@@ -12,6 +12,7 @@ const settingsSchema = z.object({
         engine: z.object({
             enabled: z.boolean(),
             version: z.enum(EngineVersion),
+            multiThreaded: z.boolean(),
             depth: z.number().min(10).max(99),
             timeLimitEnabled: z.boolean(),
             timeLimit: z.number().min(0.01),
@@ -46,7 +47,8 @@ export const defaultSettings: Settings = {
     analysis: {
         engine: {
             enabled: true,
-            version: EngineVersion.STOCKFISH_17_LITE,
+            version: EngineVersion.STOCKFISH_19_LITE,
+            multiThreaded: true,
             depth: 16,
             lines: 2,
             timeLimitEnabled: false,

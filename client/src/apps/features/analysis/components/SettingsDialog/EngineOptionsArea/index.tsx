@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { floor, clamp } from "lodash-es";
@@ -10,21 +10,31 @@ import LogMessage from "@/components/common/LogMessage";
 import DropdownSetting from "@/components/settings/DropdownSetting";
 import NumberSetting from "@/components/settings/NumberSetting";
 import SwitchSetting from "@/components/settings/SwitchSetting";
+import { useEngineDownload } from "@/hooks/useEngineDownload";
+import Button from "@/components/common/Button";
 
 import * as styles from "../SettingsDialog.module.css";
 
 const engineVersionOptions = [
     {
-        label: "Stockfish 17 (68 MB)",
-        value: EngineVersion.STOCKFISH_17
+        label: "Stockfish 19 (68 MB)",
+        value: EngineVersion.STOCKFISH_19
     },
     {
-        label: "Stockfish 17 Lite (Recommended)",
-        value: EngineVersion.STOCKFISH_17_LITE
+        label: "Stockfish 19 Lite (Recommended)",
+        value: EngineVersion.STOCKFISH_19_LITE
     },
     {
-        label: "Stockfish 17 (Compatibility)",
-        value: EngineVersion.STOCKFISH_17_ASM
+        label: "Stockfish 19 (Compatibility)",
+        value: EngineVersion.STOCKFISH_19_ASM
+    },
+    {
+        label: "Stockfish 19 (Lichess Build)",
+        value: EngineVersion.LICHESS_19
+    },
+    {
+        label: "Stockfish 19 (Lichess Smallnet)",
+        value: EngineVersion.LICHESS_19_SMALLNET
     }
 ];
 
@@ -93,6 +103,29 @@ function EngineOptionsArea() {
                     });
                 }}
                 dropdownStyle={{ width: "180px" }}
+            />
+        </div>
+
+        <div className={styles.setting}>
+            <span data-tooltip-id="settings-engine-multithreaded">
+                {t("settings.engine.multiThreaded")}
+            </span>
+
+            <Tooltip
+                id="settings-engine-multithreaded"
+                content={t("settings.engine.descriptions.multiThreaded")}
+                delayShow={500}
+                className={styles.settingDescription}
+            />
+
+            <SwitchSetting
+                defaultChecked={settings.analysis.engine.multiThreaded}
+                onChange={checked => (
+                    setSettings(draft => {
+                        draft.analysis.engine.multiThreaded = checked;
+                        return draft;
+                    })
+                )}
             />
         </div>
 
@@ -230,7 +263,133 @@ function EngineOptionsArea() {
                 dropdownStyle={{ width: "180px" }}
             />
         </div>
+
+        <div className={styles.setting}>
+            <span className={styles.header}>
+                {t("settings.engine.downloads.title")}
+            </span>
+
+            <EngineDownloadsPanel />
+        </div>
     </>;
+}
+
+function EngineDownloadsPanel() {
+    const { t } = useTranslation("analysis");
+    const {
+        downloading,
+        progress,
+        downloadedEngines,
+        refreshDownloaded,
+        handleDownload,
+        handleDelete,
+        isDownloaded,
+        getDownloadInfo,
+        getAllDownloads
+    } = useEngineDownload();
+
+    const [showAll, setShowAll] = useState(false);
+
+    const downloads = getAllDownloads();
+    const visibleDownloads = showAll ? downloads : downloads.slice(0, 3);
+
+    return (
+        <div className={styles.downloadsPanel}>
+            {downloadedEngines.length > 0 && (
+                <div className={styles.downloadedList}>
+                    <span className={styles.downloadedHeader}>
+                        {t("settings.engine.downloads.downloaded")}
+                    </span>
+                    {downloadedEngines.map(engine => {
+                        const info = getDownloadInfo(engine.version);
+                        return (
+                            <div key={engine.version} className={styles.downloadedItem}>
+                                <span className={styles.downloadedLabel}>
+                                    {info?.label || engine.version}
+                                </span>
+                                <span className={styles.downloadedSize}>
+                                    {(engine.size / 1024 / 1024).toFixed(1)} MB
+                                </span>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => handleDelete(engine.version)}
+                                >
+                                    {t("settings.engine.downloads.remove")}
+                                </Button>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+
+            <div className={styles.availableList}>
+                <span className={styles.availableHeader}>
+                    {t("settings.engine.downloads.available")}
+                </span>
+                {visibleDownloads.map(info => {
+                    const downloaded = isDownloaded(info.version);
+                    const isDownloading = downloading === info.version;
+
+                    return (
+                        <div key={info.version} className={styles.availableItem}>
+                            <div className={styles.availableInfo}>
+                                <span className={styles.availableLabel}>
+                                    {info.label}
+                                </span>
+                                <span className={styles.availableDescription}>
+                                    {info.description} ({info.size})
+                                </span>
+                            </div>
+                            <div className={styles.availableActions}>
+                                {isDownloading && (
+                                    <div className={styles.downloadProgress}>
+                                        <div
+                                            className={styles.progressBar}
+                                            style={{ width: `${progress}%` }}
+                                        />
+                                        <span className={styles.progressText}>
+                                            {progress}%
+                                        </span>
+                                    </div>
+                                )}
+                                {!downloaded && !isDownloading && (
+                                    <Button
+                                        variant="primary"
+                                        size="sm"
+                                        onClick={() => handleDownload(info.version)}
+                                    >
+                                        {t("settings.engine.downloads.download")}
+                                    </Button>
+                                )}
+                                {downloaded && !isDownloading && (
+                                    <Button
+                                        variant="secondary"
+                                        size="sm"
+                                        onClick={() => handleDelete(info.version)}
+                                    >
+                                        {t("settings.engine.downloads.remove")}
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+                    );
+                })}
+                {downloads.length > 3 && (
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className={styles.showMoreButton}
+                        onClick={() => setShowAll(!showAll)}
+                    >
+                        {showAll
+                            ? t("settings.engine.downloads.showLess")
+                            : t("settings.engine.downloads.showMore")}
+                    </Button>
+                )}
+            </div>
+        </div>
+    );
 }
 
 export default EngineOptionsArea;

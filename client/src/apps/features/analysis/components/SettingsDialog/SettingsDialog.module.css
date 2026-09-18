@@ -61,3 +61,112 @@
     position: fixed;
     max-width: 250px;
 }
+
+.downloadsPanel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.downloadedList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.downloadedHeader {
+    font-weight: 600;
+    color: var(--ui-shade-2);
+    font-size: 14px;
+}
+
+.downloadedItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: var(--ui-shade-1);
+    border-radius: 6px;
+}
+
+.downloadedLabel {
+    font-weight: 500;
+}
+
+.downloadedSize {
+    font-size: 12px;
+    color: var(--ui-shade-3);
+    margin-right: 8px;
+}
+
+.availableList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.availableHeader {
+    font-weight: 600;
+    color: var(--ui-shade-2);
+    font-size: 14px;
+}
+
+.availableItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: var(--ui-shade-1);
+    border-radius: 6px;
+    gap: 15px;
+}
+
+.availableInfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.availableLabel {
+    font-weight: 500;
+    display: block;
+}
+
+.availableDescription {
+    font-size: 12px;
+    color: var(--ui-shade-3);
+    display: block;
+    margin-top: 2px;
+}
+
+.availableActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.downloadProgress {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 120px;
+}
+
+.progressBar {
+    height: 6px;
+    background-color: var(--ui-accent);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progressText {
+    font-size: 11px;
+    color: var(--ui-shade-3);
+    min-width: 35px;
+}
+
+.showMoreButton {
+    align-self: center;
+    margin-top: 5px;
+}

@@ -60,11 +60,27 @@ function RealtimeEngine({
     useEffect(() => {
         engine?.terminate();
 
-        const newEngine = new Engine(hydratedConfig.version);
-        setEngine(newEngine);
+        let mounted = true;
 
-        return () => newEngine.terminate();
-    }, [hydratedConfig.version]);
+        Engine.createAuto(hydratedConfig.version, hydratedConfig.multiThreaded)
+            .then(newEngine => {
+                if (mounted) {
+                    setEngine(newEngine);
+                } else {
+                    newEngine.terminate();
+                }
+            })
+            .catch(err => {
+                if (mounted) {
+                    setEvaluationError(t("realtimeEngine.error") + ": " + err.message);
+                }
+            });
+
+        return () => {
+            mounted = false;
+            engine?.terminate();
+        };
+    }, [hydratedConfig.version, hydratedConfig.multiThreaded]);
 
     // Get number of lines expected to appear
     const expectedLineCount = useMemo(() => Math.min(

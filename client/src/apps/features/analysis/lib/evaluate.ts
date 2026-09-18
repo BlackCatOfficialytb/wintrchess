@@ -9,6 +9,7 @@ import getCloudEvaluation from "./cloudEvaluate";
 
 interface EvaluateMovesOptions {
     engineVersion: EngineVersion;
+    multiThreaded: boolean;
     maxEngineCount?: number;
     engineDepth: number;
     engineTimeLimit?: number;
@@ -84,9 +85,9 @@ function createGameEvaluator(
         let enginesResting = 0;
         let stateTreeNodeIndex = Math.max(evaluatedStateCount - 1, 0);
 
-        return await new Promise((res, rej) => {
+        return await new Promise<StateTreeNode[]>(async (res, rej) => {
             // Bring an engine to a new FEN
-            function evaluateNextPosition(engine: Engine) {
+            async function evaluateNextPosition(engine: Engine) {
                 const currentStateTreeNodeIndex = stateTreeNodeIndex;
                 const currentStateTreeNode = stateTreeNodes[stateTreeNodeIndex];
 
@@ -123,7 +124,7 @@ function createGameEvaluator(
 
                         options.onProgress?.(getProgress());
                     }
-                }).then(lines => {
+                }).then(async lines => {
                     progresses[currentStateTreeNodeIndex] = 1;
 
                     currentStateTreeNode.state.engineLines = [
@@ -131,7 +132,7 @@ function createGameEvaluator(
                         ...lines
                     ];
 
-                    evaluateNextPosition(engine);
+                    await evaluateNextPosition(engine);
                 });
 
                 stateTreeNodeIndex++;
@@ -141,7 +142,7 @@ function createGameEvaluator(
             const engines: Engine[] = [];
 
             for (let i = 0; i < engineCount; i++) {
-                const engine = new Engine(options.engineVersion);
+                const engine = await Engine.createAuto(options.engineVersion, options.multiThreaded);
                 engines.push(engine);
 
                 options.engineConfig?.(engine);
@@ -152,7 +153,7 @@ function createGameEvaluator(
 
                 engine.onError(rej);
 
-                evaluateNextPosition(engine);
+                await evaluateNextPosition(engine);
             }
 
             controller.signal.addEventListener("abort", () => {
