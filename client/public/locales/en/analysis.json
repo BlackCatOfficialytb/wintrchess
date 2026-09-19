@@ -40,6 +40,7 @@
                 "available": "Available Engines",
                 "download": "Download",
                 "remove": "Remove",
+                "manage": "Manage Downloads",
                 "showMore": "Show more",
                 "showLess": "Show less",
                 "downloadSuccess": "{{engine}} downloaded successfully",

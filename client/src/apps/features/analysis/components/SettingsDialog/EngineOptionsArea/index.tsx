@@ -12,6 +12,8 @@ import NumberSetting from "@/components/settings/NumberSetting";
 import SwitchSetting from "@/components/settings/SwitchSetting";
 import { useEngineDownload } from "@/hooks/useEngineDownload";
 import Button from "@/components/common/Button";
+import ButtonColour from "@/components/common/Button/Colour";
+import EngineDownloadsDialog from "../EngineDownloadsDialog";
 
 import * as styles from "../SettingsDialog.module.css";
 
@@ -42,6 +44,8 @@ function EngineOptionsArea() {
     const { t, i18n } = useTranslation(["analysis", "common"]);
 
     const { settings, setSettings } = useSettingsStore();
+
+    const [showDownloadsDialog, setShowDownloadsDialog] = useState(false);
 
     const engineArrowsOptions = useMemo(() => [
         {
@@ -269,127 +273,19 @@ function EngineOptionsArea() {
                 {t("settings.engine.downloads.title")}
             </span>
 
-            <EngineDownloadsPanel />
+            <Button
+                className={styles.smallButton}
+                style={{ backgroundColor: ButtonColour.BLUE }}
+                onClick={() => setShowDownloadsDialog(true)}
+            >
+                {t("settings.engine.downloads.manage")}
+            </Button>
+
+            {showDownloadsDialog && (
+                <EngineDownloadsDialog onClose={() => setShowDownloadsDialog(false)} />
+            )}
         </div>
     </>;
-}
-
-function EngineDownloadsPanel() {
-    const { t } = useTranslation("analysis");
-    const {
-        downloading,
-        progress,
-        downloadedEngines,
-        refreshDownloaded,
-        handleDownload,
-        handleDelete,
-        isDownloaded,
-        getDownloadInfo,
-        getAllDownloads
-    } = useEngineDownload();
-
-    const [showAll, setShowAll] = useState(false);
-
-    const downloads = getAllDownloads();
-    const visibleDownloads = showAll ? downloads : downloads.slice(0, 3);
-
-    return (
-        <div className={styles.downloadsPanel}>
-            {downloadedEngines.length > 0 && (
-                <div className={styles.downloadedList}>
-                    <span className={styles.downloadedHeader}>
-                        {t("settings.engine.downloads.downloaded")}
-                    </span>
-                    {downloadedEngines.map(engine => {
-                        const info = getDownloadInfo(engine.version);
-                        return (
-                            <div key={engine.version} className={styles.downloadedItem}>
-                                <span className={styles.downloadedLabel}>
-                                    {info?.label || engine.version}
-                                </span>
-                                <span className={styles.downloadedSize}>
-                                    {(engine.size / 1024 / 1024).toFixed(1)} MB
-                                </span>
-                                <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    onClick={() => handleDelete(engine.version)}
-                                >
-                                    {t("settings.engine.downloads.remove")}
-                                </Button>
-                            </div>
-                        );
-                    })}
-                </div>
-            )}
-
-            <div className={styles.availableList}>
-                <span className={styles.availableHeader}>
-                    {t("settings.engine.downloads.available")}
-                </span>
-                {visibleDownloads.map(info => {
-                    const downloaded = isDownloaded(info.version);
-                    const isDownloading = downloading === info.version;
-
-                    return (
-                        <div key={info.version} className={styles.availableItem}>
-                            <div className={styles.availableInfo}>
-                                <span className={styles.availableLabel}>
-                                    {info.label}
-                                </span>
-                                <span className={styles.availableDescription}>
-                                    {info.description} ({info.size})
-                                </span>
-                            </div>
-                            <div className={styles.availableActions}>
-                                {isDownloading && (
-                                    <div className={styles.downloadProgress}>
-                                        <div
-                                            className={styles.progressBar}
-                                            style={{ width: `${progress}%` }}
-                                        />
-                                        <span className={styles.progressText}>
-                                            {progress}%
-                                        </span>
-                                    </div>
-                                )}
-                                {!downloaded && !isDownloading && (
-                                    <Button
-                                        variant="primary"
-                                        size="sm"
-                                        onClick={() => handleDownload(info.version)}
-                                    >
-                                        {t("settings.engine.downloads.download")}
-                                    </Button>
-                                )}
-                                {downloaded && !isDownloading && (
-                                    <Button
-                                        variant="secondary"
-                                        size="sm"
-                                        onClick={() => handleDelete(info.version)}
-                                    >
-                                        {t("settings.engine.downloads.remove")}
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
-                    );
-                })}
-                {downloads.length > 3 && (
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        className={styles.showMoreButton}
-                        onClick={() => setShowAll(!showAll)}
-                    >
-                        {showAll
-                            ? t("settings.engine.downloads.showLess")
-                            : t("settings.engine.downloads.showMore")}
-                    </Button>
-                )}
-            </div>
-        </div>
-    );
 }
 
 export default EngineOptionsArea;

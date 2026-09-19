@@ -170,3 +170,8 @@
     align-self: center;
     margin-top: 5px;
 }
+
+.smallButton {
+    padding: 4px 10px;
+    font-size: 12px;
+}
