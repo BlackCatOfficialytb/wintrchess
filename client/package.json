@@ -1,6 +1,7 @@
 {
     "scripts": {
-        "build": "webpack",
+        "build": "npm run download-engines && webpack",
+        "download-engines": "node scripts/download-engines.mjs",
         "check": "tsc --noEmit"
     },
     "devDependencies": {
@@ -8,7 +9,9 @@
         "@babel/preset-env": "^7.24.6",
         "@babel/preset-react": "^7.24.6",
         "@babel/preset-typescript": "^7.24.6",
+        "@lichess-org/stockfish-web": "^0.5.0",
         "@lichess-org/types": "^2.0.48",
+        "stockfish.wasm": "^0.5.7",
         "@mliebelt/pgn-parser": "^1.4.15",
         "@tanstack/react-query": "^5.50.1",
         "@types/lodash-es": "^4.17.12",

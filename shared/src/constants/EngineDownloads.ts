@@ -1,8 +1,6 @@
 import EngineVersion from "./EngineVersion";
 
-const BASE_URL = "https://github.com/nmrugg/stockfish.js/releases/download/v19.0.0";
-
-const lichessBaseUrl = "https://github.com/lichess-org/stockfish-web/releases/download";
+const BASE_URL = "/engines";
 
 interface EngineDownloadInfo {
     version: EngineVersion;
@@ -17,8 +15,8 @@ export const ENGINE_DOWNLOADS: EngineDownloadInfo[] = [
     {
         version: EngineVersion.STOCKFISH_19,
         label: "Stockfish 19 (68 MB)",
-        jsUrl: `${BASE_URL}/stockfish-19.js`,
-        wasmUrl: `${BASE_URL}/stockfish-19.wasm`,
+        jsUrl: `${BASE_URL}/stockfish-19-single.js`,
+        wasmUrl: `${BASE_URL}/stockfish-19-single.wasm`,
         size: "68 MB",
         description: "Strongest version, multi-threaded, requires CORS headers"
     },
@@ -56,16 +54,16 @@ export const ENGINE_DOWNLOADS: EngineDownloadInfo[] = [
     {
         version: EngineVersion.LICHESS_19,
         label: "Stockfish 19 (Lichess Build)",
-        jsUrl: `${lichessBaseUrl}/sf_19/stockfish-19-lichess-build.js`,
-        wasmUrl: `${lichessBaseUrl}/sf_19/stockfish-19-lichess-build.wasm`,
+        jsUrl: `${BASE_URL}/stockfish-19-lichess-build.js`,
+        wasmUrl: `${BASE_URL}/stockfish-19-lichess-build.wasm`,
         size: "~10 MB",
         description: "Official Stockfish 19 build from Lichess"
     },
     {
         version: EngineVersion.LICHESS_19_SMALLNET,
         label: "Stockfish 19 (Lichess Smallnet)",
-        jsUrl: `${lichessBaseUrl}/sf_19_smallnet/stockfish-19-lichess-build-smallnet.js`,
-        wasmUrl: `${lichessBaseUrl}/sf_19_smallnet/stockfish-19-lichess-build-smallnet.wasm`,
+        jsUrl: `${BASE_URL}/stockfish-19-lichess-build-smallnet.js`,
+        wasmUrl: `${BASE_URL}/stockfish-19-lichess-build-smallnet.wasm`,
         size: "~5 MB",
         description: "Lichess build with size-optimized NNUE"
     }

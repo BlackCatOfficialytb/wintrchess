@@ -4,3 +4,6 @@ node_modules
 .vs
 .VSCodeCounter
 .vscode
+client/public/engines/*.wasm
+client/public/engines/*.js
+!client/public/engines/.gitkeep
