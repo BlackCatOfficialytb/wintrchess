@@ -14,6 +14,7 @@ interface RealtimeEngineProps {
         lines?: number;
         threads?: number;
         timeLimit?: number;
+        multiThreaded?: boolean;
     };
     cachedEngineLines?: EngineLine[];
     onEngineLines?: (lines: EngineLine[]) => void;

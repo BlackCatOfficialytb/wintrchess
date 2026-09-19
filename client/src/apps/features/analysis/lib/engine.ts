@@ -5,11 +5,27 @@ import EngineVersion from "shared/constants/EngineVersion";
 import { STARTING_FEN } from "shared/constants/utils";
 import { getEngineBlob, createEngineObjectUrl, revokeEngineObjectUrl } from "@/lib/engineDownloader";
 
-// Convert UCI evaluation types to our ones
 const uciEvaluationTypes: Record<string, string | undefined> = {
     cp: "centipawn",
     mate: "mate"
 };
+
+function getEngineFile(version: EngineVersion, multiThreaded: boolean): string {
+    if (multiThreaded) {
+        switch (version) {
+            case EngineVersion.STOCKFISH_19:
+                return EngineVersion.STOCKFISH_19_MULTI;
+            case EngineVersion.STOCKFISH_19_LITE:
+                return EngineVersion.STOCKFISH_19_LITE_MULTI;
+            case EngineVersion.LICHESS_19:
+            case EngineVersion.LICHESS_19_SMALLNET:
+                return version;
+            default:
+                return version;
+        }
+    }
+    return version;
+}
 
 class Engine {
     private worker: Worker;
@@ -30,43 +46,13 @@ class Engine {
         this.setPosition(this.position);
     }
 
-    private getEngineFile(): string {
-        if (this.multiThreaded) {
-            switch (this.version) {
-                case EngineVersion.STOCKFISH_19:
-                    return EngineVersion.STOCKFISH_19_MULTI;
-                case EngineVersion.STOCKFISH_19_LITE:
-                    return EngineVersion.STOCKFISH_19_LITE_MULTI;
-                case EngineVersion.LICHESS_19:
-                case EngineVersion.LICHESS_19_SMALLNET:
-                    return this.version;
-                default:
-                    return this.version;
-            }
-        }
-        return this.version;
-    }
-
     private createWorker(): Worker {
         if (this.objectUrl) {
             return new Worker(this.objectUrl);
         }
 
-        const engineFile = this.getEngineFile();
+        const engineFile = getEngineFile(this.version, this.multiThreaded);
         return new Worker("/engines/" + engineFile);
-    }
-
-    static async createFromDownload(
-        version: EngineVersion,
-        multiThreaded = false
-    ): Promise<Engine> {
-        const blobs = await getEngineBlob(version);
-        if (!blobs) {
-            throw new Error(`Engine ${version} not downloaded`);
-        }
-
-        const objectUrl = createEngineObjectUrl(blobs.jsBlob);
-        return new Engine(version, multiThreaded, objectUrl);
     }
 
     static async createAuto(
@@ -97,9 +83,9 @@ class Engine {
                 const message = String(event.data);
 
                 onLogReceived?.(message);
-    
+
                 logMessages.push(message);
-    
+
                 if (endCondition(message)) {
                     worker.removeEventListener("message", onMessageReceived);
                     worker.removeEventListener("error", rej);
@@ -201,13 +187,11 @@ class Engine {
                 if (!log.startsWith("info depth")) return;
                 if (log.includes("currmove")) return;
 
-                // Extract depth and multipv index of line
                 const depth = parseInt(log.match(/(?<= depth )\d+/)?.[0] || "");
                 if (isNaN(depth)) return;
 
                 const index = parseInt(log.match(/(?<= multipv )\d+/)?.[0] || "") || 1;
 
-                // Extract evaluation type and score
                 const scoreMatches = log.match(/ score (cp|mate) (-?\d+)/);
 
                 const evaluationType = uciEvaluationTypes[scoreMatches?.[1] || ""];
@@ -219,15 +203,12 @@ class Engine {
                 let evaluationScore = parseInt(scoreMatches?.[2] || "");
                 if (isNaN(evaluationScore)) return;
 
-                // Make sure evaluations are always from White's view
                 if (this.position.includes(" b ")) {
                     evaluationScore = -evaluationScore;
                 }
 
-                // Extract UCI moves from pv
                 const moveUcis = log.match(/ pv (.*)/)?.at(1)?.split(" ") || [];
 
-                // Convert these to SANs on a temp board
                 const moveSans: string[] = [];
 
                 const board = new Chess(this.position);
@@ -235,7 +216,6 @@ class Engine {
                     moveSans.push(board.move(moveUci).san);
                 }
 
-                // Remove old duplicate line and add new one
                 const newEngineLine: EngineLine = {
                     depth: depth,
                     index: index,

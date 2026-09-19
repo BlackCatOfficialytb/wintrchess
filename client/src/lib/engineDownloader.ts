@@ -1,65 +1,63 @@
 import { ENGINE_DOWNLOADS, getEngineDownloadInfo } from "shared/constants/EngineDownloads";
 import EngineVersion from "shared/constants/EngineVersion";
 
-const ENGINE_CACHE_PREFIX = "wintrchess_engine_";
-const ENGINE_META_KEY = "wintrchess_engine_meta";
+const DB_NAME = "wintrchess_engines";
+const STORE_NAME = "engines";
+const DB_VERSION = 1;
 
 interface EngineMeta {
     version: EngineVersion;
     downloadedAt: number;
     size: number;
-    jsBlob: Blob;
-    wasmBlob?: Blob;
+    jsArrayBuffer: ArrayBuffer;
+    wasmArrayBuffer?: ArrayBuffer;
+}
+
+function openDB(): Promise<IDBDatabase> {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => resolve(request.result);
+        request.onupgradeneeded = (event) => {
+            const db = (event.target as IDBOpenDBRequest).result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: "version" });
+            }
+        };
+    });
 }
 
 async function getCachedEngine(version: EngineVersion): Promise<EngineMeta | null> {
     try {
-        const metaStr = localStorage.getItem(`${ENGINE_CACHE_PREFIX}${version}`);
-        if (!metaStr) return null;
-
-        const meta = JSON.parse(metaStr) as Omit<EngineMeta, "jsBlob" | "wasmBlob"> & {
-            jsBlob: string;
-            wasmBlob?: string;
-        };
-
-        const jsBlob = await (async () => {
-            const response = await fetch(meta.jsBlob);
-            return response.blob();
-        })();
-
-        let wasmBlob: Blob | undefined;
-        if (meta.wasmBlob) {
-            const response = await fetch(meta.wasmBlob);
-            wasmBlob = await response.blob();
-        }
-
-        return { ...meta, jsBlob, wasmBlob };
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, "readonly");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.get(version);
+            request.onsuccess = () => {
+                const result = request.result as EngineMeta | undefined;
+                if (result) {
+                    resolve(result);
+                } else {
+                    resolve(null);
+                }
+            };
+            request.onerror = () => reject(request.error);
+        });
     } catch {
         return null;
     }
 }
 
 async function cacheEngine(meta: EngineMeta): Promise<void> {
-    const jsObjectUrl = URL.createObjectURL(meta.jsBlob);
-    let wasmObjectUrl: string | undefined;
-    if (meta.wasmBlob) {
-        wasmObjectUrl = URL.createObjectURL(meta.wasmBlob);
-    }
-
-    const toStore = {
-        version: meta.version,
-        downloadedAt: meta.downloadedAt,
-        size: meta.size,
-        jsBlob: jsObjectUrl,
-        wasmBlob: wasmObjectUrl
-    };
-
-    localStorage.setItem(`${ENGINE_CACHE_PREFIX}${meta.version}`, JSON.stringify(toStore));
-
-    const allMetaStr = localStorage.getItem(ENGINE_META_KEY);
-    const allMeta: Record<string, { version: EngineVersion; downloadedAt: number; size: number }> = allMetaStr ? JSON.parse(allMetaStr) : {};
-    allMeta[meta.version] = { version: meta.version, downloadedAt: meta.downloadedAt, size: meta.size };
-    localStorage.setItem(ENGINE_META_KEY, JSON.stringify(allMeta));
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(STORE_NAME, "readwrite");
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.put(meta);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
 }
 
 export async function downloadEngine(
@@ -69,7 +67,7 @@ export async function downloadEngine(
     const info = getEngineDownloadInfo(version);
     if (!info) throw new Error(`Unknown engine version: ${version}`);
 
-    const downloadJs = async (): Promise<Blob> => {
+    const downloadJs = async (): Promise<ArrayBuffer> => {
         const response = await fetch(info.jsUrl);
         if (!response.ok) throw new Error(`Failed to download JS: ${response.statusText}`);
 
@@ -91,14 +89,20 @@ export async function downloadEngine(
                 }
             }
         } else {
-            const blob = await response.blob();
-            return blob;
+            return response.arrayBuffer();
         }
 
-        return new Blob(chunks);
+        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of chunks) {
+            result.set(chunk, offset);
+            offset += chunk.length;
+        }
+        return result.buffer;
     };
 
-    const downloadWasm = async (): Promise<Blob | undefined> => {
+    const downloadWasm = async (): Promise<ArrayBuffer | undefined> => {
         if (!info.wasmUrl) return undefined;
 
         const response = await fetch(info.wasmUrl);
@@ -122,55 +126,79 @@ export async function downloadEngine(
                 }
             }
         } else {
-            const blob = await response.blob();
-            return blob;
+            return response.arrayBuffer();
         }
 
-        return new Blob(chunks);
+        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+        const result = new Uint8Array(totalLength);
+        let offset = 0;
+        for (const chunk of chunks) {
+            result.set(chunk, offset);
+            offset += chunk.length;
+        }
+        return result.buffer;
     };
 
-    const [jsBlob, wasmBlob] = await Promise.all([downloadJs(), downloadWasm()]);
+    const [jsArrayBuffer, wasmArrayBuffer] = await Promise.all([downloadJs(), downloadWasm()]);
 
     const meta: EngineMeta = {
         version,
         downloadedAt: Date.now(),
-        size: jsBlob.size + (wasmBlob?.size || 0),
-        jsBlob,
-        wasmBlob
+        size: jsArrayBuffer.byteLength + (wasmArrayBuffer?.byteLength || 0),
+        jsArrayBuffer,
+        wasmArrayBuffer
     };
 
     await cacheEngine(meta);
 
-    return { jsBlob, wasmBlob };
+    return {
+        jsBlob: new Blob([jsArrayBuffer]),
+        wasmBlob: wasmArrayBuffer ? new Blob([wasmArrayBuffer]) : undefined
+    };
 }
 
 export async function getEngineBlob(version: EngineVersion): Promise<{ jsBlob: Blob; wasmBlob?: Blob } | null> {
     const cached = await getCachedEngine(version);
     if (cached) {
-        return { jsBlob: cached.jsBlob, wasmBlob: cached.wasmBlob };
+        return {
+            jsBlob: new Blob([cached.jsArrayBuffer]),
+            wasmBlob: cached.wasmArrayBuffer ? new Blob([cached.wasmArrayBuffer]) : undefined
+        };
     }
     return null;
 }
 
 export function isEngineDownloaded(version: EngineVersion): boolean {
-    return localStorage.getItem(`${ENGINE_CACHE_PREFIX}${version}`) !== null;
+    return false;
 }
 
-export function getDownloadedEngines(): Array<{ version: EngineVersion; downloadedAt: number; size: number }> {
-    const metaStr = localStorage.getItem(ENGINE_META_KEY);
-    if (!metaStr) return [];
-    return Object.values(JSON.parse(metaStr));
-}
-
-export function deleteEngine(version: EngineVersion): void {
-    localStorage.removeItem(`${ENGINE_CACHE_PREFIX}${version}`);
-
-    const metaStr = localStorage.getItem(ENGINE_META_KEY);
-    if (metaStr) {
-        const meta = JSON.parse(metaStr);
-        delete meta[version];
-        localStorage.setItem(ENGINE_META_KEY, JSON.stringify(meta));
+export async function getDownloadedEngines(): Promise<Array<{ version: EngineVersion; downloadedAt: number; size: number }>> {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = db.transaction(STORE_NAME, "readonly");
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll();
+            request.onsuccess = () => {
+                const results = request.result as EngineMeta[];
+                resolve(results.map(r => ({ version: r.version, downloadedAt: r.downloadedAt, size: r.size })));
+            };
+            request.onerror = () => reject(request.error);
+        });
+    } catch {
+        return [];
     }
+}
+
+export async function deleteEngine(version: EngineVersion): Promise<void> {
+    const db = await openDB();
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(STORE_NAME, "readwrite");
+        const store = transaction.objectStore(STORE_NAME);
+        const request = store.delete(version);
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+    });
 }
 
 export function getEngineUrl(version: EngineVersion): string {
@@ -185,5 +213,4 @@ export function revokeEngineObjectUrl(url: string): void {
     URL.revokeObjectURL(url);
 }
 
-// Re-export from shared package
 export { ENGINE_DOWNLOADS, getEngineDownloadInfo } from "shared/constants/EngineDownloads";

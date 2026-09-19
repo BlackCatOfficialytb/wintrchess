@@ -34,6 +34,7 @@ function useEvaluateGame() {
                 ? settings.timeLimit : undefined,
             cloudEngineLines: settings.lines,
             maxEngineCount: 4,
+            multiThreaded: settings.multiThreaded,
             engineConfig: engine => engine.setLineCount(settings.lines),
             onProgress: progress => {
                 setEvaluationProgress(progress);

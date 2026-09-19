@@ -1,9 +1,8 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import EngineVersion from "shared/constants/EngineVersion";
 import {
     downloadEngine,
-    isEngineDownloaded,
     getDownloadedEngines,
     deleteEngine,
     getEngineDownloadInfo,
@@ -19,9 +18,14 @@ export function useEngineDownload() {
         Array<{ version: EngineVersion; downloadedAt: number; size: number }>
     >([]);
 
-    const refreshDownloaded = useCallback(() => {
-        setDownloadedEngines(getDownloadedEngines());
+    const refreshDownloaded = useCallback(async () => {
+        const engines = await getDownloadedEngines();
+        setDownloadedEngines(engines);
     }, []);
+
+    useEffect(() => {
+        refreshDownloaded();
+    }, [refreshDownloaded]);
 
     const handleDownload = useCallback(async (version: EngineVersion) => {
         if (downloading) return;
@@ -32,7 +36,7 @@ export function useEngineDownload() {
         try {
             await downloadEngine(version, setProgress);
             toast.success(t("settings.engine.downloadSuccess", { engine: getEngineDownloadInfo(version)?.label || version }));
-            refreshDownloaded();
+            await refreshDownloaded();
         } catch (error) {
             toast.error(t("settings.engine.downloadError", { error: String(error) }));
         } finally {
@@ -41,15 +45,15 @@ export function useEngineDownload() {
         }
     }, [downloading, t, refreshDownloaded]);
 
-    const handleDelete = useCallback((version: EngineVersion) => {
-        deleteEngine(version);
+    const handleDelete = useCallback(async (version: EngineVersion) => {
+        await deleteEngine(version);
         toast.success(t("settings.engine.deleted", { engine: getEngineDownloadInfo(version)?.label || version }));
-        refreshDownloaded();
+        await refreshDownloaded();
     }, [t, refreshDownloaded]);
 
     const isDownloaded = useCallback((version: EngineVersion) => {
-        return isEngineDownloaded(version);
-    }, []);
+        return downloadedEngines.some(e => e.version === version);
+    }, [downloadedEngines]);
 
     const getDownloadInfo = useCallback((version: EngineVersion) => {
         return getEngineDownloadInfo(version);
