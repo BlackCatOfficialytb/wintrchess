@@ -1,7 +1,8 @@
 {
     "scripts": {
         "build": "tsc && tsc-alias -f",
-        "check": "tsc --noEmit"
+        "check": "tsc --noEmit",
+        "check-sqlite": "node scripts/check-sqlite.mjs"
     },
     "dependencies": {
         "altcha-lib": "^1.2.0",

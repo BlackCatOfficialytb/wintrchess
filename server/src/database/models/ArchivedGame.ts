@@ -1,7 +1,8 @@
-import { Types, Schema, model } from "mongoose";
+import { Types, Schema } from "mongoose";
 
 import { ArchivedGame } from "shared/types/game/ArchivedGame";
 import Collection from "@/constants/Collection";
+import { model } from "@/database/model";
 
 type ArchivedGameDocument = (
     Omit<ArchivedGame, "userId">
@@ -12,7 +13,7 @@ const archivedGameSchema = new Schema<ArchivedGameDocument>(
     {}, { strict: false }
 );
 
-const ArchivedGame = model(
+const ArchivedGame = model<ArchivedGameDocument>(
     "archivedGame",
     archivedGameSchema,
     Collection.ARCHIVED_GAMES
