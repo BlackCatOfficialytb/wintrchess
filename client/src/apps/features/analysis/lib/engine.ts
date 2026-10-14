@@ -3,12 +3,18 @@ import { Chess } from "chess.js";
 import { EngineLine } from "shared/types/game/position/EngineLine";
 import EngineVersion from "shared/constants/EngineVersion";
 import { STARTING_FEN } from "shared/constants/utils";
-import { getEngineBlob, createEngineObjectUrl, revokeEngineObjectUrl } from "@/lib/engineDownloader";
 
 const uciEvaluationTypes: Record<string, string | undefined> = {
     cp: "centipawn",
     mate: "mate"
 };
+
+// Entries generated as ES modules instead of classic worker scripts
+const moduleEngines = new Set<EngineVersion>([
+    EngineVersion.STOCKFISH_19_ASM,
+    EngineVersion.LICHESS_19,
+    EngineVersion.LICHESS_19_SMALLNET
+]);
 
 function getEngineFile(version: EngineVersion, multiThreaded: boolean): string {
     if (multiThreaded) {
@@ -31,15 +37,13 @@ class Engine {
     private worker: Worker;
     private version: EngineVersion;
     private multiThreaded: boolean;
-    private objectUrl?: string;
 
     private position = STARTING_FEN;
     private evaluating = false;
 
-    constructor(version: EngineVersion, multiThreaded = false, objectUrl?: string) {
+    constructor(version: EngineVersion, multiThreaded = false) {
         this.version = version;
         this.multiThreaded = multiThreaded;
-        this.objectUrl = objectUrl;
 
         this.worker = this.createWorker();
         this.worker.postMessage("uci");
@@ -47,25 +51,12 @@ class Engine {
     }
 
     private createWorker(): Worker {
-        if (this.objectUrl) {
-            return new Worker(this.objectUrl);
-        }
-
         const engineFile = getEngineFile(this.version, this.multiThreaded);
-        return new Worker("/engines/" + engineFile);
-    }
 
-    static async createAuto(
-        version: EngineVersion,
-        multiThreaded = false
-    ): Promise<Engine> {
-        const blobs = await getEngineBlob(version);
-        if (blobs) {
-            const objectUrl = createEngineObjectUrl(blobs.jsBlob);
-            return new Engine(version, multiThreaded, objectUrl);
-        }
-
-        return new Engine(version, multiThreaded);
+        return new Worker(
+            "/engines/" + engineFile,
+            moduleEngines.has(this.version) ? { type: "module" } : undefined
+        );
     }
 
     private consumeLogs(
@@ -117,10 +108,6 @@ class Engine {
 
     terminate() {
         this.worker.postMessage("quit");
-        if (this.objectUrl) {
-            revokeEngineObjectUrl(this.objectUrl);
-            this.objectUrl = undefined;
-        }
     }
 
     setOption(option: string, value: string) {

@@ -2,6 +2,7 @@
     "scripts": {
         "build": "npm run download-engines && webpack",
         "download-engines": "node scripts/download-engines.mjs",
+        "check-engines": "node scripts/check-engines.mjs",
         "check": "tsc --noEmit"
     },
     "devDependencies": {

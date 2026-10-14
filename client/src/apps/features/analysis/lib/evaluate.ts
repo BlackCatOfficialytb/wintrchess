@@ -142,7 +142,7 @@ function createGameEvaluator(
             const engines: Engine[] = [];
 
             for (let i = 0; i < engineCount; i++) {
-                const engine = await Engine.createAuto(options.engineVersion, options.multiThreaded);
+                const engine = new Engine(options.engineVersion, options.multiThreaded);
                 engines.push(engine);
 
                 options.engineConfig?.(engine);

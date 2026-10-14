@@ -1,101 +1,133 @@
-import { mkdir, copyFile, access } from "node:fs/promises";
-import { resolve } from "node:path";
+import { mkdir, copyFile, access, writeFile, readFile } from "node:fs/promises";
+import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __dirname = resolve(fileURLToPath(import.meta.url), "..");
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const ENGINES_DIR = resolve(__dirname, "../public/engines");
 const NODE_MODULES = resolve(__dirname, "../../node_modules");
 
-const FILES_TO_COPY = [
-    {
-        src: resolve(NODE_MODULES, "@lichess-org/stockfish-web/sf_19.js"),
-        dest: "stockfish-19-lichess-build.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "@lichess-org/stockfish-web/sf_19.wasm"),
-        dest: "stockfish-19-lichess-build.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "@lichess-org/stockfish-web/sf_19_smallnet.js"),
-        dest: "stockfish-19-lichess-build-smallnet.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "@lichess-org/stockfish-web/sf_19_smallnet.wasm"),
-        dest: "stockfish-19-lichess-build-smallnet.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.js"),
-        dest: "stockfish-19-single.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.wasm"),
-        dest: "stockfish-19-single.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.js"),
-        dest: "stockfish-19.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.wasm"),
-        dest: "stockfish-19.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.js"),
-        dest: "stockfish-19-lite-single.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.wasm"),
-        dest: "stockfish-19-lite-single.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.js"),
-        dest: "stockfish-19-lite.js"
-    },
-    {
-        src: resolve(NODE_MODULES, "stockfish.wasm/stockfish.wasm"),
-        dest: "stockfish-19-lite.wasm"
-    },
-    {
-        src: resolve(NODE_MODULES, "@lichess-org/stockfish-web/sf_19.js"),
-        dest: "stockfish-19-asm.js"
-    }
+// Engine payloads. Their names are load-bearing: both engines resolve their
+// .wasm (and their pthread workers) relative to their own file name.
+const PAYLOADS = [
+    "stockfish.wasm/stockfish.js",
+    "stockfish.wasm/stockfish.wasm",
+    "stockfish.wasm/stockfish.worker.js",
+    "@lichess-org/stockfish-web/sf_19.js",
+    "@lichess-org/stockfish-web/sf_19.wasm",
+    "@lichess-org/stockfish-web/sf_19_smallnet.js",
+    "@lichess-org/stockfish-web/sf_19_smallnet.wasm"
 ];
 
-async function copyIfExists(src, dest) {
-    try {
-        await access(src);
-        await copyFile(src, dest);
-        console.log(`  ✓ Copied: ${dest}`);
-        return true;
-    } catch {
-        console.log(`  ✗ Missing: ${src}`);
-        return false;
-    }
-}
+// Text payloads patched after copy. stockfish.wasm's pump only drains the
+// proxied main-thread call queue when the main thread claims to be the
+// *browser* main thread; in a worker emscripten registers that flag as false,
+// so every proxied fd_write (all UCI output from search threads) deadlocks.
+// Force the flag: the thread owns this worker's event loop either way.
+const PATCHES = {
+    "stockfish.wasm/stockfish.js": [[
+        "__register_pthread_ptr(PThread.mainThreadBlock,!ENVIRONMENT_IS_WORKER,1)",
+        "__register_pthread_ptr(PThread.mainThreadBlock,1,1)"
+    ]]
+};
+
+// Worker entries (one per EngineVersion): neither payload is a worker script
+// by itself, so each entry bridges worker postMessage/UCI to the engine.
+const CLASSIC_ENTRY = `
+importScripts("./stockfish.js");
+
+// no document.currentScript in a worker scope, so emscripten cannot discover
+// the factory url for its own pthread workers - hand it over explicitly.
+const engine = Stockfish({
+    mainScriptUrlOrBlob: new URL("stockfish.js", self.location.href).href
+});
+engine.addMessageListener(line => postMessage(line));
+self.onmessage = event => engine.postMessage(event.data);
+`;
+
+const moduleEntry = payload => `
+import StockfishWeb from "./${payload}";
+
+const queued = [];
+self.onmessage = event => queued.push(String(event.data));
+
+// listen is a callback property read at output time; passing it up front
+// registers it before any UCI output can flow
+const engine = await StockfishWeb({ listen: line => postMessage(line) });
+for (const command of queued) engine.uci(command);
+
+self.onmessage = event => engine.uci(String(event.data));
+`;
+
+const ENTRIES = {
+    "stockfish-19-single.js": CLASSIC_ENTRY,
+    "stockfish-19.js": CLASSIC_ENTRY,
+    "stockfish-19-lite-single.js": CLASSIC_ENTRY,
+    "stockfish-19-lite.js": CLASSIC_ENTRY,
+    "stockfish-19-asm.js": moduleEntry("sf_19.js"),
+    "stockfish-19-lichess-build.js": moduleEntry("sf_19.js"),
+    "stockfish-19-lichess-build-smallnet.js": moduleEntry("sf_19_smallnet.js")
+};
+
+const GENERATED_HEADER = "// generated by scripts/download-engines.mjs - do not edit\n";
 
 async function main() {
-    console.log("Copying Stockfish engines from node_modules...\n");
+    console.log("Installing Stockfish engines...\n");
 
     await mkdir(ENGINES_DIR, { recursive: true });
 
-    let successCount = 0;
-    for (const { src, dest } of FILES_TO_COPY) {
-        const destPath = resolve(ENGINES_DIR, dest);
-        if (await copyIfExists(src, destPath)) {
-            successCount++;
+    let copied = 0;
+    for (const payload of PAYLOADS) {
+        const src = resolve(NODE_MODULES, payload);
+        const dest = resolve(ENGINES_DIR, payload.split("/").pop());
+        const patches = PATCHES[payload];
+
+        try {
+            await access(src);
+            if (patches) {
+                let content = await readFile(src, "utf8");
+                for (const [from, to] of patches) {
+                    if (!content.includes(from)) {
+                        console.error(`  \u2717 Patch miss in ${payload}: ${from}`);
+                        process.exit(1);
+                    }
+                    content = content.replace(from, to);
+                }
+                await writeFile(dest, content);
+            } else {
+                await copyFile(src, dest);
+            }
+            console.log(`  \u2713 Copied: ${dest}`);
+            copied++;
+        } catch {
+            console.log(`  \u2717 Missing: ${src}`);
         }
     }
 
-    console.log(`\n✓ Copied ${successCount}/${FILES_TO_COPY.length} engine files`);
-    
-    if (successCount === 0) {
-        console.error("No engine files found. Run 'npm install' first.");
+    for (const [name, source] of Object.entries(ENTRIES)) {
+        const dest = resolve(ENGINES_DIR, name);
+        await writeFile(dest, GENERATED_HEADER + source.trimStart());
+        console.log(`  \u2713 Wrote:  ${dest}`);
+    }
+
+    console.log(`\n\u2713 Installed ${copied}/${PAYLOADS.length} engine payloads, `
+        + `${Object.keys(ENTRIES).length} worker entries`);
+
+    if (copied !== PAYLOADS.length) {
+        console.error("Some engine payloads are missing. Run 'npm install' first.");
         process.exit(1);
     }
 }
 
-main().catch(err => {
-    console.error("Error:", err.message);
-    process.exit(1);
-});
+export { ENTRIES };
+
+// run only when invoked directly (check-engines.mjs imports ENTRIES)
+const invokedDirectly = process.argv[1]
+    && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+
+if (invokedDirectly) {
+    main().catch(err => {
+        console.error("Error:", err.message);
+        process.exit(1);
+    });
+}

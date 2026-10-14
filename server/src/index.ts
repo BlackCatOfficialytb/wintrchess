@@ -32,6 +32,14 @@ async function main() {
     app.use(cookieParser());
     app.use(hostnameWhitelist);
 
+    // Stockfish wasm builds allocate shared memory, which browsers only
+    // expose when the page is cross-origin isolated (COOP + COEP).
+    app.use((req, res, next) => {
+        res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+        res.setHeader("Cross-Origin-Embedder-Policy", "credentialless");
+        next();
+    });
+
     // Static assets
     app.use("/",
         express.static("client/dist"),

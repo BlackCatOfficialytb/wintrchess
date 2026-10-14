@@ -5,8 +5,8 @@ enum EngineVersion {
     STOCKFISH_19_LITE_MULTI = "stockfish-19-lite.js",
     STOCKFISH_19 = "stockfish-19-single.js",
     STOCKFISH_19_MULTI = "stockfish-19.js",
-    LICHESS_19_SMALLNET = "stockfish-19-lichess-build-smallnet",
-    LICHESS_19 = "stockfish-19-lichess-build"
+    LICHESS_19_SMALLNET = "stockfish-19-lichess-build-smallnet.js",
+    LICHESS_19 = "stockfish-19-lichess-build.js"
 }
 
 export default EngineVersion;

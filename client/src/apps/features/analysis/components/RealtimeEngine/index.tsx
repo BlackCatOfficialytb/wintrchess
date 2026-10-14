@@ -62,19 +62,24 @@ function RealtimeEngine({
 
         let mounted = true;
 
-        Engine.createAuto(hydratedConfig.version, hydratedConfig.multiThreaded)
-            .then(newEngine => {
-                if (mounted) {
-                    setEngine(newEngine);
-                } else {
-                    newEngine.terminate();
-                }
-            })
-            .catch(err => {
-                if (mounted) {
-                    setEvaluationError(t("realtimeEngine.error") + ": " + err.message);
-                }
-            });
+        let newEngine: Engine;
+        try {
+            newEngine = new Engine(hydratedConfig.version, hydratedConfig.multiThreaded);
+        } catch (err) {
+            if (mounted) {
+                setEvaluationError(
+                    t("realtimeEngine.error") + ": " + String(err)
+                );
+            }
+
+            return;
+        }
+
+        if (mounted) {
+            setEngine(newEngine);
+        } else {
+            newEngine.terminate();
+        }
 
         return () => {
             mounted = false;
