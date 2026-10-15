@@ -1,17 +1,13 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 import Collection from "@/constants/Collection";
-import { model } from "@/database/model";
 
 const announcementSchema = new Schema({
     colour: { type: String, required: true },
     content: { type: String, required: true }
 });
 
-const Announcement = model<{
-    colour: string;
-    content: string;
-}>(
+const Announcement = model(
     "announcement",
     announcementSchema,
     Collection.ANNOUNCEMENT

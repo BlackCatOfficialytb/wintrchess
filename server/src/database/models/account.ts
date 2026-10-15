@@ -1,29 +1,28 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import * as AuthTypes from "better-auth/types";
 
 import Collection from "@/constants/Collection";
-import { model } from "@/database/model";
 import { AuthInfer } from "@/lib/auth";
 
-export const User = model<AuthInfer["user"]>(
+export const User = model(
     "user",
     new Schema<AuthInfer["user"]>({}, { strict: false }),
     Collection.USERS
 );
 
-export const Account = model<AuthTypes.Account>(
+export const Account = model(
     "account",
     new Schema<AuthTypes.Account>(),
     Collection.ACCOUNTS
 );
 
-export const Session = model<AuthInfer["session"]>(
+export const Session = model(
     "session",
     new Schema<AuthInfer["session"]>(),
     Collection.SESSIONS
 );
 
-export const Verification = model<AuthTypes.Verification>(
+export const Verification = model(
     "verification",
     new Schema<AuthTypes.Verification>(),
     Collection.ACCOUNT_VERIFICATIONS 

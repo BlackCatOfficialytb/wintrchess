@@ -1,13 +1,10 @@
 import cluster from "cluster";
-import mongoose from "mongoose";
+import mongoose, { mongo } from "mongoose";
 import { betterAuth } from "better-auth";
-import type { BetterAuthOptions } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 import schemas, { additionalUserFields } from "shared/constants/account/schemas";
 import Collection from "@/constants/Collection";
-import { isSqliteReady } from "@/database/sqlite";
-import { sqliteAuthAdapter } from "@/database/sqliteAuthAdapter";
 import { sendAccountEmail } from "@/lib/email";
 
 import { requestProcessor, userInitialiser } from "./registration";
@@ -17,7 +14,7 @@ export type AuthInfer = AuthType["$Infer"]["Session"];
 
 let instance: AuthType | null = null;
 
-function createAuth(database: BetterAuthOptions["database"]) {
+function createAuth(database: mongo.Db) {
     if (!process.env.ORIGIN) {
         throw new Error("origin not specified.");
     }
@@ -29,7 +26,7 @@ function createAuth(database: BetterAuthOptions["database"]) {
     return betterAuth({
         baseURL: `${process.env.ORIGIN}/auth/account`,
         secret: process.env.AUTH_SECRET,
-        database,
+        database: mongodbAdapter(database),
         emailAndPassword: {
             enabled: true,
             minPasswordLength: schemas.password.minLength || 8,
@@ -98,19 +95,11 @@ function createAuth(database: BetterAuthOptions["database"]) {
 }
 
 export function getAuth() {
-    if (process.env.DATABASE_DRIVER == "sqlite") {
-        if (!isSqliteReady()) throw new Error(
-            "cannot initialise auth without sqlite database."
-        );
-
-        return instance ??= createAuth(sqliteAuthAdapter);
-    }
-
     if (!mongoose.connection.db) throw new Error(
         "cannot initialise auth without database connection."
     );
 
-    return instance ??= createAuth(mongodbAdapter(mongoose.connection.db));
+    return instance ??= createAuth(mongoose.connection.db);
 }
 
 export default getAuth;

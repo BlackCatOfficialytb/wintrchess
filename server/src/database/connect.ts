@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import cluster from "cluster";
 
 import Collection from "@/constants/Collection";
-import { initSqlite } from "@/database/sqlite";
 
 async function initialiseIndexes() {
     const db = mongoose.connection.db;
@@ -19,12 +18,6 @@ async function initialiseIndexes() {
 
 async function connectDatabase() {
     const first = cluster.worker?.id == 1;
-
-    if (process.env.DATABASE_DRIVER == "sqlite") {
-        initSqlite(process.env.SQLITE_PATH || "data/wintrchess.db");
-        if (first) console.log("sqlite database ready.");
-        return;
-    }
 
     try {
         await mongoose.connect(

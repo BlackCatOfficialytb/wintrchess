@@ -1,7 +1,6 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 
 import Collection from "@/constants/Collection";
-import { model } from "@/database/model";
 
 const analysisSessionSchema = new Schema({
     token: { type: String, required: true },
@@ -9,11 +8,7 @@ const analysisSessionSchema = new Schema({
     createdAt: { type: Date, required: true }
 });
 
-const AnalysisSession = model<{
-    token: string;
-    actions: number;
-    createdAt: Date;
-}>(
+const AnalysisSession = model(
     "analysisSession",
     analysisSessionSchema,
     Collection.ANALYSIS_SESSIONS
