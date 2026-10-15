@@ -1,11 +1,13 @@
 const tsEslint = require("typescript-eslint");
 const tsStylistic = require("@stylistic/eslint-plugin-ts");
 
-module.exports = tsEslint.config({
-    files: [
-        "**/*.ts",
-        "**/*.tsx"
-    ],
+module.exports = tsEslint.config(
+    { ignores: ["**/dist/**"] },
+    {
+        files: [
+            "**/*.ts",
+            "**/*.tsx"
+        ],
     languageOptions: {
         parser: tsEslint.parser
     },
@@ -14,7 +16,7 @@ module.exports = tsEslint.config({
         "@ts-styles": tsStylistic
     },
     rules: {
-        "@ts/quotes": ["error", "double"],
+        "@ts-styles/quotes": ["error", "double"],
         "@ts-styles/quote-props": ["error", "as-needed"],
         "@ts-styles/brace-style": "error",
         "@ts-styles/comma-dangle": ["error", "never"],

@@ -66,17 +66,7 @@ function createAuth(database: mongo.Db) {
             modelName: Collection.USERS,
             additionalFields: additionalUserFields,
             changeEmail: {
-                enabled: true,
-                sendChangeEmailVerification: async (ctx) => sendAccountEmail({
-                    recipient: ctx.newEmail,
-                    subject: "Verify your new email address",
-                    message: "Please verify your WintrChess account's new"
-                        + " email address by clicking the button below:",
-                    buttonLabel: "Verify Email Address",
-                    buttonUrl: ctx.url,
-                    plaintextFallback: "Please verify your WintrChess account's"
-                        + ` new email address: ${ctx.url}`
-                })
+                enabled: true
             },
             deleteUser: { enabled: true }
         },
