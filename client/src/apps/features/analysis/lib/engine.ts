@@ -9,9 +9,10 @@ const uciEvaluationTypes: Record<string, string | undefined> = {
     mate: "mate"
 };
 
-// Entries generated as ES modules instead of classic worker scripts
+// Entries generated as ES modules instead of classic worker scripts.
+// nmrugg's v19.0.1 files (including stockfish-19-asm.js) are classic
+// self-contained workers; only the lichess wrappers use ES module syntax.
 const moduleEngines = new Set<EngineVersion>([
-    EngineVersion.STOCKFISH_19_ASM,
     EngineVersion.LICHESS_19,
     EngineVersion.LICHESS_19_SMALLNET
 ]);

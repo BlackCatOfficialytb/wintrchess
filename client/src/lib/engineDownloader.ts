@@ -105,7 +105,17 @@ export async function downloadEngine(
     const downloadWasm = async (): Promise<ArrayBuffer | undefined> => {
         if (!info.wasmUrl) return undefined;
 
-        const response = await fetch(info.wasmUrl);
+        let response = await fetch(info.wasmUrl);
+        if (!response.ok) {
+            // client-side fallback: the local payload wasm is missing, so
+            // retry the release-asset name derived from the engine entry
+            // (the "sf wasm link.txt" convention <entry>.wasm). GitHub
+            // release assets send no CORS headers - a direct fetch throws
+            // "Failed to fetch" - so the retry stays same-origin and the
+            // server mirrors the txt links under /engines/.
+            const releaseWasm = info.jsUrl.replace(/\.js$/, ".wasm");
+            if (releaseWasm != info.wasmUrl) response = await fetch(releaseWasm);
+        }
         if (!response.ok) throw new Error(`Failed to download WASM: ${response.statusText}`);
 
         const contentLength = response.headers.get("content-length");

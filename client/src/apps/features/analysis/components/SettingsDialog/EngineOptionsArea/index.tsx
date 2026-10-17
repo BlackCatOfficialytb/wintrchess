@@ -15,24 +15,28 @@ import * as styles from "../SettingsDialog.module.css";
 
 const engineVersionOptions = [
     {
-        label: "Stockfish 19 (68 MB)",
+        label: "Stockfish 19 (99 MB)",
         value: EngineVersion.STOCKFISH_19
     },
     {
-        label: "Stockfish 19 Lite (Recommended)",
+        label: "Stockfish 19 Lite (1.7–1.9 MB) (Recommended)",
         value: EngineVersion.STOCKFISH_19_LITE
     },
     {
-        label: "Stockfish 19 (Compatibility)",
+        label: "Stockfish 19 (Compatibility) (3.2 MB)",
         value: EngineVersion.STOCKFISH_19_ASM
     },
     {
-        label: "Stockfish 19 (Lichess Build)",
+        label: "Stockfish 19 (Lichess Build) (0.6 MB)",
         value: EngineVersion.LICHESS_19
     },
     {
-        label: "Stockfish 19 (Lichess Smallnet)",
+        label: "Stockfish 19 (Lichess Smallnet) (0.5 MB)",
         value: EngineVersion.LICHESS_19_SMALLNET
+    },
+    {
+        label: "Stockfish 11 (HCE) (1.5 MB)",
+        value: EngineVersion.STOCKFISH_11
     }
 ];
 
@@ -101,6 +105,7 @@ function EngineOptionsArea() {
                     });
                 }}
                 dropdownStyle={{ width: "180px" }}
+                menuPositionStrategy="fixed"
             />
         </div>
 
@@ -259,6 +264,7 @@ function EngineOptionsArea() {
                     });
                 }}
                 dropdownStyle={{ width: "180px" }}
+                menuPositionStrategy="fixed"
             />
         </div>
     </>;

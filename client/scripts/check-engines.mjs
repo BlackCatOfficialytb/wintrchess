@@ -27,16 +27,20 @@ function assert(condition, message) {
     if (!condition) throw new Error(message);
 }
 
-// Every worker file shipped in EngineVersion must have a generated entry.
+// Every worker file shipped in EngineVersion must exist: either as a
+// generated entry or as a self-contained payload (nmrugg v19 builds).
 async function checkEnumMatches() {
     const source = await readFile(ENGINE_VERSION_FILE, "utf8");
     const versions = source.match(/"([^"]+\.js)"/g)?.map(value => value.slice(1, -1)) || [];
+    const files = await readdir(ENGINES_DIR);
 
-    const ungenerated = versions.filter(version => !(version in ENTRIES));
+    const missing = versions.filter(version => (
+        !(version in ENTRIES) && !files.includes(version)
+    ));
     const unshipped = Object.keys(ENTRIES).filter(entry => !versions.includes(entry));
 
     assert(versions.length > 0, "no engine versions found in EngineVersion.ts");
-    assert(!ungenerated.length, `no worker entry generated for: ${ungenerated}`);
+    assert(!missing.length, `engine file missing (no entry, no payload): ${missing}`);
     assert(!unshipped.length, `worker entry not in EngineVersion: ${unshipped}`);
 }
 

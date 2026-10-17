@@ -9,10 +9,21 @@ const NODE_MODULES = resolve(__dirname, "../../node_modules");
 
 // Engine payloads. Their names are load-bearing: both engines resolve their
 // .wasm (and their pthread workers) relative to their own file name.
+// stockfish/bin ships the real nmrugg v19.0.1 release builds (all five
+// flavors) - those files double as their own worker entries.
 const PAYLOADS = [
     "stockfish.wasm/stockfish.js",
     "stockfish.wasm/stockfish.wasm",
     "stockfish.wasm/stockfish.worker.js",
+    "stockfish/bin/stockfish-19.js",
+    "stockfish/bin/stockfish-19.wasm",
+    "stockfish/bin/stockfish-19-single.js",
+    "stockfish/bin/stockfish-19-single.wasm",
+    "stockfish/bin/stockfish-19-lite.js",
+    "stockfish/bin/stockfish-19-lite.wasm",
+    "stockfish/bin/stockfish-19-lite-single.js",
+    "stockfish/bin/stockfish-19-lite-single.wasm",
+    "stockfish/bin/stockfish-19-asm.js",
     "@lichess-org/stockfish-web/sf_19.js",
     "@lichess-org/stockfish-web/sf_19.wasm",
     "@lichess-org/stockfish-web/sf_19_smallnet.js",
@@ -60,11 +71,11 @@ self.onmessage = event => engine.uci(String(event.data));
 `;
 
 const ENTRIES = {
-    "stockfish-19-single.js": CLASSIC_ENTRY,
-    "stockfish-19.js": CLASSIC_ENTRY,
-    "stockfish-19-lite-single.js": CLASSIC_ENTRY,
-    "stockfish-19-lite.js": CLASSIC_ENTRY,
-    "stockfish-19-asm.js": moduleEntry("sf_19.js"),
+    // wraps the stockfish.wasm npm payload (lichess-org/stockfish.wasm,
+    // SF_classical Stockfish 11 with hand-crafted evaluation)
+    "stockfish-11.js": CLASSIC_ENTRY,
+    // the nmrugg v19.0.1 builds (stockfish-19*.js) are self-contained worker
+    // scripts - no generated entry needed, the payload file is the entry
     "stockfish-19-lichess-build.js": moduleEntry("sf_19.js"),
     "stockfish-19-lichess-build-smallnet.js": moduleEntry("sf_19_smallnet.js")
 };

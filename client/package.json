@@ -12,7 +12,6 @@
         "@babel/preset-typescript": "^7.24.6",
         "@lichess-org/stockfish-web": "^0.5.0",
         "@lichess-org/types": "^2.0.48",
-        "stockfish.wasm": "^0.5.7",
         "@mliebelt/pgn-parser": "^1.4.15",
         "@tanstack/react-query": "^5.50.1",
         "@types/lodash-es": "^4.17.12",
@@ -45,10 +44,14 @@
         "react-tooltip": "^5.28.1",
         "recharts": "^2.15.3",
         "shared": "*",
+        "stockfish.wasm": "^0.5.7",
         "style-loader": "^4.0.0",
         "webpack": "^5.91.0",
         "webpack-cli": "^5.1.4",
         "zod": "^4.0.10",
         "zustand": "^4.5.4"
+    },
+    "dependencies": {
+        "stockfish": "^19.0.1"
     }
 }

@@ -1,5 +1,5 @@
 > [!IMPORTANT]
-> Looking for maintainers! Please join [the Discord server](https://discord.com/invite/XxtsAzPyCb) and open a ticket to apply :)
+> Looking for maintainers! Please join [the Discord server](https://discord.com/invite/XxtsAzPyCb) and open a ticket to apply :\)
 
 <h1 align="center">
     <a href="https://wintrchess.com"><img width="175" src="https://github.com/user-attachments/assets/9a33a746-c9cd-43b8-b17b-564f3f6ce4a2" /></a>
@@ -24,12 +24,15 @@
 The WintrChess repository is a monorepo made up of three packages:
 
 #### `client`
+
 The frontend for the website built with React and TypeScript.
 
 #### `server`
+
 The backend for the website where the website content is served, and where any API endpoints will live.
 
 #### `shared`
+
 Libraries, some types and common logic is stored here and can be accessed by both other packages.
 
 ## 📚 Documentation
