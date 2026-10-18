@@ -25,7 +25,7 @@ import * as styles from "./OptionsToolbar.module.css";
 
 import iconBack from "@assets/img/interface/back.svg";
 import iconFlip from "@assets/img/interface/flip.svg";
-import iconReanalyze from "@assets/img/interface/reanalyze.svg";
+import iconReanalysis from "@assets/img/interface/reanalysis.svg";
 import iconSettings from "@assets/img/interface/settings.svg";
 import iconShare from "@assets/img/interface/share.svg";
 import iconSave from "@assets/img/interface/save.svg";
@@ -163,7 +163,7 @@ function OptionsToolbar() {
 
             {gameAnalysisOpen && <Button
                 className={styles.optionButton}
-                icon={iconReanalyze}
+                icon={iconReanalysis}
                 iconSize={"40px"}
                 tooltipId={"options-toolbar-reanalyze"}
                 disabled={analysisStatus != AnalysisStatus.INACTIVE}

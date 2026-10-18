@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <g transform="matrix(0.7778,0,0,0.7778,2.6664,2.6664)" stroke="#e8eaed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 22.677 22.677 L 18.337 18.337" style="transform-box: fill-box; transform-origin: 50% 50%;"/>
+    <path d="M3 12C3 7.063 7.063 3 12 3C14.515 3.009 16.932 3.992 18.74 5.74L21 8"/>
+    <path d="M21 3L21 8L16 8"/>
+    <path d="M21 12C21 16.937 16.937 21 12 21C9.485 20.991 7.068 20.008 5.26 18.26L3 16"/>
+    <path d="M8 16L3 16L3 21"/>
+  </g>
+</svg>
