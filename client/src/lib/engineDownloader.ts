@@ -1,264 +1,201 @@
-// local engine cache: downloads the stockfish js/wasm payloads listed in
-// shared EngineDownloads, stores them in IndexedDB so repeat visits run
-// fully offline, and hands out Blobs for the engine worker to consume.
-// metadata (version/size/date) is kept alongside the payloads so the
-// settings UI can list what is downloaded without reading the buffers.
+// runtime engine download manager: mirrors the stockfish payloads listed in
+// shared EngineDownloads into the Cache Storage API so repeat visits boot
+// the engines straight from disk - even offline. public/engine-downloads-sw.js
+// intercepts /engines/* and answers from that same cache; without a download
+// the plain /engines/<file> URLs keep loading from the network, so nothing
+// here is required for the engines to work - downloads only make them
+// instant and offline-capable.
 
-import { ENGINE_DOWNLOADS, getEngineDownloadInfo } from "shared/constants/EngineDownloads";
+import {
+    ENGINE_DOWNLOADS,
+    getEngineDownloadInfo,
+    getEngineDownloadSize
+} from "shared/constants/EngineDownloads";
 import EngineVersion from "shared/constants/EngineVersion";
 
-// one IndexedDB database for all engine versions; object store keyed by
-// EngineVersion so each engine has exactly one cached copy
-const DB_NAME = "wintrchess_engines";
-const STORE_NAME = "engines";
-const DB_VERSION = 1;
+const CACHE_NAME = "wintrchess-engines-v1";
 
-interface EngineMeta {
+// served from the site root (client/public), so its default scope covers
+// every /engines/ request
+const SERVICE_WORKER_URL = "/engine-downloads-sw.js";
+
+// synthetic cache entries holding the download metadata per engine; they
+// live outside /engines/ so no fetch ever hits them (only the cache API)
+const META_URL_PREFIX = "/engine-downloads-meta/";
+
+export interface DownloadedEngine {
     version: EngineVersion;
     downloadedAt: number;
-    size: number;
-    jsArrayBuffer: ArrayBuffer;
-    wasmArrayBuffer?: ArrayBuffer;
+    sizeBytes: number;
 }
 
-// opens (and on first use creates) the cache database; every public helper
-// calls this itself so there is no shared connection to keep alive/close
-function openDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onerror = () => reject(request.error);
-        request.onsuccess = () => resolve(request.result);
-        request.onupgradeneeded = (event) => {
-            const db = (event.target as IDBOpenDBRequest).result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                db.createObjectStore(STORE_NAME, { keyPath: "version" });
-            }
-        };
-    });
+const toAbsoluteUrl = (path: string) => new URL(path, location.origin).href;
+const getMetaUrl = (version: EngineVersion) => toAbsoluteUrl(META_URL_PREFIX + version);
+
+// registers the cache-serving service worker once per page load. false
+// means the browser cannot serve downloads from cache (no service worker
+// support or a non-secure context), which callers surface as an error
+// rather than silently downloading files that would never be used
+let serviceWorkerPromise: Promise<boolean> | null = null;
+
+export function ensureEngineDownloadServiceWorker(): Promise<boolean> {
+    if (serviceWorkerPromise) return serviceWorkerPromise;
+
+    serviceWorkerPromise = (async () => {
+        if (!("serviceWorker" in navigator) || !("caches" in window)) {
+            return false;
+        }
+
+        try {
+            await navigator.serviceWorker.register(SERVICE_WORKER_URL, { scope: "/" });
+            // resolves once the worker is active; it claims open pages, so
+            // this session's engine fetches are intercepted as well
+            await navigator.serviceWorker.ready;
+            return true;
+        } catch {
+            return false;
+        }
+    })();
+
+    return serviceWorkerPromise;
 }
 
-// reads one engine's cached entry; any error (indexedDB unavailable in
-// private browsing, blocked storage, upgrade race) degrades to "not cached"
-async function getCachedEngine(version: EngineVersion): Promise<EngineMeta | null> {
-    try {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(STORE_NAME, "readonly");
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.get(version);
-            request.onsuccess = () => {
-                const result = request.result as EngineMeta | undefined;
-                if (result) {
-                    resolve(result);
-                } else {
-                    resolve(null);
-                }
-            };
-            request.onerror = () => reject(request.error);
-        });
-    } catch {
-        return null;
+// drains a response body so callers get incremental byte counts; browsers
+// without a readable body fall back to one arrayBuffer() read (no
+// incremental progress, but the download still completes)
+async function drainWithProgress(
+    response: Response,
+    onChunk: (bytes: number) => void
+): Promise<void> {
+    const reader = response.body?.getReader();
+
+    if (!reader) {
+        onChunk((await response.arrayBuffer()).byteLength);
+        return;
+    }
+
+    while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        onChunk(value.length);
     }
 }
 
-// stores the freshly downloaded buffers; put() overwrites an existing entry
-// for the same version, so a re-download just replaces the old copy
-async function cacheEngine(meta: EngineMeta): Promise<void> {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(STORE_NAME, "readwrite");
-        const store = transaction.objectStore(STORE_NAME);
-        const request = store.put(meta);
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error);
-    });
-}
-
-// downloads js + wasm in parallel, caches both in IndexedDB, and returns
-// them as Blobs. progress spans 0-50 while the js payload streams and
-// 50-100 for wasm (or the whole range on js alone when the engine has no
-// wasm), so callers see one continuous bar across the two fetches
+// downloads every payload of one engine into the cache, reporting progress
+// 0-100 across the whole set by bytes. entries keep their original content
+// type because WebAssembly.instantiateStreaming rejects anything else, and
+// are keyed by plain URL so the service worker can match the engine's
+// ordinary /engines/ requests against them
 export async function downloadEngine(
     version: EngineVersion,
     onProgress?: (progress: number) => void
-): Promise<{ jsBlob: Blob; wasmBlob?: Blob }> {
+): Promise<void> {
     const info = getEngineDownloadInfo(version);
     if (!info) throw new Error(`Unknown engine version: ${version}`);
 
-    // streams the js entry point chunk by chunk (response.body reader)
-    // so partial progress is reportable; falls back to arrayBuffer() for
-    // environments without streaming, which means no progress updates
-    const downloadJs = async (): Promise<ArrayBuffer> => {
-        const response = await fetch(info.jsUrl);
-        if (!response.ok) throw new Error(`Failed to download JS: ${response.statusText}`);
+    if (!await ensureEngineDownloadServiceWorker()) {
+        throw new Error("Engine downloads are not supported in this browser");
+    }
 
-        const contentLength = response.headers.get("content-length");
-        const total = contentLength ? parseInt(contentLength, 10) : 0;
-        let loaded = 0;
+    const cache = await caches.open(CACHE_NAME);
+    const totalBytes = getEngineDownloadSize(info);
 
-        const reader = response.body?.getReader();
-        const chunks: Uint8Array[] = [];
-
-        if (reader) {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                chunks.push(value);
-                loaded += value.length;
-                if (total > 0 && onProgress) {
-                    onProgress(Math.round((loaded / total) * 50));
-                }
-            }
-        } else {
-            return response.arrayBuffer();
-        }
-
-        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
-        const result = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const chunk of chunks) {
-            result.set(chunk, offset);
-            offset += chunk.length;
-        }
-        return result.buffer;
+    let loadedBytes = 0;
+    const reportProgress = (bytes: number) => {
+        loadedBytes += bytes;
+        // hold at 99 until the files are actually stored, then jump to 100
+        onProgress?.(Math.min(99, Math.round((loadedBytes / totalBytes) * 100)));
     };
 
-    // wasm is optional (pure-JS builds); same streaming approach as the js
-    // payload, reporting the 50-100 half of the total progress range
-    const downloadWasm = async (): Promise<ArrayBuffer | undefined> => {
-        if (!info.wasmUrl) return undefined;
-
-        let response = await fetch(info.wasmUrl);
+    const downloadFile = async (path: string) => {
+        const response = await fetch(path);
         if (!response.ok) {
-            // client-side fallback: the local payload wasm is missing, so
-            // retry the release-asset name derived from the engine entry
-            // (the "sf wasm link.txt" convention <entry>.wasm). GitHub
-            // release assets send no CORS headers - a direct fetch throws
-            // "Failed to fetch" - so the retry stays same-origin and the
-            // server mirrors the txt links under /engines/.
-            const releaseWasm = info.jsUrl.replace(/\.js$/, ".wasm");
-            if (releaseWasm != info.wasmUrl) response = await fetch(releaseWasm);
-        }
-        if (!response.ok) throw new Error(`Failed to download WASM: ${response.statusText}`);
-
-        const contentLength = response.headers.get("content-length");
-        const total = contentLength ? parseInt(contentLength, 10) : 0;
-        let loaded = 0;
-
-        const reader = response.body?.getReader();
-        const chunks: Uint8Array[] = [];
-
-        if (reader) {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                chunks.push(value);
-                loaded += value.length;
-                if (total > 0 && onProgress) {
-                    onProgress(50 + Math.round((loaded / total) * 50));
-                }
-            }
-        } else {
-            return response.arrayBuffer();
+            throw new Error(`Failed to download ${path}: ${response.status} ${response.statusText}`);
         }
 
-        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
-        const result = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const chunk of chunks) {
-            result.set(chunk, offset);
-            offset += chunk.length;
-        }
-        return result.buffer;
+        // the cache keeps an untouched clone of the network response: a
+        // response rebuilt via new Response(...) is rejected when the site
+        // later loads it as a worker script, and the original headers
+        // already carry the correct js/wasm content types. the original
+        // body is drained in parallel so progress still ticks while the
+        // clone is written to disk
+        const forCache = response.clone();
+
+        await Promise.all([
+            drainWithProgress(response, reportProgress),
+            cache.put(toAbsoluteUrl(path), forCache)
+        ]);
     };
 
-    const [jsArrayBuffer, wasmArrayBuffer] = await Promise.all([downloadJs(), downloadWasm()]);
+    try {
+        await Promise.all(info.files.map(file => downloadFile(file.path)));
+    } catch (error) {
+        // drop a partial download: without this the half-cached files
+        // would waste quota and could later be served to the engine
+        await deleteEngine(version).catch(() => {});
+        if (error instanceof DOMException && error.name == "QuotaExceededError") {
+            throw new Error("Not enough storage space to download this engine");
+        }
+        throw error;
+    }
 
-    const meta: EngineMeta = {
+    const meta: DownloadedEngine = {
         version,
         downloadedAt: Date.now(),
-        size: jsArrayBuffer.byteLength + (wasmArrayBuffer?.byteLength || 0),
-        jsArrayBuffer,
-        wasmArrayBuffer
+        sizeBytes: totalBytes
     };
 
-    await cacheEngine(meta);
+    await cache.put(getMetaUrl(version), new Response(JSON.stringify(meta), {
+        headers: { "Content-Type": "application/json" }
+    }));
 
-    return {
-        jsBlob: new Blob([jsArrayBuffer]),
-        wasmBlob: wasmArrayBuffer ? new Blob([wasmArrayBuffer]) : undefined
-    };
+    onProgress?.(100);
 }
 
-// returns the js/wasm as Blobs, cache-first; null means "never downloaded
-// or cache unreadable", which callers treat as "must download first"
-export async function getEngineBlob(version: EngineVersion): Promise<{ jsBlob: Blob; wasmBlob?: Blob } | null> {
-    const cached = await getCachedEngine(version);
-    if (cached) {
-        return {
-            jsBlob: new Blob([cached.jsArrayBuffer]),
-            wasmBlob: cached.wasmArrayBuffer ? new Blob([cached.wasmArrayBuffer]) : undefined
-        };
-    }
-    return null;
-}
+// lists engines whose every payload plus meta entry is present. metadata
+// only - the payload buffers are never read out here
+export async function getDownloadedEngines(): Promise<DownloadedEngine[]> {
+    if (!("caches" in window)) return [];
 
-// synchronous stub kept for API compatibility: IndexedDB reads are async,
-// so a truthful check needs getDownloadedEngines()/getEngineBlob() instead.
-// callers (useEngineDownload) already derive the flag from their own state
-export function isEngineDownloaded(version: EngineVersion): boolean {
-    return false;
-}
-
-// lists cached engines as metadata only (buffers stripped) - used by the
-// settings UI to render download sizes/dates without loading payloads
-export async function getDownloadedEngines(): Promise<Array<{ version: EngineVersion; downloadedAt: number; size: number }>> {
     try {
-        const db = await openDB();
-        return new Promise((resolve, reject) => {
-            const transaction = db.transaction(STORE_NAME, "readonly");
-            const store = transaction.objectStore(STORE_NAME);
-            const request = store.getAll();
-            request.onsuccess = () => {
-                const results = request.result as EngineMeta[];
-                resolve(results.map(r => ({ version: r.version, downloadedAt: r.downloadedAt, size: r.size })));
-            };
-            request.onerror = () => reject(request.error);
-        });
+        const cache = await caches.open(CACHE_NAME);
+
+        const results = await Promise.all(ENGINE_DOWNLOADS.map(async info => {
+            const payloads = await Promise.all(info.files.map(
+                file => cache.match(toAbsoluteUrl(file.path))
+            ));
+            if (payloads.some(payload => !payload)) return null;
+
+            const meta = await cache.match(getMetaUrl(info.version));
+            if (!meta) return null;
+
+            return await meta.json() as DownloadedEngine;
+        }));
+
+        return results.filter((result): result is DownloadedEngine => result != null);
     } catch {
         return [];
     }
 }
 
-// removes one engine's cache entry (settings UI "delete"); no-op if absent
+// removes one engine's payloads and metadata; safe to call when nothing
+// was downloaded (also used to clean up after a failed download)
 export async function deleteEngine(version: EngineVersion): Promise<void> {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const transaction = db.transaction(STORE_NAME, "readwrite");
-        const store = transaction.objectStore(STORE_NAME);
-        const request = store.delete(version);
-        request.onsuccess = () => resolve();
-        request.onerror = () => reject(request.error);
-    });
+    const info = getEngineDownloadInfo(version);
+    if (!info || !("caches" in window)) return;
+
+    const cache = await caches.open(CACHE_NAME);
+    await Promise.all([
+        ...info.files.map(file => cache.delete(toAbsoluteUrl(file.path))),
+        cache.delete(getMetaUrl(version))
+    ]);
 }
 
-// path to the same-origin /engines/ mirror (the server serves these files;
-// going through it avoids the CORS-less GitHub release assets, see the
-// wasm fallback comment in downloadEngine)
-export function getEngineUrl(version: EngineVersion): string {
-    return `/engines/${version}`;
-}
-
-// object-URL helpers: engine workers get a blob: URL rather than the Blob
-// itself; every createEngineObjectUrl must eventually be paired with
-// revokeEngineObjectUrl so the blob memory is released
-export function createEngineObjectUrl(blob: Blob): string {
-    return URL.createObjectURL(blob);
-}
-
-export function revokeEngineObjectUrl(url: string): void {
-    URL.revokeObjectURL(url);
-}
-
-// re-export shared constants so consumers import engine metadata from one place
-export { ENGINE_DOWNLOADS, getEngineDownloadInfo } from "shared/constants/EngineDownloads";
+// re-export the shared metadata so consumers import engine info from one place
+export {
+    ENGINE_DOWNLOADS,
+    getEngineDownloadInfo,
+    getEngineDownloadSize,
+    formatEngineSize
+} from "shared/constants/EngineDownloads";

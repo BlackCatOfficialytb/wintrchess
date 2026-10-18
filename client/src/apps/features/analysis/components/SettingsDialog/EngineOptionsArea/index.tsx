@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "react-tooltip";
 import { floor, clamp } from "lodash-es";
@@ -10,6 +10,9 @@ import LogMessage from "@/components/common/LogMessage";
 import DropdownSetting from "@/components/settings/DropdownSetting";
 import NumberSetting from "@/components/settings/NumberSetting";
 import SwitchSetting from "@/components/settings/SwitchSetting";
+import Button from "@/components/common/Button";
+import ButtonColour from "@/components/common/Button/Colour";
+import EngineDownloadsDialog from "../EngineDownloadsDialog";
 
 import * as styles from "../SettingsDialog.module.css";
 
@@ -44,6 +47,8 @@ function EngineOptionsArea() {
     const { t, i18n } = useTranslation(["analysis", "common"]);
 
     const { settings, setSettings } = useSettingsStore();
+
+    const [showDownloadsDialog, setShowDownloadsDialog] = useState(false);
 
     const engineArrowsOptions = useMemo(() => [
         {
@@ -266,6 +271,24 @@ function EngineOptionsArea() {
                 dropdownStyle={{ width: "180px" }}
                 menuPositionStrategy="fixed"
             />
+        </div>
+
+        <div className={styles.setting}>
+            <span className={styles.header}>
+                {t("settings.engine.downloads.title")}
+            </span>
+
+            <Button
+                className={styles.smallButton}
+                style={{ backgroundColor: ButtonColour.BLUE }}
+                onClick={() => setShowDownloadsDialog(true)}
+            >
+                {t("settings.engine.downloads.manage")}
+            </Button>
+
+            {showDownloadsDialog && (
+                <EngineDownloadsDialog onClose={() => setShowDownloadsDialog(false)} />
+            )}
         </div>
     </>;
 }

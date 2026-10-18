@@ -54,6 +54,9 @@ class Engine {
     private createWorker(): Worker {
         const engineFile = getEngineFile(this.version, this.multiThreaded);
 
+        // these payloads can be mirrored into the download manager's cache;
+        // when they are, its service worker answers this request from disk
+        // instead of the network
         return new Worker(
             "/engines/" + engineFile,
             moduleEngines.has(this.version) ? { type: "module" } : undefined

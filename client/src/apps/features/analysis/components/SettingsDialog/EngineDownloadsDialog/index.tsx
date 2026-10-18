@@ -5,6 +5,7 @@ import ButtonColour from "@/components/common/Button/Colour";
 import Dialog from "@/components/common/Dialog";
 import Button from "@/components/common/Button";
 import { useEngineDownload } from "@/hooks/useEngineDownload";
+import { formatEngineSize, getEngineDownloadSize } from "@/lib/engineDownloader";
 
 import * as styles from "./EngineDownloadsDialog.module.css";
 
@@ -14,7 +15,6 @@ function EngineDownloadsDialog({ onClose }: { onClose: () => void }) {
         downloading,
         progress,
         downloadedEngines,
-        refreshDownloaded,
         handleDownload,
         handleDelete,
         isDownloaded,
@@ -46,7 +46,7 @@ function EngineDownloadsDialog({ onClose }: { onClose: () => void }) {
                                     {info?.label || engine.version}
                                 </span>
                                 <span className={styles.downloadedSize}>
-                                    {(engine.size / 1024 / 1024).toFixed(1)} MB
+                                    {formatEngineSize(engine.sizeBytes)}
                                 </span>
                                 <Button
                                     className={styles.smallButton}
@@ -76,7 +76,7 @@ function EngineDownloadsDialog({ onClose }: { onClose: () => void }) {
                                     {info.label}
                                 </span>
                                 <span className={styles.availableDescription}>
-                                    {info.description} ({info.size})
+                                    {info.description} ({formatEngineSize(getEngineDownloadSize(info))})
                                 </span>
                             </div>
                             <div className={styles.availableActions}>
