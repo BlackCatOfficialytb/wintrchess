@@ -10,6 +10,7 @@ import { cloneDeep, omit } from "lodash-es";
 import { defaultAnalysedGame } from "shared/constants/utils";
 import AnalysisStatus from "@analysis/constants/AnalysisStatus";
 import useAnalysisProgressStore from "../../stores/AnalysisProgressStore";
+import useReanalyzeGame from "@analysis/hooks/useReanalyzeGame";
 import { useAnalysisGameStore } from "@analysis/stores/AnalysisGameStore";
 import useAnalysisBoardStore from "@analysis/stores/AnalysisBoardStore";
 import useRealtimeEngineStore from "@analysis/stores/RealtimeEngineStore";
@@ -24,6 +25,7 @@ import * as styles from "./OptionsToolbar.module.css";
 
 import iconBack from "@assets/img/interface/back.svg";
 import iconFlip from "@assets/img/interface/flip.svg";
+import iconReanalyze from "@assets/img/interface/reanalyze.svg";
 import iconSettings from "@assets/img/interface/settings.svg";
 import iconShare from "@assets/img/interface/share.svg";
 import iconSave from "@assets/img/interface/save.svg";
@@ -37,11 +39,13 @@ function OptionsToolbar() {
 
     const {
         evaluationController,
+        analysisStatus,
         setAnalysisStatus,
         setAnalysisError
     } = useAnalysisProgressStore(
         useShallow(state => ({
             evaluationController: state.evaluationController,
+            analysisStatus: state.analysisStatus,
             setAnalysisStatus: state.setAnalysisStatus,
             setAnalysisError: state.setAnalysisError
         }))
@@ -64,6 +68,8 @@ function OptionsToolbar() {
     const setDisplayedEngineLines = useRealtimeEngineStore(
         state => state.setDisplayedEngineLines
     );
+
+    const reanalyzeGame = useReanalyzeGame();
 
     const [ settingsOpen, setSettingsOpen ] = useState(false);
     const [ shareOpen, setShareOpen ] = useState(false);
@@ -152,6 +158,21 @@ function OptionsToolbar() {
             <Tooltip
                 id="options-toolbar-flip"
                 content={t("optionsToolbar.flipBoard")}
+                delayShow={500}
+            />
+
+            {gameAnalysisOpen && <Button
+                className={styles.optionButton}
+                icon={iconReanalyze}
+                iconSize={"40px"}
+                tooltipId={"options-toolbar-reanalyze"}
+                disabled={analysisStatus != AnalysisStatus.INACTIVE}
+                onClick={reanalyzeGame}
+            />}
+
+            <Tooltip
+                id="options-toolbar-reanalyze"
+                content={t("optionsToolbar.reanalyze")}
                 delayShow={500}
             />
 

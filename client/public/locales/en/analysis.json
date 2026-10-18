@@ -2,6 +2,7 @@
     "title": "Game Analysis",
     "optionsToolbar": {
         "flipBoard": "Flip Board",
+        "reanalyze": "Reanalyze Game",
         "share": "Share Game",
         "save": "Save to Archive",
         "noArchiveStorage": "You can only store up to 50 games in your Game Archive.",
