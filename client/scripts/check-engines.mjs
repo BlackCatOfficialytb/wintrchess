@@ -74,7 +74,7 @@ function installGlobals(scratch, entry, lines) {
     // emscripten routes pthread aborts through the main thread as alert()
     globalThis.alert = message => lines.push(String(message));
 
-    // pthread pool: stockfish.worker.js runs on a real thread (the classic
+    // pthread pool: stockfish-11-hce.worker.js runs on a real thread (the classic
     // engine blocks in Atomics.wait until it executes the thread entry), so
     // the handle only relays messages between emscripten and that thread.
     // outbound messages buffer until the stub signals its handler is up.

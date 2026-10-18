@@ -51,22 +51,29 @@ async function main() {
     // nmrugg/stockfish.js v19 release assets (see "sf wasm link.txt").
     // The browser cannot fetch these directly - release assets send no
     // Access-Control-Allow-Origin header - so the server proxies them.
+    // Keys are our variant-specific local names, values the upstream asset
+    // names they were renamed from.
     // ponytail: no disk cache; add one if repeated 90MB pulls show up in logs.
     const engineReleaseBase =
         "https://github.com/nmrugg/stockfish.js/releases/download/v19.0.1/";
-    const engineFallbacks = new Set([
-        "stockfish-19.js", "stockfish-19.wasm",
-        "stockfish-19-single.js", "stockfish-19-single.wasm",
-        "stockfish-19-lite.js", "stockfish-19-lite.wasm",
-        "stockfish-19-lite-single.js", "stockfish-19-lite-single.wasm",
-        "stockfish-19-asm.js"
+    const engineFallbacks = new Map([
+        ["stockfish-19-full-multi.js", "stockfish-19.js"],
+        ["stockfish-19-full-multi.wasm", "stockfish-19.wasm"],
+        ["stockfish-19-full-single.js", "stockfish-19-single.js"],
+        ["stockfish-19-full-single.wasm", "stockfish-19-single.wasm"],
+        ["stockfish-19-lite-multi.js", "stockfish-19-lite.js"],
+        ["stockfish-19-lite-multi.wasm", "stockfish-19-lite.wasm"],
+        ["stockfish-19-lite-single.js", "stockfish-19-lite-single.js"],
+        ["stockfish-19-lite-single.wasm", "stockfish-19-lite-single.wasm"],
+        ["stockfish-19-asm.js", "stockfish-19-asm.js"]
     ]);
 
     app.get("/engines/:file", async (req, res) => {
-        if (!engineFallbacks.has(req.params.file)) return res.sendStatus(404);
+        const upstreamName = engineFallbacks.get(req.params.file);
+        if (!upstreamName) return res.sendStatus(404);
 
         try {
-            const upstream = await fetch(engineReleaseBase + req.params.file);
+            const upstream = await fetch(engineReleaseBase + upstreamName);
             if (!upstream.ok || !upstream.body) return res.sendStatus(404);
 
             res.status(200);

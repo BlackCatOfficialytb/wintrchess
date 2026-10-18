@@ -1,5 +1,5 @@
-// Emulates a browser worker scope just enough to run stockfish.wasm's
-// stockfish.worker.js inside a node:worker_threads Worker. check-engines.mjs
+// Emulates a browser worker scope just enough to run the stockfish-11-hce
+// build's stockfish-11-hce.worker.js inside a node:worker_threads Worker. check-engines.mjs
 // uses this for the engine's pthread pool; a real browser loads the file
 // directly as a classic worker.
 import { readFileSync } from "node:fs";
@@ -26,7 +26,7 @@ globalThis.postMessage = message => parentPort.postMessage(message);
 parentPort.postMessage({ ready: true });
 parentPort.on("message", data => globalThis.onmessage?.({ data }));
 
-// stockfish.worker.js has a native node branch (require/__filename) that
+// stockfish-11-hce.worker.js has a native node branch (require/__filename) that
 // would crash in a vm context - hide process so it takes the browser branch
 globalThis.process = undefined;
 
