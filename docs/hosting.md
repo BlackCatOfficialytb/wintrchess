@@ -44,6 +44,12 @@ The origin - URLs in emails are constructed using this, and the authentication u
 For example, `http://localhost:8080` or `https://wintrchess.com`.
 
 ```toml
+TRUSTED_ORIGINS="https://app.example.com,https://*.example.dev"
+```
+
+Additional origins that authentication requests are accepted from, separated by commas. `ORIGIN` is always accepted. Supports `*` and `?` wildcards, which is useful when the app is served through a tunnel or preview deployment.
+
+```toml
 SQLITE_PATH="data/wintrchess.db"
 ```
 

@@ -27,6 +27,10 @@ function createAuth(database: BetterAuthOptions["database"]) {
     return betterAuth({
         baseURL: `${process.env.ORIGIN}/auth/account`,
         secret: process.env.AUTH_SECRET,
+        trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "")
+            .split(",")
+            .map(origin => origin.trim())
+            .filter(Boolean),
         database,
         emailAndPassword: {
             enabled: true,
