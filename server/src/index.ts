@@ -7,7 +7,6 @@ import dotenv from "dotenv";
 import { toNodeHandler } from "better-auth/node";
 
 import connectDatabase from "@/database/connect";
-import hostnameWhitelist from "@/lib/security/whitelist";
 import getAuth from "@/lib/auth";
 import mainRouter from "./routes";
 
@@ -31,7 +30,6 @@ async function main() {
     const app = express();
 
     app.use(cookieParser());
-    app.use(hostnameWhitelist);
 
     // Stockfish wasm builds allocate shared memory, which browsers only
     // expose when the page is cross-origin isolated (COOP + COEP).
