@@ -1,5 +1,5 @@
 const tsEslint = require("typescript-eslint");
-const tsStylistic = require("@stylistic/eslint-plugin-ts");
+const stylistic = require("@stylistic/eslint-plugin");
 
 module.exports = tsEslint.config(
     { ignores: ["**/dist/**"] },
@@ -8,28 +8,29 @@ module.exports = tsEslint.config(
             "**/*.ts",
             "**/*.tsx"
         ],
-    languageOptions: {
-        parser: tsEslint.parser
-    },
-    plugins: {
-        "@ts": tsEslint.plugin,
-        "@ts-styles": tsStylistic
-    },
-    rules: {
-        "@ts-styles/quotes": ["error", "double"],
-        "@ts-styles/quote-props": ["error", "as-needed"],
-        "@ts-styles/brace-style": "error",
-        "@ts-styles/comma-dangle": ["error", "never"],
-        "@ts-styles/comma-spacing": "error",
-        "@ts-styles/function-call-spacing": "error",
-        "@ts-styles/indent": ["error", 4],
-        "@ts-styles/key-spacing": "error",
-        "@ts-styles/keyword-spacing": "error",
-        "@ts-styles/member-delimiter-style": "error",
-        "@ts-styles/semi": "error",
-        "@ts-styles/no-extra-semi": "error",
-        "@ts-styles/type-annotation-spacing": "error",
-        "@ts/no-empty-function": "warn",
-        "@ts/no-unused-vars": "warn"
+        languageOptions: {
+            parser: tsEslint.parser
+        },
+        plugins: {
+            "@ts": tsEslint.plugin,
+            "@stylistic": stylistic
+        },
+        rules: {
+            "@stylistic/quotes": ["error", "double"],
+            "@stylistic/quote-props": ["error", "as-needed"],
+            "@stylistic/brace-style": "error",
+            "@stylistic/comma-dangle": ["error", "never"],
+            "@stylistic/comma-spacing": "error",
+            "@stylistic/function-call-spacing": "error",
+            "@stylistic/indent": ["error", 4],
+            "@stylistic/key-spacing": "error",
+            "@stylistic/keyword-spacing": "error",
+            "@stylistic/member-delimiter-style": "error",
+            "@stylistic/semi": "error",
+            "@stylistic/no-extra-semi": "error",
+            "@stylistic/type-annotation-spacing": "error",
+            "@ts/no-empty-function": "warn",
+            "@ts/no-unused-vars": "warn"
+        }
     }
-});
+);
