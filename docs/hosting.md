@@ -6,7 +6,6 @@
 
 - Git
 - Node.js 22 or later
-- MongoDB
 - Docker, if you want to host with that
 
 ## Setup
@@ -45,10 +44,10 @@ The origin - URLs in emails are constructed using this, and the authentication u
 For example, `http://localhost:8080` or `https://wintrchess.com`.
 
 ```toml
-DATABASE_URI="mongodb://" # ...
+SQLITE_PATH="data/wintrchess.db"
 ```
 
-A connection string for a MongoDB database. Collections, indexes etc. will be created when the app runs. Defaults to `mongodb://database/wintrchess`.
+The path of the SQLite database file. The file and its parent directory are created automatically when the app starts. Defaults to `data/wintrchess.db`.
 
 ```toml
 ANALYSIS_SESSION_ACTIONS=80
@@ -131,12 +130,13 @@ npm start
 ```
 
 The server will begin listening on the port that you defined in the environment variables, or `8080` if you have not defined one.
-Make sure you have your database running.
+The SQLite database is created automatically at `SQLITE_PATH` (default `data/wintrchess.db`).
 
 ## Deploy with Docker
 
-You might find it easier to run WintrChess in a Docker container. The database will be created for you so you will not have to
-specify a database URI.
+You might find it easier to run WintrChess in a Docker container. The SQLite
+database lives in the `wintrchess-database` volume, so it survives container
+rebuilds.
 
 ### Build and start
 

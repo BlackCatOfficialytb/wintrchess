@@ -1,4 +1,3 @@
-import { Types } from "mongoose";
 import { gzipSync, gunzipSync } from "zlib";
 import { Compressed, compress, decompress } from "compress-json";
 import { Buffer } from "buffer";
@@ -42,9 +41,7 @@ export async function unarchiveAnalysedGame(
 }
 
 export async function clearArchivedGames(userId: string) {
-    await ArchivedGameModel.deleteMany({
-        userId: new Types.ObjectId(userId)
-    });
+    await ArchivedGameModel.deleteMany({ userId });
 }
 
 export function getArchivedGameMetadata<T extends ArchivedGameMetadata>(

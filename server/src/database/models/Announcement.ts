@@ -1,15 +1,12 @@
-import { Schema, model } from "mongoose";
-
 import Collection from "@/constants/Collection";
+import { model } from "@/database/model";
 
-const announcementSchema = new Schema({
-    colour: { type: String, required: true },
-    content: { type: String, required: true }
-});
+export interface AnnouncementDocument {
+    colour: string;
+    content: string;
+}
 
-const Announcement = model(
-    "announcement",
-    announcementSchema,
+const Announcement = model<AnnouncementDocument>(
     Collection.ANNOUNCEMENT
 );
 

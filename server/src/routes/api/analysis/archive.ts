@@ -1,7 +1,6 @@
 import express, { Router } from "express";
 import z from "zod";
 import { StatusCodes } from "http-status-codes";
-import { Types } from "mongoose";
 import { omit } from "lodash-es";
 
 import {
@@ -27,7 +26,7 @@ router.get("/analysis/archive", async (req, res) => {
         return res.sendStatus(StatusCodes.UNAUTHORIZED);
 
     const rawArchive = await ArchivedGame.find({
-        userId: new Types.ObjectId(req.user.id)
+        userId: req.user.id
     }).lean();
 
     const archive: GameArchive = Object.fromEntries(
@@ -60,7 +59,7 @@ router.post("/analysis/archive/add", async (req, res) => {
         analysedGame, req.user.id
     );
 
-    if (existingGame?.userId.toString() == req.user.id) {
+    if (existingGame?.userId == req.user.id) {
         // Update existing archived game
         await existingGame.updateOne(
             omit(archivedGame, ["userId"])
@@ -71,17 +70,14 @@ router.post("/analysis/archive/add", async (req, res) => {
 
     // Check for maximum archive size
     const userArchiveSize = await ArchivedGame.countDocuments({
-        userId: new Types.ObjectId(req.user.id)
+        userId: req.user.id
     });
 
     if (userArchiveSize >= maximumArchiveSize)
         return res.sendStatus(StatusCodes.INSUFFICIENT_STORAGE);
 
     // Create new archived game
-    const archiveEntry = await ArchivedGame.create({
-        ...archivedGame,
-        userId: new Types.ObjectId(req.user.id)
-    });
+    const archiveEntry = await ArchivedGame.create(archivedGame);
 
     res.send(archiveEntry._id.toString());
 });
@@ -96,8 +92,8 @@ router.post("/analysis/archive/delete", async (req, res) => {
         return res.sendStatus(StatusCodes.BAD_REQUEST);
 
     const deletion = await ArchivedGame.deleteMany({
-        _id: { $in: gameIds.map(gameId => new Types.ObjectId(gameId)) },
-        userId: new Types.ObjectId(req.user.id)
+        _id: { $in: gameIds },
+        userId: req.user.id
     });
 
     if (deletion.deletedCount == 0)

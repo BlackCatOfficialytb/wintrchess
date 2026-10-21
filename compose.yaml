@@ -7,13 +7,8 @@ services:
       - "${PORT:-8080}:8080"
     env_file:
       - .env
-    depends_on:
-      - database
-  database:
-    image: mongo:latest
     volumes:
-      - wintrchess-database:/data/db
-    attach: false
+      - wintrchess-database:/app/data
 
 volumes:
   wintrchess-database:

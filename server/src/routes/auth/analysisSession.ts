@@ -62,7 +62,8 @@ router.post(path, async (req, res) => {
 
     await AnalysisSession.create({
         token: sessionToken,
-        actions: process.env.ANALYSIS_SESSION_ACTIONS || defaultSessionActions,
+        actions: Number(process.env.ANALYSIS_SESSION_ACTIONS)
+            || defaultSessionActions,
         createdAt: new Date()
     });
 
