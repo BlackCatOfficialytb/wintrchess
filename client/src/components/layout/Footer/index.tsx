@@ -1,23 +1,11 @@
-import React, { lazy, Suspense, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
 import Typography from "@/components/Typography";
-import Dialog from "@/components/common/Dialog";
-import LoadingPlaceholder from "../LoadingPlaceholder";
 import { manageDataConsent } from "@/lib/consent";
 
 import FooterProps from "./FooterProps";
 import * as styles from "./Footer.module.css";
-
-const LanguagesDialog = lazy(() => import(
-    "@/components/settings/LanguagesDialog"
-));
-
-function LoadingDialog() {
-    return <Dialog>
-        <LoadingPlaceholder/>
-    </Dialog>;
-}
 
 function Footer({ className, style }: FooterProps) {
     const { t } = useTranslation(["common", "helpCenter"]);
@@ -25,8 +13,6 @@ function Footer({ className, style }: FooterProps) {
     const copyrightYear = useMemo(() => (
         new Date().getFullYear()
     ), []);
-
-    const [ languagesOpen, setLanguagesOpen ] = useState(false);
 
     return <footer
         className={`${styles.wrapper} ${className}`}
@@ -58,12 +44,9 @@ function Footer({ className, style }: FooterProps) {
                     {t("footer.privacySettings")}
                 </span>
 
-                <span
-                    className={styles.link}
-                    onClick={() => setLanguagesOpen(true)}
-                >
+                <a href="/settings/language" className={styles.link}>
                     {t("footer.language")}
-                </span>
+                </a>
             </div>
 
             <div className={styles.section}>
@@ -80,12 +63,6 @@ function Footer({ className, style }: FooterProps) {
                 </a>
             </div>
         </div>
-
-        <Suspense fallback={<LoadingDialog/>}>
-            {languagesOpen && <LanguagesDialog
-                onClose={() => setLanguagesOpen(false)}
-            />}
-        </Suspense>
     </footer>;
 }
 
