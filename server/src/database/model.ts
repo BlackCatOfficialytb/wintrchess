@@ -1,4 +1,4 @@
-import { sqliteModel } from "./sqlite";
+import { sqlModel } from "./sql";
 
 export interface StoredId {
     toString(): string;
@@ -39,9 +39,8 @@ export interface ModelLike<T> {
 }
 
 /**
- * Single entry point for the app's models, backed by the SQLite document
- * store.
+ * Single entry point for the app's models, backed by the SQL document store.
  */
 export function model<T>(collection: string): ModelLike<T> {
-    return sqliteModel<T>(collection);
+    return sqlModel<T>(collection);
 }

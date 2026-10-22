@@ -50,10 +50,22 @@ TRUSTED_ORIGINS="https://app.example.com,https://*.example.dev"
 Additional origins that authentication requests are accepted from, separated by commas. `ORIGIN` is always accepted. Supports `*` and `?` wildcards, which is useful when the app is served through a tunnel or preview deployment.
 
 ```toml
+DATABASE_URL="sqlite:data/wintrchess.db"
+```
+
+The database to use. The tables are created automatically on startup.
+
+- SQLite: `sqlite:data/wintrchess.db` or a plain file path. The file and its parent directory are created automatically. This is the default.
+- MySQL / MariaDB: `mysql://user:password@host:3306/wintrchess` (or a `mariadb://` URL).
+- PostgreSQL: `postgresql://user:password@host:5432/wintrchess` (or a `postgres://` URL).
+
+The database user needs permission to create tables, or the tables must already exist.
+
+```toml
 SQLITE_PATH="data/wintrchess.db"
 ```
 
-The path of the SQLite database file. The file and its parent directory are created automatically when the app starts. Defaults to `data/wintrchess.db`.
+The path of the SQLite database file when `DATABASE_URL` is not set. The file and its parent directory are created automatically when the app starts. Defaults to `data/wintrchess.db`.
 
 ```toml
 ANALYSIS_SESSION_ACTIONS=80
@@ -136,13 +148,14 @@ npm start
 ```
 
 The server will begin listening on the port that you defined in the environment variables, or `8080` if you have not defined one.
-The SQLite database is created automatically at `SQLITE_PATH` (default `data/wintrchess.db`).
+Database tables are created automatically on startup. SQLite is the default at `SQLITE_PATH` (default `data/wintrchess.db`); set `DATABASE_URL` to a MySQL/MariaDB or PostgreSQL URL to use an external server instead.
 
 ## Deploy with Docker
 
 You might find it easier to run WintrChess in a Docker container. The SQLite
 database lives in the `wintrchess-database` volume, so it survives container
-rebuilds.
+rebuilds. If you use MySQL or PostgreSQL, set `DATABASE_URL` to your server;
+the volume is then unused.
 
 ### Build and start
 

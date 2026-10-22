@@ -1,4 +1,4 @@
-// Runnable check for the sqlite storage layer.
+// Runnable check for the SQL storage layer using its default SQLite backend.
 // Run: npm run build -w server && npm run check-sqlite -w server
 import { strict as assert } from "node:assert";
 import { existsSync, mkdtempSync, rmSync } from "node:fs";
@@ -8,7 +8,7 @@ import { pathToFileURL, fileURLToPath } from "node:url";
 import { DatabaseSync } from "node:sqlite";
 
 const scriptsDirectory = dirname(fileURLToPath(import.meta.url));
-const distFile = join(scriptsDirectory, "..", "dist", "database", "sqlite.js");
+const distFile = join(scriptsDirectory, "..", "dist", "database", "sql.js");
 
 if (!existsSync(distFile)) {
     console.error("dist is missing - run: npm run build -w server");
@@ -20,9 +20,9 @@ const load = relative => import(
 );
 
 const {
-    initSqlite, sqliteModel, ObjectId, closeSqlite, purgeExpiredAnalysisSessions
-} = await load("sqlite.js");
-const { sqliteAuthAdapter } = await load("sqliteAuthAdapter.js");
+    initDatabase, sqlModel, ObjectId, closeDatabase, purgeExpiredAnalysisSessions
+} = await load("sql.js");
+const { sqlAuthAdapter } = await load("sqlAuthAdapter.js");
 const { default: Collection } = await import(
     pathToFileURL(join(scriptsDirectory, "..", "dist", "constants", "Collection.js")).href
 );
@@ -31,11 +31,11 @@ const directory = mkdtempSync(join(tmpdir(), "wintrchess-sqlite-check-"));
 const databasePath = join(directory, "check.db");
 process.on("exit", () => {
     // Release the file handle before deleting (Windows locks open files).
-    closeSqlite();
+    closeDatabase();
     rmSync(directory, { recursive: true, force: true });
 });
 
-initSqlite(databasePath);
+await initDatabase(databasePath);
 
 // --- ObjectId shim ---------------------------------------------------------
 const generatedId = new ObjectId();
@@ -45,7 +45,7 @@ assert.equal(new ObjectId(generatedId.toString()).hex, generatedId.hex);
 assert.throws(() => new ObjectId("not-a-hex-id"));
 
 // --- documents: create, revive types, query -------------------------------
-const games = sqliteModel(Collection.ARCHIVED_GAMES);
+const games = sqlModel(Collection.ARCHIVED_GAMES);
 // better-auth generates non-hex user ids, so archived games keep the string.
 const userId = "better-auth-user-id-1234567890abcdef";
 
@@ -72,7 +72,7 @@ assert.equal(
 assert.throws(() => games.findById("garbage"));
 
 // --- instance methods ------------------------------------------------------
-const sessions = sqliteModel(Collection.ANALYSIS_SESSIONS);
+const sessions = sqlModel(Collection.ANALYSIS_SESSIONS);
 const session = await sessions.create({
     token: "session-token", actions: 80, createdAt: new Date()
 });
@@ -88,7 +88,7 @@ await session.deleteOne();
 assert.equal(await sessions.findOne({ token: "session-token" }), null);
 
 // --- sorting, skipping, limiting, lean -------------------------------------
-const news = sqliteModel(Collection.NEWS_ARTICLES);
+const news = sqlModel(Collection.NEWS_ARTICLES);
 await news.create({ id: "a", timestamp: "2026-01-01" });
 await news.create({ id: "b", timestamp: "2026-01-03" });
 const third = await news.create({ id: "c", timestamp: "2026-01-02" });
@@ -118,7 +118,7 @@ const deletion = await news.deleteMany({ _id: { $in: [third._id.toString()] } })
 assert.equal(deletion.deletedCount, 1);
 assert.equal(await news.findOne({ id: "c" }), null);
 
-const announcements = sqliteModel(Collection.ANNOUNCEMENT);
+const announcements = sqlModel(Collection.ANNOUNCEMENT);
 await announcements.create({ colour: "red", content: "hello" });
 assert.equal((await announcements.deleteMany()).deletedCount, 1);
 
@@ -138,13 +138,13 @@ const expired = await sessions.create({
 });
 await sessions.create({ token: "fresh", actions: 80, createdAt: new Date() });
 
-purgeExpiredAnalysisSessions();
+await purgeExpiredAnalysisSessions();
 
 assert.equal(await sessions.findOne({ token: expired.token }), null);
 assert.ok(await sessions.findOne({ token: "fresh" }), "fresh sessions stay");
 
 // --- better-auth adapter ---------------------------------------------------
-const adapter = sqliteAuthAdapter({
+const adapter = sqlAuthAdapter({
     user: { modelName: Collection.USERS },
     account: { modelName: Collection.ACCOUNTS },
     session: { modelName: Collection.SESSIONS },
@@ -273,4 +273,4 @@ assert.equal(await adapter.count({
     where: [{ field: "id", value: user.id }]
 }), 0, "delete removes the record");
 
-console.log("sqlite storage check passed");
+console.log("sql storage check passed (sqlite backend)");

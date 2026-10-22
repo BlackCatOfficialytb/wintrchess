@@ -4,8 +4,8 @@ import type { BetterAuthOptions } from "better-auth";
 
 import schemas, { additionalUserFields } from "shared/constants/account/schemas";
 import Collection from "@/constants/Collection";
-import { isSqliteReady } from "@/database/sqlite";
-import { sqliteAuthAdapter } from "@/database/sqliteAuthAdapter";
+import { isDatabaseReady } from "@/database/sql";
+import { sqlAuthAdapter } from "@/database/sqlAuthAdapter";
 import { sendAccountEmail } from "@/lib/email";
 
 import { requestProcessor, userInitialiser } from "./registration";
@@ -90,11 +90,11 @@ function createAuth(database: BetterAuthOptions["database"]) {
 }
 
 export function getAuth() {
-    if (!isSqliteReady()) throw new Error(
+    if (!isDatabaseReady()) throw new Error(
         "cannot initialise auth without database connection."
     );
 
-    return instance ??= createAuth(sqliteAuthAdapter);
+    return instance ??= createAuth(sqlAuthAdapter);
 }
 
 export default getAuth;

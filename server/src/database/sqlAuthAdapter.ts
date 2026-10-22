@@ -2,12 +2,12 @@ import { createAdapterFactory } from "better-auth/adapters";
 
 import {
     ObjectId, deleteDocument, readDocuments, writeDocument
-} from "./sqlite";
+} from "./sql";
 
-// better-auth adapter over the sqlite document store. Model names come from
-// the modelName options in lib/auth and match the table names that
-// initSqlite creates, so no mapping layer is needed. Auth records keep their
-// better-auth id in the _id column and never store a duplicate `id` field.
+// better-auth adapter over the SQL document store. Model names come from the
+// modelName options in lib/auth and match the table names that initDatabase
+// creates, so no mapping layer is needed. Auth records keep their better-auth
+// id in the _id column and never store a duplicate `id` field.
 
 type WhereClause = {
     field: string;
@@ -154,10 +154,10 @@ function withId(id: string, doc: Record<string, any>) {
     return { ...doc, id } as any;
 }
 
-export const sqliteAuthAdapter = createAdapterFactory({
+export const sqlAuthAdapter = createAdapterFactory({
     config: {
-        adapterId: "sqlite-documents",
-        adapterName: "SQLite Documents",
+        adapterId: "sql-documents",
+        adapterName: "SQL Documents",
         usePlural: false,
         supportsDates: true,
         supportsJSON: true,
@@ -175,12 +175,12 @@ export const sqliteAuthAdapter = createAdapterFactory({
 
             delete values.id;
 
-            writeDocument(model, id, values);
+            await writeDocument(model, id, values);
             return withId(id, values);
         },
 
         findOne: async ({ model, where }) => {
-            const hit = readDocuments(model).find(
+            const hit = (await readDocuments(model)).find(
                 ({ id, doc }) => matchesWhere(id, doc, where)
             );
 
@@ -188,7 +188,7 @@ export const sqliteAuthAdapter = createAdapterFactory({
         },
 
         findMany: async ({ model, where, limit, offset, sortBy }) => {
-            let found = readDocuments(model)
+            let found = (await readDocuments(model))
                 .filter(({ id, doc }) => matchesWhere(id, doc, where));
 
             if (sortBy) {
@@ -209,28 +209,29 @@ export const sqliteAuthAdapter = createAdapterFactory({
             return found.map(({ id, doc }) => withId(id, doc));
         },
 
-        count: async ({ model, where }) => readDocuments(model)
+        count: async ({ model, where }) => (await readDocuments(model))
             .filter(({ id, doc }) => matchesWhere(id, doc, where)).length,
 
         update: async ({ model, where, update }) => {
-            const hit = readDocuments(model).find(
+            const hit = (await readDocuments(model)).find(
                 ({ id, doc }) => matchesWhere(id, doc, where)
             );
 
             if (!hit) return null;
 
             applyAuthUpdate(hit.doc, update as Record<string, any>);
-            writeDocument(model, hit.id, hit.doc);
+            await writeDocument(model, hit.id, hit.doc);
             return withId(hit.id, hit.doc);
         },
 
         updateMany: async ({ model, where, update }) => {
             let updated = 0;
 
-            for (const hit of readDocuments(model)
-                .filter(({ id, doc }) => matchesWhere(id, doc, where))) {
+            for (const hit of await readDocuments(model)) {
+                if (!matchesWhere(hit.id, hit.doc, where)) continue;
+
                 applyAuthUpdate(hit.doc, update);
-                writeDocument(model, hit.id, hit.doc);
+                await writeDocument(model, hit.id, hit.doc);
                 updated++;
             }
 
@@ -238,19 +239,19 @@ export const sqliteAuthAdapter = createAdapterFactory({
         },
 
         delete: async ({ model, where }) => {
-            const hit = readDocuments(model).find(
+            const hit = (await readDocuments(model)).find(
                 ({ id, doc }) => matchesWhere(id, doc, where)
             );
 
-            if (hit) deleteDocument(model, hit.id);
+            if (hit) await deleteDocument(model, hit.id);
         },
 
         deleteMany: async ({ model, where }) => {
             let deleted = 0;
 
-            for (const hit of readDocuments(model)
-                .filter(({ id, doc }) => matchesWhere(id, doc, where))) {
-                if (deleteDocument(model, hit.id)) deleted++;
+            for (const hit of await readDocuments(model)) {
+                if (!matchesWhere(hit.id, hit.doc, where)) continue;
+                if (await deleteDocument(model, hit.id)) deleted++;
             }
 
             return deleted;

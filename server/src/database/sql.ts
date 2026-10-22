@@ -1,20 +1,23 @@
 import { randomBytes } from "crypto";
-import { mkdirSync } from "fs";
-import { dirname } from "path";
-import { DatabaseSync } from "node:sqlite";
 
 import Collection from "@/constants/Collection";
 import type {
     Doc, FindManyQuery, FindOneQuery, ModelLike, StoredId
 } from "./model";
+import { createSqlBackend, type SqlBackend } from "./drivers";
 
-// Document store over node:sqlite. Every collection is one table:
+// Document store over SQL. Every collection is one table:
 // (_id TEXT PRIMARY KEY, doc TEXT) with the document serialised as JSON;
 // dates, buffers and object ids are encoded as tagged objects so they survive
 // the round trip. Queries only support what the app uses: equality, $in, and
 // sorting/skip/limit for the news feed.
+//
+// SQLite is the default backend. Set DATABASE_URL to a mysql:/mariadb: or
+// postgres:/postgresql: URL to use one of those servers instead; the table
+// shape and the document encoding stay exactly the same.
 
-let database: DatabaseSync | null = null;
+let backend: SqlBackend | null = null;
+let purgeTimer: NodeJS.Timeout | null = null;
 
 // Analysis sessions expire 4 hours after creation.
 const analysisSessionLifetime = 4 * 60 * 60 * 1000;
@@ -24,36 +27,66 @@ export interface StoredDocument {
     doc: Record<string, any>;
 }
 
-export function isSqliteReady(): boolean {
-    return database != null;
+export function isDatabaseReady(): boolean {
+    return backend != null;
 }
 
-export function closeSqlite(): void {
-    database?.close();
-    database = null;
-}
-
-export function initSqlite(path: string): void {
-    if (database) return;
-
-    mkdirSync(dirname(path), { recursive: true });
-    database = new DatabaseSync(path);
-
-    // Cluster workers open the same file simultaneously; wait for locks
-    // instead of failing, since switching to WAL briefly holds one.
-    database.exec("PRAGMA busy_timeout = 5000");
-    database.exec("PRAGMA journal_mode=WAL");
-
-    for (const collection of Object.values(Collection)) {
-        database.exec(
-            `CREATE TABLE IF NOT EXISTS "${collection}"`
-            + " (_id TEXT PRIMARY KEY, doc TEXT NOT NULL)"
-        );
+export async function closeDatabase(): Promise<void> {
+    if (purgeTimer) {
+        clearInterval(purgeTimer);
+        purgeTimer = null;
     }
 
-    // SQLite has no TTL indexes, so expire analysis sessions with a timer.
-    purgeExpiredAnalysisSessions();
-    setInterval(purgeExpiredAnalysisSessions, 5 * 60_000).unref();
+    const current = backend;
+    backend = null;
+    await current?.close();
+}
+
+/**
+ * Connect to the configured SQL backend and create the collection tables.
+ *
+ * Accepts a connection URL or, for compatibility with the original SQLite
+ * implementation, a plain database path. Returns the backend name for logging.
+ */
+export async function initDatabase(
+    url = process.env.DATABASE_URL
+        || process.env.SQLITE_PATH
+        || "data/wintrchess.db"
+): Promise<string> {
+    if (backend) return backend.label;
+
+    const created = await createSqlBackend(url);
+    backend = created;
+
+    try {
+        for (const collection of Object.values(Collection)) {
+            await created.createTable(collection);
+        }
+
+        // None of the supported backends need a TTL index for this: the
+        // number of active analysis sessions is small, and the same purge
+        // loop works on every driver.
+        await purgeExpiredAnalysisSessions();
+
+        purgeTimer = setInterval(() => {
+            purgeExpiredAnalysisSessions().catch(error => {
+                console.error(
+                    "failed to purge expired analysis sessions:", error
+                );
+            });
+        }, 5 * 60_000);
+        purgeTimer.unref();
+    } catch (error) {
+        backend = null;
+        try {
+            await created.close();
+        } catch {
+            // Keep the original startup error.
+        }
+        throw error;
+    }
+
+    return created.label;
 }
 
 export class ObjectId {
@@ -127,15 +160,15 @@ function decode(value: unknown): any {
     return value;
 }
 
-function requireDatabase(): DatabaseSync {
-    if (!database) throw new Error("sqlite database not initialised.");
-    return database;
+function requireBackend(): SqlBackend {
+    if (!backend) throw new Error("database not initialised.");
+    return backend;
 }
 
-export function readDocuments(collection: string): StoredDocument[] {
-    const rows = requireDatabase()
-        .prepare(`SELECT _id, doc FROM "${collection}"`)
-        .all() as { _id: string; doc: string }[];
+export async function readDocuments(
+    collection: string
+): Promise<StoredDocument[]> {
+    const rows = await requireBackend().readAll(collection);
 
     return rows.map(row => ({
         id: row._id,
@@ -143,35 +176,32 @@ export function readDocuments(collection: string): StoredDocument[] {
     }));
 }
 
-export function writeDocument(
+export async function writeDocument(
     collection: string, id: string, doc: Record<string, any>
-): void {
+): Promise<void> {
     const encoded = encode(doc) as Record<string, unknown>;
     delete encoded._id;
 
-    requireDatabase()
-        .prepare(
-            `INSERT INTO "${collection}" (_id, doc) VALUES (?, ?)`
-            + " ON CONFLICT(_id) DO UPDATE SET doc = excluded.doc"
-        )
-        .run(id, JSON.stringify(encoded));
+    await requireBackend().upsert(
+        collection, id, JSON.stringify(encoded)
+    );
 }
 
-export function deleteDocument(collection: string, id: string): boolean {
-    return requireDatabase()
-        .prepare(`DELETE FROM "${collection}" WHERE _id = ?`)
-        .run(id).changes > 0;
+export async function deleteDocument(
+    collection: string, id: string
+): Promise<boolean> {
+    return requireBackend().delete(collection, id);
 }
 
-export function purgeExpiredAnalysisSessions(): void {
+export async function purgeExpiredAnalysisSessions(): Promise<void> {
     const collection = Collection.ANALYSIS_SESSIONS;
 
-    for (const { id, doc } of readDocuments(collection)) {
+    for (const { id, doc } of await readDocuments(collection)) {
         const createdAt = doc.createdAt
             ? new Date(doc.createdAt).getTime() : 0;
 
         if (Date.now() - createdAt > analysisSessionLifetime) {
-            deleteDocument(collection, id);
+            await deleteDocument(collection, id);
         }
     }
 }
@@ -229,8 +259,10 @@ function applyUpdate(
     }
 }
 
-function findHits(collection: string, query?: Record<string, unknown>) {
-    return readDocuments(collection).map(hit => {
+async function findHits(
+    collection: string, query?: Record<string, unknown>
+): Promise<StoredDocument[]> {
+    return (await readDocuments(collection)).map(hit => {
         // _id lives in its column, not in the stored document; queries
         // against it need it present before filtering.
         hit.doc._id = storedIdFor(hit.id);
@@ -250,18 +282,18 @@ function attach<T>(collection: string, id: string, doc: Record<string, any>): Do
     Object.defineProperties(doc, {
         save: {
             value: async () => {
-                writeDocument(collection, id, doc);
+                await writeDocument(collection, id, doc);
             }
         },
         updateOne: {
             value: async (update: Record<string, unknown>) => {
                 applyUpdate(doc, update);
-                writeDocument(collection, id, doc);
+                await writeDocument(collection, id, doc);
             }
         },
         deleteOne: {
             value: async () => {
-                deleteDocument(collection, id);
+                await deleteDocument(collection, id);
             }
         }
     });
@@ -297,8 +329,8 @@ function query<T>(
     let from = 0;
     let count: number | undefined;
 
-    const execute = () => {
-        let hits = findHits(collection, filter);
+    const execute = async () => {
+        let hits = await findHits(collection, filter);
 
         if (sort) hits = sortHits(hits, sort);
         if (from) hits = hits.slice(from);
@@ -332,7 +364,7 @@ function query<T>(
     return cursor;
 }
 
-export function sqliteModel<T>(collection: string): ModelLike<T> {
+export function sqlModel<T>(collection: string): ModelLike<T> {
     return {
         findOne: filter =>
             query<T>(collection, "one", filter) as FindOneQuery<T>,
@@ -343,23 +375,24 @@ export function sqliteModel<T>(collection: string): ModelLike<T> {
                 collection, "one", { _id: new ObjectId(id) }
             ) as FindOneQuery<T>;
         },
-        countDocuments: async filter => findHits(collection, filter).length,
+        countDocuments: async filter =>
+            (await findHits(collection, filter)).length,
 
         create: async values => {
             const doc = { ...values };
             const id = values._id != null
                 ? String(values._id) : new ObjectId().hex;
 
-            writeDocument(collection, id, doc);
+            await writeDocument(collection, id, doc);
             return attach<T>(collection, id, doc);
         },
 
         updateOne: async (filter, update, options) => {
-            const hit = findHits(collection, filter)[0];
+            const hit = (await findHits(collection, filter))[0];
 
             if (hit) {
                 applyUpdate(hit.doc, update);
-                writeDocument(collection, hit.id, hit.doc);
+                await writeDocument(collection, hit.id, hit.doc);
                 return { matchedCount: 1, modifiedCount: 1 };
             }
 
@@ -378,25 +411,25 @@ export function sqliteModel<T>(collection: string): ModelLike<T> {
                 const id = seed._id != null
                     ? String(seed._id) : new ObjectId().hex;
 
-                writeDocument(collection, id, seed);
+                await writeDocument(collection, id, seed);
             }
 
             return { matchedCount: 0, modifiedCount: 0 };
         },
 
         deleteOne: async filter => {
-            const hit = findHits(collection, filter)[0];
+            const hit = (await findHits(collection, filter))[0];
             if (!hit) return { deletedCount: 0 };
 
-            deleteDocument(collection, hit.id);
+            await deleteDocument(collection, hit.id);
             return { deletedCount: 1 };
         },
 
         deleteMany: async filter => {
             let deletedCount = 0;
 
-            for (const hit of findHits(collection, filter)) {
-                if (deleteDocument(collection, hit.id)) deletedCount++;
+            for (const hit of await findHits(collection, filter)) {
+                if (await deleteDocument(collection, hit.id)) deletedCount++;
             }
 
             return { deletedCount };

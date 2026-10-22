@@ -1,13 +1,13 @@
 import cluster from "cluster";
 
-import { initSqlite } from "@/database/sqlite";
+import { initDatabase } from "@/database/sql";
 
-function connectDatabase() {
+async function connectDatabase() {
     const first = cluster.worker?.id == 1;
 
     try {
-        initSqlite(process.env.SQLITE_PATH || "data/wintrchess.db");
-        if (first) console.log("sqlite database ready.");
+        const label = await initDatabase();
+        if (first) console.log(`${label.toLowerCase()} database ready.`);
     } catch (error) {
         if (!first) return;
         console.log("database connection failed:");
