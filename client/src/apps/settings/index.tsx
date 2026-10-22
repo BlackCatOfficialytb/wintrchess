@@ -16,6 +16,10 @@ const BugReportingSection = lazy(
     () => import("./components/categories/BugReporting")
 );
 
+const LanguageSection = lazy(
+    () => import("./components/categories/Language")
+);
+
 import "@/i18n";
 import "@/index.css";
 
@@ -38,6 +42,7 @@ function App() {
 
                     <Route path="/settings/account" element={<AccountSection/>} />
                     <Route path="/settings/theme" element={<BoardAndPiecesSection/>} />
+                    <Route path="/settings/language" element={<LanguageSection/>} />
                     <Route path="/settings/bugs" element={<BugReportingSection/>} />
                 </Route>
             </Routes>

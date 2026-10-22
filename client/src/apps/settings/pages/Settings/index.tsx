@@ -48,6 +48,13 @@ function Settings() {
                 </CategoryTab>
 
                 <CategoryTab
+                    active={location.pathname.includes("/settings/language")}
+                    onClick={() => navigate("/settings/language")}
+                >
+                    {t("footer.language", { ns: "common" })}
+                </CategoryTab>
+
+                <CategoryTab
                     active={location.pathname.includes("/settings/bugs")}
                     onClick={() => navigate("/settings/bugs")}
                 >
