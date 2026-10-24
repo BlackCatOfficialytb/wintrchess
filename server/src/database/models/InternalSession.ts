@@ -1,15 +1,12 @@
-import { Schema, model } from "mongoose";
-
 import Collection from "@/constants/Collection";
+import { model } from "@/database/model";
 
-const internalSessionSchema = new Schema({
-    token: { type: String, required: true },
-    createdAt: { type: Date, required: true }
-});
+export interface InternalSessionDocument {
+    token: string;
+    createdAt: Date;
+}
 
-const InternalSession = model(
-    "internalSession",
-    internalSessionSchema,
+const InternalSession = model<InternalSessionDocument>(
     Collection.INTERNAL_SESSIONS
 );
 

@@ -15,11 +15,9 @@ router.get("/archived-game", async (req, res) => {
     if (!archivedGame) return res.sendStatus(StatusCodes.NOT_FOUND);
 
     const game = await Archive.unarchiveAnalysedGame({
-        ...omit(archivedGame, ["_id", "__v"]),
-        userId: archivedGame.userId.toString(),
-        gzippedStateTree: Buffer.copyBytesFrom(
-            archivedGame.gzippedStateTree.buffer
-        )
+        ...omit(archivedGame, ["_id"]),
+        userId: archivedGame.userId,
+        gzippedStateTree: Buffer.from(archivedGame.gzippedStateTree)
     });
 
     return res.json(game);

@@ -6,7 +6,7 @@
 
 - Git
 - Node.js 22 or later
-- MongoDB
+- MongoDB, or a SQL database (SQLite, MySQL and PostgreSQL are supported)
 - Docker, if you want to host with that
 
 ## Setup
@@ -48,7 +48,31 @@ For example, `http://localhost:8080` or `https://wintrchess.com`.
 DATABASE_URI="mongodb://" # ...
 ```
 
-A connection string for a MongoDB database. Collections, indexes etc. will be created when the app runs. Defaults to `mongodb://database/wintrchess`.
+A connection string for a database. The app supports both MongoDB and SQL databases (SQLite, MySQL, PostgreSQL).
+
+**For MongoDB:**
+```toml
+DATABASE_URI="mongodb://user:password@host:port/database"
+```
+
+**For SQL databases (SQLite recommended for development):**
+```toml
+# Set this to switch to SQL backend
+DB_TYPE="sql"
+
+# SQLite (no password, defaults to ./data/wintrchess.db)
+DATABASE_URL="./data/wintrchess.db"
+
+# PostgreSQL
+DATABASE_URL="postgresql://user:password@host:port/database"
+
+# MySQL
+DATABASE_URL="mysql://user:password@host:port/database"
+```
+
+For more detailed database setup instructions, see [DATABASE SETUP.md](./database-setup.md).
+
+Collections, indexes, and tables will be created automatically when the app runs.
 
 ```toml
 ANALYSIS_SESSION_ACTIONS=80

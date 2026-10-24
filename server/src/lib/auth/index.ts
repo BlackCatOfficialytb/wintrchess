@@ -1,10 +1,14 @@
 import cluster from "cluster";
-import mongoose, { mongo } from "mongoose";
+import mongoose from "mongoose";
 import { betterAuth } from "better-auth";
+import type { BetterAuthOptions } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 
 import schemas, { additionalUserFields } from "shared/constants/account/schemas";
 import Collection from "@/constants/Collection";
+import { DATABASE_KIND } from "@/database/backendKind";
+import { isDatabaseReady } from "@/database/sql";
+import { sqlAuthAdapter } from "@/database/sqlAuthAdapter";
 import { sendAccountEmail } from "@/lib/email";
 
 import { requestProcessor, userInitialiser } from "./registration";
@@ -14,7 +18,7 @@ export type AuthInfer = AuthType["$Infer"]["Session"];
 
 let instance: AuthType | null = null;
 
-function createAuth(database: mongo.Db) {
+function createAuth(database: BetterAuthOptions["database"]) {
     if (!process.env.ORIGIN) {
         throw new Error("origin not specified.");
     }
@@ -26,7 +30,11 @@ function createAuth(database: mongo.Db) {
     return betterAuth({
         baseURL: `${process.env.ORIGIN}/auth/account`,
         secret: process.env.AUTH_SECRET,
-        database: mongodbAdapter(database),
+        trustedOrigins: (process.env.TRUSTED_ORIGINS ?? "")
+            .split(",")
+            .map(origin => origin.trim())
+            .filter(Boolean),
+        database,
         emailAndPassword: {
             enabled: true,
             minPasswordLength: schemas.password.minLength || 8,
@@ -84,12 +92,24 @@ function createAuth(database: mongo.Db) {
     });
 }
 
-export function getAuth() {
-    if (!mongoose.connection.db) throw new Error(
+function assertDatabaseConnection() {
+    const connected = DATABASE_KIND == "sql"
+        ? isDatabaseReady()
+        : mongoose.connection.db != null;
+
+    if (!connected) throw new Error(
         "cannot initialise auth without database connection."
     );
+}
 
-    return instance ??= createAuth(mongoose.connection.db);
+export function getAuth() {
+    assertDatabaseConnection();
+
+    const database: BetterAuthOptions["database"] = DATABASE_KIND == "sql"
+        ? sqlAuthAdapter
+        : mongodbAdapter(mongoose.connection.db!);
+
+    return instance ??= createAuth(database);
 }
 
 export default getAuth;
