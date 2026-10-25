@@ -26,7 +26,7 @@ function Footer({ className, style }: FooterProps) {
             />
 
             <span className={styles.copyrightNotice}>
-                Copyright © {copyrightYear} wintrchess.com
+                Copyright © {copyrightYear} wintrchess.blackcatofficial.qzz.io
             </span>
 
             <span className={styles.copyrightNotice}>
@@ -58,7 +58,7 @@ function Footer({ className, style }: FooterProps) {
                     {t("footer.privacyPolicy")}
                 </a>
 
-                <a href="https://github.com/WintrCat/wintrchess">
+                <a href="https://github.com/BlackCatOfficialytb/wintrchess">
                     {t("footer.openSource")}
                 </a>
             </div>

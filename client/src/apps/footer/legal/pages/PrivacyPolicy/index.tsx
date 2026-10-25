@@ -27,7 +27,7 @@ function PrivacyPolicy() {
             </h2>
 
             <span>
-                1.1 "The Service", "The Website", "We", "Our", "Us" - the wintrchess.com website
+                1.1 "The Service", "The Website", "We", "Our", "Us" - the wintrchess.blackcatofficial.qzz.io website
                 and any service that we provide that you use therein.
                 Also the entity that collects information from you.
             </span>

@@ -42,7 +42,7 @@ ORIGIN="http://localhost:8080"
 > Required
 
 The origin - URLs in emails are constructed using this, and the authentication uses it as a base URL.
-For example, `http://localhost:8080` or `https://wintrchess.com`.
+For example, `http://localhost:8080` or `https://wintrchess.blackcatofficial.qzz.io`.
 
 ```toml
 DATABASE_URI="mongodb://" # ...

@@ -2,7 +2,7 @@
 > Looking for maintainers! Please join [the Discord server](https://discord.com/invite/XxtsAzPyCb) and open a ticket to apply :\)
 
 <h1 align="center">
-    <a href="https://wintrchess.com"><img width="175" src="https://github.com/user-attachments/assets/9a33a746-c9cd-43b8-b17b-564f3f6ce4a2" /></a>
+    <a href="https://wintrchess.blackcatofficial.qzz.io"><img width="175" src="https://github.com/user-attachments/assets/9a33a746-c9cd-43b8-b17b-564f3f6ce4a2" /></a>
     <br>
     WintrChess
 </h1>
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-    📌 <a href="https://wintrchess.com/"><b>wintrchess.com</b></a>
+    📌 <a href="https://wintrchess.blackcatofficial.qzz.io/"><b>wintrchess.blackcatofficial.qzz.io</b></a>
 </p>
 
 <img width="1000" alt="image" src="https://github.com/user-attachments/assets/77d98631-07d4-4ccc-83ef-32f6b3e1d6dd" />
@@ -37,9 +37,15 @@ Libraries, some types and common logic is stored here and can be accessed by bot
 
 ## 📚 Documentation
 
-[Hosting WintrChess locally](https://github.com/WintrCat/wintrchess/blob/master/docs/hosting.md)
+[Hosting WintrChess locally](https://github.com/BlackCatOfficialytb/wintrchess/blob/master/docs/hosting.md)
 
-[Contributing to the project](https://github.com/WintrCat/wintrchess/blob/master/docs/contributing.md)
+[Contributing to the project](https://github.com/BlackCatOfficialytb/wintrchess/blob/master/docs/contributing.md)
+
+## 💬 Support & Security
+
+Need help, general or support questions, or want to report a security vulnerability (please do not open public issues for security reports)? Reach out on the Discord server:
+
+📌 [dsc.gg/blackcatofficial](https://dsc.gg/blackcatofficial)
 
 ## ☕ Support
 
