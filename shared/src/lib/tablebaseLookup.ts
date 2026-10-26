@@ -87,9 +87,9 @@ export async function lookupTablebase(
             draw: data.class === "draw",
             win: data.class === "win"
         };
-    } catch (error) {
+    } catch (error: unknown) {
         clearTimeout(timeoutId);
-        console.warn(`[tablebaseLookup] Lookup failed:`, error?.message);
+        console.warn(`[tablebaseLookup] Lookup failed:`, error);
         return undefined;
     }
 }
