@@ -19,34 +19,45 @@ function parseStateTree(game: Game) {
         let lastNode = node;
 
         for (const pgnMove of moves) {
-            const move = new Chess(lastNode.state.fen)
-                .move(pgnMove.notation.notation);
+            const sanMove = pgnMove.notation.notation;
+            console.log(`[parseStateTree] Attempting '${sanMove}'`); // Debug logging
 
-            const newNode: StateTreeNode = {
-                id: uniqueId(),
-                mainline: mainline,
-                parent: lastNode,
-                children: [],
-                state: {
-                    fen: move.after,
-                    engineLines: [],
-                    move: {
-                        san: move.san,
-                        uci: move.lan
-                    },
-                    moveColour: move.color == "w"
-                        ? PieceColour.WHITE
-                        : PieceColour.BLACK
-                }
-            };
+            const parsedMove = new Chess(lastNode.state.fen)
+                .move(sanMove);
 
-            lastNode.children.push(newNode);
+            if (parsedMove) {
+                // Move was valid, create new node
+                const newNode: StateTreeNode = {
+                    id: uniqueId(),
+                    mainline: mainline,
+                    parent: lastNode,
+                    children: [],
+                    state: {
+                        fen: parsedMove.after,
+                        engineLines: [],
+                        move: {
+                            san: parsedMove.san,
+                            uci: parsedMove.lan
+                        },
+                        moveColour: parsedMove.color == "w"
+                            ? PieceColour.WHITE
+                            : PieceColour.BLACK
+                    }
+                };
+
+                lastNode.children.push(newNode);
+                lastNode = newNode;
+            } else {
+                // Move was invalid - this can happen in Chess 960 with strict validation,
+                // or with malformed/not-supported PGN notations like extended castling.
+                console.warn(`[parseStateTree] Skipping invalid move '${sanMove}'`);
+                // Continue with next move - the invalid PGN notation is treated similarly
+                // to a comment/variation that couldn't be parsed into the game
+            }
 
             for (const variation of pgnMove.variations) {
                 addMovesToNode(lastNode, variation, false);
             }
-
-            lastNode = newNode;
         }
     }
 

@@ -14,8 +14,13 @@ type PieceMovement = Pick<RawMove, "from" | "to" | "promotion">;
 
 function safeMove(fen: string, move: string | PieceMovement) {
     try {
-        return new Chess(fen).move(move);
-    } catch {
+        const parsedMove = new Chess(fen).move(move);
+        if (!parsedMove) {
+            console.warn(`[extractNode] safeMove returned undefined for ${JSON.stringify(move)} at FEN ${fen.slice(0, 20)}...`);
+        }
+        return parsedMove;
+    } catch (err: unknown) {
+        console.warn(`[extractNode] safeMove threw error:`, err);
         return undefined;
     }
 }
