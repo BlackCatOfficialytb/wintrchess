@@ -40,3 +40,6 @@ function GameReport() {
 
         <ClassificationCountCard analysisGame={analysisGame} />
     </>;
+}
+
+export default GameReport;
