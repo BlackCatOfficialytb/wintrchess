@@ -39,4 +39,4 @@ function GameReport() {
         <AccuraciesCard accuracies={accuracies} />
 
         <ClassificationCountCard analysisGame={analysisGame} />
-    >
+    </>;
