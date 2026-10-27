@@ -1,28 +1,23 @@
-/**
- * Syzygy tablebase information
- */
-export interface TablebaseResult {
-    /** Centipawn score (scaled -50000 to +50000) */
-    score: number;
-    /** Distance to mate (moves) */
-    dtm?: number;
-    /** Is it a loss? */
-    loss: boolean;
-    /** Is it a draw? */
-    draw: boolean;
-    /** Is it a win? */
-    win: boolean;
+export interface PVMove {
+    move: string;
+    dtz: number;
+    isBest: boolean;
 }
 
-/**
- * Tablebase lookup configuration
- */
+export interface TablebaseData {
+    pvMoves: PVMove[];
+    resultText: string;
+}
+
+export interface TablebaseResult {
+    score: number;
+    dtm?: number;
+    class: 'win' | 'loss' | 'draw';
+}
+
 export interface TablebaseOptions {
-    /** Lichess base URL (default: https://tablebase.lichess.org) */
     baseUrl?: string;
-    /** Maximum number of PV lines (default: 6) */
     multiPv?: number;
-    /** Request timeout in ms (default: 300) */
     timeout?: number;
 }
 
@@ -30,7 +25,6 @@ export interface TablebaseOptions {
  * Whether a position is suitable for tablebase lookup (≤7 pieces)
  */
 export function isTablebasePosition(fen: string): boolean {
-    // Count non-pawn pieces + pawns
     const piecePattern = /[KBRQ]/g;
     const pawnPattern = /p/g;
 
@@ -38,6 +32,66 @@ export function isTablebasePosition(fen: string): boolean {
     const pawnCount = (fen.match(pawnPattern) || []).length;
 
     return (pieceCount + pawnCount) <= 7;
+}
+
+/**
+ * Format a tablebase score to a readable string
+ */
+export function formatTablebaseScore(score: number): string {
+    const absScore = Math.abs(score);
+    if (absScore >= 50000) {
+        return score > 0 ? "#+M" : "#-M";
+    }
+    const evalScore = score / 100;
+    return score > 0 ? `+${evalScore.toFixed(2)}` : evalScore.toFixed(2);
+}
+
+/**
+ * Parse the mainline moves from a PV line
+ */
+function parsePVMoves(any): TablebaseData | null {
+    if (!data?.pv) {
+        return null;
+    }
+
+    const pvMoves: PVMove[] = [];
+
+    try {
+        if (data.pv && typeof data.pv === 'string') {
+            const moves = data.pv.split(' ');
+            moves.forEach((move: string, idx: number) => {
+                pvMoves.push({
+                    move: move,
+                    dtz: 0,
+                    isBest: idx === 0
+                });
+            });
+        }
+    } catch {
+        return null;
+    }
+
+    return {
+        pvMoves,
+        resultText: data.result || "NO RESULT"
+    };
+}
+
+/**
+ * Convert a tablebase score to result text
+ */
+function getResultText(any): string {
+    if (!data || !data.class) {
+        return "NO RESULT";
+    }
+
+    const resultMap: Record<string, string> = {
+        'win': 'WHITE WINS',
+        'loss': 'BLACK WINS',
+        'draw': 'TABLEBASE DRAWS'
+    };
+
+    return resultMap[data.class] || "NO RESULT";
 }
 
 /**
@@ -65,13 +119,11 @@ export async function lookupTablebase(
 
         const response = await fetch(url, {
             signal: controller.signal,
-            // No credentials need to be sent (public API)
         });
 
         clearTimeout(timeoutId);
 
-        if (!response.ok || response.status === 404 || response.status === 400) {
-            // Position not found in tablebases (or invalid)
+        if (!response.ok || response.status === 404) {
             return undefined;
         }
 
@@ -79,31 +131,14 @@ export async function lookupTablebase(
 
         if (!data) return undefined;
 
-        // Parse result (field names per Lichess API)
         return {
             score: data.score ?? 0,
             dtm: data.dtm ?? undefined,
-            loss: data.class === "loss",
-            draw: data.class === "draw",
-            win: data.class === "win"
+            class: data.class || 'draw'
         };
     } catch (error: unknown) {
         clearTimeout(timeoutId);
-        console.warn(`[tablebaseLookup] Lookup failed:`, error);
+        console.warn('[tablebaseLookup] Lookup failed:', error);
         return undefined;
     }
-}
-
-/**
- * Convert tablebase score to human-readable string
- */
-export function formatTablebaseScore(score: number): string {
-    const absScore = Math.abs(score);
-    if (absScore >= 50000) {
-        // Mate detected
-        return score > 0 ? "#+M" : "#-M";
-    }
-    // Convert centipawns to decimal
-    const evalScore = score / 100;
-    return score > 0 ? `+${evalScore.toFixed(2)}` : evalScore.toFixed(2);
 }
