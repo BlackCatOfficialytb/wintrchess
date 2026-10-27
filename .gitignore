@@ -7,3 +7,4 @@ node_modules
 client/public/engines/*.wasm
 client/public/engines/*.js
 !client/public/engines/.gitkeep
+cyberstrike.json
