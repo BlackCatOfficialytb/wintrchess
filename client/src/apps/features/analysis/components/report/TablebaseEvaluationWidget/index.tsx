@@ -16,13 +16,16 @@ interface TablebaseEvaluationWidgetProps {
 /**
  * Tablebase Evaluation Widget
  *
- * Displays tablebase-generated PV lines for endgame positions with
- * DTZ (Dividing by Two Moves) evaluations.
+ * Displays tablebase-generated variations for endgame positions with
+ * DTZ (Dividing by Zeroing Moves) evaluations.
  *
- * Uses the WintrChess theme:
- * - Background: var(--ui-shade-3) #1f2125
- * - Borders: var(--ui-shade-6) #3e4349
- * - Text: white, lighter grays
+ * Theme tokens (dark mode):
+ * - Card background:  var(--ui-shade-4) #2c2f35
+ * - Row background:   var(--ui-shade-2) #17191e
+ * - Accent row bg:    var(--ui-shade-6) #3e4349
+ * - Borders:          var(--ui-shade-6), accent var(--ui-shade-7)
+ * - Muted text:       var(--ui-shade-7) #50575f
+ * - Primary/badge text: white / var(--ui-shade-1) on white badge
  */
 const TablebaseEvaluationWidget: React.FC<TablebaseEvaluationWidgetProps> = ({
     pvMoves = [],
@@ -38,109 +41,205 @@ const TablebaseEvaluationWidget: React.FC<TablebaseEvaluationWidgetProps> = ({
     };
 
     return (
-        <div className="w-full rounded-lg border shadow-sm" style={{ backgroundColor: 'var(--ui-shade-3)' }}>
+        <div
+            style={{
+                width: "100%",
+                boxSizing: "border-box",
+                borderRadius: "10px",
+                backgroundColor: "var(--ui-shade-4)",
+                border: "1px solid var(--ui-shade-6)",
+                overflow: "hidden"
+            }}
+        >
             {/* Header */}
             <div
-                className="px-4 py-3 border-b flex items-center justify-between cursor-pointer hover:opacity-80"
+                onClick={toggleExpanded}
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: "8px",
+                    padding: "10px 12px",
+                    cursor: "pointer",
+                    borderBottom: isExpanded
+                        ? "1px solid var(--ui-shade-6)"
+                        : "none"
+                }}
             >
-                <div className="flex items-center gap-3">
-                    <h3 className="text-sm font-bold text-white" style={{ fontFamily: 'var(--ui-font)' }}>
+                <div style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    minWidth: 0
+                }}>
+                    <span style={{
+                        color: "white",
+                        fontWeight: 700,
+                        fontSize: "0.95rem",
+                        fontFamily: "var(--ui-font)"
+                    }}>
                         Tablebase
-                    </h3>
-                    <span className="px-2.5 py-1 text-xs font-bold text-black rounded-full" style={{ backgroundColor: 'var(--ui-shade-1)' }}>
+                    </span>
+                    <span style={{
+                        flexShrink: 1,
+                        minWidth: 0,
+                        maxWidth: "100%",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        padding: "3px 10px",
+                        borderRadius: "999px",
+                        border: "1px solid var(--ui-shade-6)",
+                        backgroundColor: "var(--ui-shade-2)",
+                        color: "white",
+                        fontWeight: 700,
+                        fontSize: "11px",
+                        letterSpacing: "0.3px"
+                    }}>
                         {resultText}
                     </span>
                 </div>
                 <button
-                    onClick={toggleExpanded}
-                    className="p-1 hover:bg-opacity-50 rounded transition-colors text-zinc-400 hover:text-white"
-                    style={{ backgroundColor: 'var(--ui-shade-5)' }}
+                    onClick={event => {
+                        event.stopPropagation();
+                        toggleExpanded();
+                    }}
                     aria-label={isExpanded ? "Collapse" : "Expand"}
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "24px",
+                        height: "24px",
+                        flexShrink: 0,
+                        padding: 0,
+                        border: "none",
+                        borderRadius: "6px",
+                        backgroundColor: "transparent",
+                        color: "var(--ui-shade-7)",
+                        cursor: "pointer"
+                    }}
+                    onMouseOver={event => {
+                        event.currentTarget.style.color = "white";
+                    }}
+                    onMouseOut={event => {
+                        event.currentTarget.style.color = "var(--ui-shade-7)";
+                    }}
                 >
-                    {/* Chevron Up Icon */}
+                    {/* Chevron, rotates when expanded */}
                     <svg
-                        width="16"
-                        height="16"
+                        width="14"
+                        height="14"
                         viewBox="0 0 24 24"
                         fill="none"
                         stroke="currentColor"
-                        strokeWidth="2"
+                        strokeWidth="2.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        style={{
+                            transform: isExpanded
+                                ? "rotate(180deg)"
+                                : "rotate(0deg)",
+                            transition: "transform 0.15s ease"
+                        }}
                     >
-                        <path d="M18 15l-6-6-6 6" />
+                        <path d="M6 9l6 6 6-6" />
                     </svg>
                 </button>
             </div>
 
-            {/* Expanded Content */}
-            {isExpanded && pvMoves.length > 0 && (
-                <div className="p-4">
-                    <div>
-                        <p
-                            className="text-xs mb-3 font-semibold uppercase tracking-wide"
-                            style={{ color: 'var(--ui-shade-5)' }}
-                        >
-                            Principal Variations (PV)
-                        </p>
+            {/* Expanded content */}
+            {isExpanded && (
+                <div style={{ padding: "10px 12px 12px 12px" }}>
+                    <div style={{
+                        marginBottom: "8px",
+                        color: "var(--ui-shade-7)",
+                        fontWeight: 600,
+                        fontSize: "10px",
+                        letterSpacing: "0.8px",
+                        textTransform: "uppercase"
+                    }}>
+                        Principal Variations
+                    </div>
 
-                        {/* Responsive Grid Layout */}
+                    {pvMoves.length > 0 ? (
                         <div
-                            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3"
                             role="list"
+                            style={{
+                                display: "grid",
+                                gridTemplateColumns:
+                                    "repeat(auto-fill, minmax(200px, 1fr))",
+                                gap: "8px"
+                            }}
                         >
                             {pvMoves.map((moveItem, index) => (
                                 <div
                                     key={index}
-                                    className={`p-3 border rounded-md transition-colors flex items-center justify-between gap-2
-                                        ${moveItem.isBest
-                                            ? ''
-                                            : ''
-                                        }`}
-                                    style={{
-                                        backgroundColor: moveItem.isBest ? 'var(--ui-shade-2)' : 'var(--ui-shade-3)',
-                                        borderColor: moveItem.isBest ? 'var(--ui-shade-4)' : 'var(--ui-shade-6)',
-                                        boxShadow: moveItem.isBest ? '0 4px 6px -1px rgba(0,0,0,0.5)' : 'none'
-                                    }}
                                     role="listitem"
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: "8px",
+                                        padding: "8px 10px",
+                                        borderRadius: "8px",
+                                        backgroundColor: moveItem.isBest
+                                            ? "var(--ui-shade-6)"
+                                            : "var(--ui-shade-2)",
+                                        border: `1px solid ${
+                                            moveItem.isBest
+                                                ? "var(--ui-shade-7)"
+                                                : "var(--ui-shade-6)"
+                                        }`
+                                    }}
                                 >
-                                    {/* Left side: Move notation */}
+                                    {/* Move notation */}
                                     <span
-                                        className="text-sm font-bold"
+                                        title={moveItem.move}
                                         style={{
-                                            color: moveItem.isBest ? 'var(--ui-shade-3)' : 'white',
-                                            fontFamily: 'var(--ui-font)'
+                                            flex: "1 1 0",
+                                            minWidth: 0,
+                                            overflow: "hidden",
+                                            whiteSpace: "nowrap",
+                                            textOverflow: "ellipsis",
+                                            color: "white",
+                                            fontWeight: 700,
+                                            fontSize: "0.9rem",
+                                            fontFamily: "var(--ui-font)"
                                         }}
                                     >
                                         {moveItem.move}
                                     </span>
 
-                                    {/* Right side: DTZ Badge */}
-                                    <span
-                                        className="px-2 py-1 text-xs font-bold rounded-full"
-                                        style={{
-                                            backgroundColor: moveItem.isBest ? 'var(--ui-shade-3)' : 'var(--ui-shade-1)',
-                                            color: moveItem.isBest ? 'white' : 'black',
-                                            fontSize: '11px'
-                                        }}
-                                    >
+                                    {/* DTZ badge */}
+                                    <span style={{
+                                        flexShrink: 0,
+                                        padding: "3px 8px",
+                                        borderRadius: "999px",
+                                        backgroundColor: moveItem.isBest
+                                            ? "white"
+                                            : "var(--ui-shade-5)",
+                                        color: moveItem.isBest
+                                            ? "var(--ui-shade-1)"
+                                            : "white",
+                                        fontWeight: 700,
+                                        fontSize: "11px",
+                                        whiteSpace: "nowrap"
+                                    }}>
                                         DTZ {moveItem.dtz}
                                     </span>
                                 </div>
                             ))}
                         </div>
-                    </div>
-                </div>
-            )}
-
-            {isExpanded && pvMoves.length === 0 && (
-                <div className="p-4">
-                    <p
-                        className="text-sm italic"
-                        style={{ color: 'var(--ui-shade-5)' }}
-                    >
-                        No tablebase variations available
-                    </p>
+                    ) : (
+                        <div
+                            style={{
+                                color: "var(--ui-shade-7)",
+                                fontSize: "0.85rem"
+                            }}
+                        >
+                            No tablebase variations available
+                        </div>
+                    )}
                 </div>
             )}
         </div>
