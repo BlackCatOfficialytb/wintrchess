@@ -1,10 +1,7 @@
-> [!IMPORTANT]
-> Looking for maintainers! Please join [the Discord server](https://discord.com/invite/XxtsAzPyCb) and open a ticket to apply :\)
-
 <h1 align="center">
     <a href="https://wintrchess.blackcatofficial.qzz.io"><img width="175" src="https://github.com/user-attachments/assets/9a33a746-c9cd-43b8-b17b-564f3f6ce4a2" /></a>
     <br>
-    WintrChess
+    WintrChess (BlackCat's fork)
 </h1>
 
 <p align="center">
