@@ -25,6 +25,18 @@ interface TablebaseDisplayData {
 
 const VARIATION_COUNT = 6;
 
+/**
+ * Distance used for ranking moves: exact DTM when provided (<= 5
+ * pieces), otherwise DTZ. Unsigned, since signed values only encode
+ * which side is losing.
+ */
+function getMoveDistance(move: {
+    dtm?: number;
+    dtz?: number;
+}): number {
+    return Math.abs(move.dtm ?? move.dtz ?? Infinity);
+}
+
 function getTablebaseDisplayData(
     result: TablebaseResult,
     fen: string
@@ -36,18 +48,40 @@ function getTablebaseDisplayData(
         || result.category == "maybe-loss"
         || result.category == "cursed-win";
 
+    const moverWinning =
+        result.category == "win"
+        || result.category == "maybe-win"
+        || result.category == "cursed-win";
+
+    const displayMoves = result.moves
+        .map(rate => ({
+            move: rate.san,
+            // Signed dtz/dtm values are negative for losing variations
+            dtz: Math.abs(rate.dtz ?? rate.dtm ?? 0),
+            dtm: rate.dtm !== undefined
+                ? Math.abs(rate.dtm)
+                : undefined,
+            isBest: false,
+            // Moves with unknown distances rank last either way
+            metric: getMoveDistance(rate)
+        }))
+        .sort((a, b) => moverWinning
+            // Fastest mate first on the winning side
+            ? a.metric - b.metric
+            // Longest resistance first on the losing side,
+            // keeping the tablebase's best defense on top
+            : b.metric - a.metric
+        )
+        .slice(0, VARIATION_COUNT)
+        .map((rate, index) => ({
+            move: rate.move,
+            dtz: rate.dtz,
+            dtm: rate.dtm,
+            isBest: index == 0
+        }));
+
     return {
-        pvMoves: result.moves
-            .slice(0, VARIATION_COUNT)
-            .map((rate, index) => ({
-                move: rate.san,
-                // Signed dtz/dtm values are negative for losing variations
-                dtz: Math.abs(rate.dtz ?? rate.dtm ?? 0),
-                dtm: rate.dtm !== undefined
-                    ? Math.abs(rate.dtm)
-                    : undefined,
-                isBest: index == 0
-            })),
+        pvMoves: displayMoves,
         resultText: formatTablebaseResult(result, fen),
         // dtm is only provided by the tablebase for <= 5-piece positions
         dtm: decisive && result.dtm !== undefined
