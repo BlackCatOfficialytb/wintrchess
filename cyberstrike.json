@@ -1,0 +1,4395 @@
+{
+  "$schema": "https://cyberstrike.io/config.json",
+  "provider": {
+    "blackcat-router": {
+      "api": "https://9router1.blackcatofficial.qzz.io/v1",
+      "name": "BlackCat Router",
+      "models": {
+        "claude-haiku-4.5-auto-switcher": {
+          "name": "claude-haiku-4.5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemma-4-26-or-31-auto-switcher": {
+          "name": "gemma-4-26-or-31-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini-2.5-pro-and-flash-auto-switcher": {
+          "name": "gemini-2.5-pro-and-flash-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimi-auto-switcher": {
+          "name": "kimi-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "minimax-m3-and-m2.x-auto-switcher": {
+          "name": "minimax-m3-and-m2.x-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "tencent-hy3-auto-switcher": {
+          "name": "tencent-hy3-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "mimo-code-free-auto-switcher": {
+          "name": "mimo-code-free-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "claude-fable-5-auto-switcher": {
+          "name": "claude-fable-5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gpt-5.6-tera-auto-switcher": {
+          "name": "gpt-5.6-tera-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gpt-5.6-luna-auto-switcher": {
+          "name": "gpt-5.6-luna-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gpt-5.6-son-auto-switcher": {
+          "name": "gpt-5.6-son-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5.2-auto-switcher": {
+          "name": "glm-5.2-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5.1-auto-switcher": {
+          "name": "glm-5.1-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5-auto-switcher": {
+          "name": "glm-5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5.x-auto-switcher": {
+          "name": "glm-5.x-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3-nano-auto-switcher": {
+          "name": "nemotron-3-nano-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3-super-auto-switcher": {
+          "name": "nemotron-3-super-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3-ultra-auto-switcher": {
+          "name": "nemotron-3-ultra-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3-auto-switcher": {
+          "name": "nemotron-3-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "deepshit-v4-pro-auto-switcher": {
+          "name": "deepshit-v4-pro-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "deepshit-v4-flash-auto-switcher": {
+          "name": "deepshit-v4-flash-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "deepshit-v4-flash-and-pro-auto-switcher": {
+          "name": "deepshit-v4-flash-and-pro-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "poolside-laguna-auto-switcher": {
+          "name": "poolside-laguna-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "step-3.7-auto-switcher": {
+          "name": "step-3.7-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "step-3.5-auto-switcher": {
+          "name": "step-3.5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "stepfun-auto-switcher": {
+          "name": "stepfun-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "north-mini-code-free-auto-switcher": {
+          "name": "north-mini-code-free-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini-3.x-flash-and-pro-auto-switcher": {
+          "name": "gemini-3.x-flash-and-pro-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini-auto-switcher": {
+          "name": "gemini-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "claude-opus-5-auto-switcher": {
+          "name": "claude-opus-5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3.5-lightning-auto-switcher": {
+          "name": "nemotron-3.5-lightning-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimi-k2.x-auto-switcher": {
+          "name": "kimi-k2.x-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimi-k3-auto-switcher": {
+          "name": "kimi-k3-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3.8-auto-switcher": {
+          "name": "qwen3.8-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3.7-auto-switcher": {
+          "name": "qwen3.7-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3.6-auto-switcher": {
+          "name": "qwen3.6-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3.5-auto-switcher": {
+          "name": "qwen3.5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3.5-27b-electornhub-auto-switcher": {
+          "name": "qwen3.5-27b-electornhub-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "claude-sonnet-4.x-auto-switcher": {
+          "name": "claude-sonnet-4.x-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "claude-sonnet-5-auto-switcher": {
+          "name": "claude-sonnet-5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen3-auto-switcher": {
+          "name": "qwen3-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen2.5-auto-switcher": {
+          "name": "qwen2.5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qwen-auto-switcher": {
+          "name": "qwen-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "deepshit-r1-auto-switcher": {
+          "name": "deepshit-r1-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "inkling-auto-switcher": {
+          "name": "inkling-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-4.7-auto-switcher": {
+          "name": "glm-4.7-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-4.6-auto-switcher": {
+          "name": "glm-4.6-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-4.5-auto-switcher": {
+          "name": "glm-4.5-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-4.x-auto-switcher": {
+          "name": "glm-4.x-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "space-bunny-free-minimax": {
+          "name": "space-bunny-free-minimax",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3-ultra-opencode": {
+          "name": "nemotron-3-ultra-opencode",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3.5-lightning-opencode": {
+          "name": "nemotron-3.5-lightning-opencode",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5.3-auto-switcher": {
+          "name": "glm-5.3-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "glm-5.3-flash-auto-switcher": {
+          "name": "glm-5.3-flash-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "muse-spark-1.3-contributor-opencode": {
+          "name": "muse-spark-1.3-contributor-opencode",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nemotron-3.5-super-vl-auto-switcher": {
+          "name": "nemotron-3.5-super-vl-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "deepshit-v4.1-flash-auto-switcher": {
+          "name": "deepshit-v4.1-flash-auto-switcher",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/gpt-oss:120b": {
+          "name": "ollama/gpt-oss:120b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/kimi-k2.5": {
+          "name": "ollama/kimi-k2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/glm-5": {
+          "name": "ollama/glm-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/minimax-m2.5": {
+          "name": "ollama/minimax-m2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/glm-4.7-flash": {
+          "name": "ollama/glm-4.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/qwen3.5": {
+          "name": "ollama/qwen3.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/minimax-m3": {
+          "name": "ollama/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/deepseek-v4.1-flash:cloud": {
+          "name": "ollama/deepseek-v4.1-flash:cloud",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/clef": {
+          "name": "ollama/clef",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/clef-flash": {
+          "name": "ollama/clef-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/clef:cloud": {
+          "name": "ollama/clef:cloud",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/glm-5.2": {
+          "name": "ollama/glm-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/glm-5.1": {
+          "name": "ollama/glm-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ollama/kimi-k3": {
+          "name": "ollama/kimi-k3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/llama-3.3-70b-versatile": {
+          "name": "groq/llama-3.3-70b-versatile",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/meta-llama/llama-4-maverick-17b-128e-instruct": {
+          "name": "groq/meta-llama/llama-4-maverick-17b-128e-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/qwen/qwen3-32b": {
+          "name": "groq/qwen/qwen3-32b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/openai/gpt-oss-120b": {
+          "name": "groq/openai/gpt-oss-120b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/openai/gpt-oss-20b": {
+          "name": "groq/openai/gpt-oss-20b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/compound": {
+          "name": "groq/compound",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/compound-mini": {
+          "name": "groq/compound-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/canopylabs/orpheus-v1-english": {
+          "name": "groq/canopylabs/orpheus-v1-english",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/meta-llama/llama-4-scout-17b-16e-instruct": {
+          "name": "groq/meta-llama/llama-4-scout-17b-16e-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/meta-llama/llama-prompt-guard-2-22m": {
+          "name": "groq/meta-llama/llama-prompt-guard-2-22m",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/meta-llama/llama-prompt-guard-2-86m": {
+          "name": "groq/meta-llama/llama-prompt-guard-2-86m",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/openai/gpt-oss-safeguard-20b": {
+          "name": "groq/openai/gpt-oss-safeguard-20b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "groq/qwen/qwen3.6-27b": {
+          "name": "groq/qwen/qwen3.6-27b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-4-argon": {
+          "name": "gemini/gemini-4-argon",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.8-flash": {
+          "name": "gemini/gemini-3.8-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.7-flash": {
+          "name": "gemini/gemini-3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.6-flash": {
+          "name": "gemini/gemini-3.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.5-flash-lite": {
+          "name": "gemini/gemini-3.5-flash-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.1-pro-preview": {
+          "name": "gemini/gemini-3.1-pro-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.1-flash-lite-preview": {
+          "name": "gemini/gemini-3.1-flash-lite-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3-flash-preview": {
+          "name": "gemini/gemini-3-flash-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemma-4-31b-it": {
+          "name": "gemini/gemma-4-31b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.5-flash": {
+          "name": "gemini/gemini-3.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "gemini/gemini-3.5-live-translate-preview": {
+          "name": "gemini/gemini-3.5-live-translate-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/cloudflare/clef-flash": {
+          "name": "cf/@cf/cloudflare/clef-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.2-1b-instruct": {
+          "name": "cf/@cf/meta/llama-3.2-1b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.2-3b-instruct": {
+          "name": "cf/@cf/meta/llama-3.2-3b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.1-8b-instruct-fp8-fast": {
+          "name": "cf/@cf/meta/llama-3.1-8b-instruct-fp8-fast",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.1-8b-instruct-awq": {
+          "name": "cf/@cf/meta/llama-3.1-8b-instruct-awq",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/mistralai/mistral-small-3.1-24b-instruct": {
+          "name": "cf/@cf/mistralai/mistral-small-3.1-24b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.1-70b-instruct-fp8-fast": {
+          "name": "cf/@cf/meta/llama-3.1-70b-instruct-fp8-fast",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/meta/llama-3.3-70b-instruct-fp8-fast": {
+          "name": "cf/@cf/meta/llama-3.3-70b-instruct-fp8-fast",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b": {
+          "name": "cf/@cf/deepseek-ai/deepseek-r1-distill-qwen-32b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/moonshotai/kimi-k2.5": {
+          "name": "cf/@cf/moonshotai/kimi-k2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/moonshotai/kimi-k2.6": {
+          "name": "cf/@cf/moonshotai/kimi-k2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/zai-org/glm-4.7-flash": {
+          "name": "cf/@cf/zai-org/glm-4.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/qwen/qwq-32b": {
+          "name": "cf/@cf/qwen/qwq-32b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/qwen/qwen2.5-coder-32b-instruct": {
+          "name": "cf/@cf/qwen/qwen2.5-coder-32b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "cf/@cf/cloudflare/clef": {
+          "name": "cf/@cf/cloudflare/clef",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/auto": {
+          "name": "hcnsec/auto",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/DeepSeek-V4-Flash": {
+          "name": "hcnsec/DeepSeek-V4-Flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/DeepSeek-V4-Pro": {
+          "name": "hcnsec/DeepSeek-V4-Pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/DeepSeek-V4.1-Flash": {
+          "name": "hcnsec/DeepSeek-V4.1-Flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/glm-5.3": {
+          "name": "hcnsec/glm-5.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/glm-5.3-flash": {
+          "name": "hcnsec/glm-5.3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/MiMo-V2.6-Flash": {
+          "name": "hcnsec/MiMo-V2.6-Flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/MiniCPM-V-4.7-35B-A3B": {
+          "name": "hcnsec/MiniCPM-V-4.7-35B-A3B",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/MiniMax-M3.1-Flash": {
+          "name": "hcnsec/MiniMax-M3.1-Flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Qwen3.8-27B": {
+          "name": "hcnsec/Qwen3.8-27B",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Qwen3.8-Flash-Next": {
+          "name": "hcnsec/Qwen3.8-Flash-Next",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/sensenova-6.8-flash-lite": {
+          "name": "hcnsec/sensenova-6.8-flash-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/sensenova-u1.5-lite": {
+          "name": "hcnsec/sensenova-u1.5-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-5-preview": {
+          "name": "hcnsec/step-5-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/stepaudio-2.5-asr": {
+          "name": "hcnsec/stepaudio-2.5-asr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/stepaudio-2.5-realtime": {
+          "name": "hcnsec/stepaudio-2.5-realtime",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/stepaudio-2.5-tts": {
+          "name": "hcnsec/stepaudio-2.5-tts",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/glm-4.7": {
+          "name": "hcnsec/glm-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/glm-5.2": {
+          "name": "hcnsec/glm-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/kat-coder-pro-v2": {
+          "name": "hcnsec/kat-coder-pro-v2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/kat-coder-pro-v2.5": {
+          "name": "hcnsec/kat-coder-pro-v2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Kimi-K2.6": {
+          "name": "hcnsec/Kimi-K2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/MiniMax-M2.7": {
+          "name": "hcnsec/MiniMax-M2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/MiniMax-M3": {
+          "name": "hcnsec/MiniMax-M3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Qwen3-Coder-Next-FP8": {
+          "name": "hcnsec/Qwen3-Coder-Next-FP8",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Qwen3.5-397B-A17B": {
+          "name": "hcnsec/Qwen3.5-397B-A17B",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Qwen3.6-35B-A3B": {
+          "name": "hcnsec/Qwen3.6-35B-A3B",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/Spark-X2-Flash": {
+          "name": "hcnsec/Spark-X2-Flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-3.5-flash": {
+          "name": "hcnsec/step-3.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-3.5-flash-2603": {
+          "name": "hcnsec/step-3.5-flash-2603",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-3.7-flash": {
+          "name": "hcnsec/step-3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-image-edit-2": {
+          "name": "hcnsec/step-image-edit-2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "hcnsec/step-router-v1": {
+          "name": "hcnsec/step-router-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "mistral/mistral-large-latest": {
+          "name": "mistral/mistral-large-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "mistral/codestral-latest": {
+          "name": "mistral/codestral-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "mistral/mistral-medium-latest": {
+          "name": "mistral/mistral-medium-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/seed-2-0-pro-260328": {
+          "name": "bpm/seed-2-0-pro-260328",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/seed-2-0-code-preview-260328": {
+          "name": "bpm/seed-2-0-code-preview-260328",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/seed-2-0-mini-260215": {
+          "name": "bpm/seed-2-0-mini-260215",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/seed-2-0-lite-260228": {
+          "name": "bpm/seed-2-0-lite-260228",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/kimi-k2-thinking-251104": {
+          "name": "bpm/kimi-k2-thinking-251104",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/glm-4-7-251222": {
+          "name": "bpm/glm-4-7-251222",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bpm/gpt-oss-120b-250805": {
+          "name": "bpm/gpt-oss-120b-250805",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/deepseek-v4-flash": {
+          "name": "notion-proxy/deepseek-v4-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/deepseek-v4-pro": {
+          "name": "notion-proxy/deepseek-v4-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/deepseek-v4.1-flash": {
+          "name": "notion-proxy/deepseek-v4.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gemini-3-flash": {
+          "name": "notion-proxy/gemini-3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gemini-3.1-pro": {
+          "name": "notion-proxy/gemini-3.1-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gemini-3.5-flash": {
+          "name": "notion-proxy/gemini-3.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gemini-3.6-flash": {
+          "name": "notion-proxy/gemini-3.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gemini-3.7-flash": {
+          "name": "notion-proxy/gemini-3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/glm-5.2": {
+          "name": "notion-proxy/glm-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/glm-5.3": {
+          "name": "notion-proxy/glm-5.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/glm-5.3-flash": {
+          "name": "notion-proxy/glm-5.3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.2": {
+          "name": "notion-proxy/gpt-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.4": {
+          "name": "notion-proxy/gpt-5.4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.4-mini": {
+          "name": "notion-proxy/gpt-5.4-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.4-nano": {
+          "name": "notion-proxy/gpt-5.4-nano",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.5": {
+          "name": "notion-proxy/gpt-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.6-luna": {
+          "name": "notion-proxy/gpt-5.6-luna",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.6-sol": {
+          "name": "notion-proxy/gpt-5.6-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-5.6-terra": {
+          "name": "notion-proxy/gpt-5.6-terra",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-6-luna": {
+          "name": "notion-proxy/gpt-6-luna",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-6.1-sol": {
+          "name": "notion-proxy/gpt-6.1-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/gpt-6.1-terra": {
+          "name": "notion-proxy/gpt-6.1-terra",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/grok-4.3": {
+          "name": "notion-proxy/grok-4.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/grok-4.5": {
+          "name": "notion-proxy/grok-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/grok-4.6": {
+          "name": "notion-proxy/grok-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/grok-build-0.1": {
+          "name": "notion-proxy/grok-build-0.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/haiku-4.5": {
+          "name": "notion-proxy/haiku-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/haiku-5.5": {
+          "name": "notion-proxy/haiku-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/kimi-k3": {
+          "name": "notion-proxy/kimi-k3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/opus-4.6": {
+          "name": "notion-proxy/opus-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/opus-4.7": {
+          "name": "notion-proxy/opus-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/opus-4.8": {
+          "name": "notion-proxy/opus-4.8",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/opus-5": {
+          "name": "notion-proxy/opus-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/opus-5.5": {
+          "name": "notion-proxy/opus-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/sonnet-4.6": {
+          "name": "notion-proxy/sonnet-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/sonnet-5": {
+          "name": "notion-proxy/sonnet-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/sonnet-5.5": {
+          "name": "notion-proxy/sonnet-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/kimi-k2.6": {
+          "name": "notion-proxy/kimi-k2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "notion-proxy/kimi-k2.7-code": {
+          "name": "notion-proxy/kimi-k2.7-code",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ps/laguna-s-2.1": {
+          "name": "ps/laguna-s-2.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "ps/laguna-xs-2.1": {
+          "name": "ps/laguna-xs-2.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/minimaxai/minimax-m2.7": {
+          "name": "nvidia/minimaxai/minimax-m2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/minimaxai/minimax-m3": {
+          "name": "nvidia/minimaxai/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/z-ai/glm-5.2": {
+          "name": "nvidia/z-ai/glm-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/deepseek-ai/deepseek-v4-pro": {
+          "name": "nvidia/deepseek-ai/deepseek-v4-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/deepseek-ai/deepseek-v4-flash": {
+          "name": "nvidia/deepseek-ai/deepseek-v4-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/moonshotai/kimi-k2.6": {
+          "name": "nvidia/moonshotai/kimi-k2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/nemotron-3-ultra-550b-a55b": {
+          "name": "nvidia/nemotron-3-ultra-550b-a55b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/parakeet-ctc-1.1b-asr": {
+          "name": "nvidia/parakeet-ctc-1.1b-asr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/z-ai/glm-5-3-flash": {
+          "name": "nvidia/z-ai/glm-5-3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/deepseek-ai/deepseek-v4.1-flash": {
+          "name": "nvidia/deepseek-ai/deepseek-v4.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/nemotron-3-super-120b-a12b": {
+          "name": "nvidia/nemotron-3-super-120b-a12b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/nemotron-3.5-lightning-30b-a3b": {
+          "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/minimaxai/minimax-m3.1-flash": {
+          "name": "nvidia/minimaxai/minimax-m3.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "nvidia/nemotron-3.5-super-vl-120b-a12b": {
+          "name": "nvidia/nemotron-3.5-super-vl-120b-a12b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/gpt-oss-120b": {
+          "name": "af/gpt-oss-120b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/gpt-oss-20b": {
+          "name": "af/gpt-oss-20b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/kimi-k2.7-code": {
+          "name": "af/kimi-k2.7-code",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/codestral-2508": {
+          "name": "af/codestral-2508",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/codestral-latest": {
+          "name": "af/codestral-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/devstral-latest": {
+          "name": "af/devstral-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/devstral-medium-latest": {
+          "name": "af/devstral-medium-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/gemma-4-26b-a4b-it": {
+          "name": "af/gemma-4-26b-a4b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/gemma3-270m:free": {
+          "name": "af/gemma3-270m:free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/glm-4.7-flash": {
+          "name": "af/glm-4.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/gpt-4o-mini": {
+          "name": "af/gpt-4o-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/llama-3.3-70b-instruct-fp8-fast": {
+          "name": "af/llama-3.3-70b-instruct-fp8-fast",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/llama-4-scout-17b-16e-instruct": {
+          "name": "af/llama-4-scout-17b-16e-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/magistral-small-latest": {
+          "name": "af/magistral-small-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/minimax-m2.5": {
+          "name": "af/minimax-m2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-14b-2512": {
+          "name": "af/ministral-14b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-14b-latest": {
+          "name": "af/ministral-14b-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-3b-2512": {
+          "name": "af/ministral-3b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-3b-latest": {
+          "name": "af/ministral-3b-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-8b-2512": {
+          "name": "af/ministral-8b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/ministral-8b-latest": {
+          "name": "af/ministral-8b-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-code-agent-latest": {
+          "name": "af/mistral-code-agent-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-code-fim-latest": {
+          "name": "af/mistral-code-fim-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-code-latest": {
+          "name": "af/mistral-code-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-large-2512": {
+          "name": "af/mistral-large-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-large-latest": {
+          "name": "af/mistral-large-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium": {
+          "name": "af/mistral-medium",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-2505": {
+          "name": "af/mistral-medium-2505",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-2508": {
+          "name": "af/mistral-medium-2508",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-2604": {
+          "name": "af/mistral-medium-2604",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-3": {
+          "name": "af/mistral-medium-3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-3-5": {
+          "name": "af/mistral-medium-3-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-medium-latest": {
+          "name": "af/mistral-medium-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-small-2506": {
+          "name": "af/mistral-small-2506",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-small-2603": {
+          "name": "af/mistral-small-2603",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "af/mistral-small-3.1-24b-instruct": {
+          "name": "af/mistral-small-3.1-24b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "vercel/alibaba/qwen3.8-27b": {
+          "name": "vercel/alibaba/qwen3.8-27b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/auto:free": {
+          "name": "bzl/auto:free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/claude-opus-4.7": {
+          "name": "bzl/claude-opus-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/claude-sonnet-4.6": {
+          "name": "bzl/claude-sonnet-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/claude-haiku-4.5": {
+          "name": "bzl/claude-haiku-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gpt-5.5": {
+          "name": "bzl/gpt-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gpt-5.4": {
+          "name": "bzl/gpt-5.4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gpt-5.4-mini": {
+          "name": "bzl/gpt-5.4-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gpt-5.4-nano": {
+          "name": "bzl/gpt-5.4-nano",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/grok-4.3": {
+          "name": "bzl/grok-4.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/grok-4.20": {
+          "name": "bzl/grok-4.20",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gemini-3.1-pro-preview": {
+          "name": "bzl/gemini-3.1-pro-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gemini-3-flash-preview": {
+          "name": "bzl/gemini-3-flash-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/gemini-3.1-flash-lite-preview": {
+          "name": "bzl/gemini-3.1-flash-lite-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/kimi-k2.6": {
+          "name": "bzl/kimi-k2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/kimi-k2.5": {
+          "name": "bzl/kimi-k2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/glm-5.1": {
+          "name": "bzl/glm-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/glm-5": {
+          "name": "bzl/glm-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/mimo-v2.5-pro": {
+          "name": "bzl/mimo-v2.5-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/mimo-v2.5": {
+          "name": "bzl/mimo-v2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/minimax-m3": {
+          "name": "bzl/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/minimax-m2.7": {
+          "name": "bzl/minimax-m2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/minimax-m2.5": {
+          "name": "bzl/minimax-m2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/qwen3.6-plus": {
+          "name": "bzl/qwen3.6-plus",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/nemotron-3-super-120b-a12b": {
+          "name": "bzl/nemotron-3-super-120b-a12b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/deepseek/deepseek-v4-flash": {
+          "name": "bzl/deepseek/deepseek-v4-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "bzl/qwen/qwen3.7-flash": {
+          "name": "bzl/qwen/qwen3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/smodel": {
+          "name": "qd/smodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/cmodel": {
+          "name": "qd/cmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/qfmodel": {
+          "name": "qd/qfmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/dfmodel": {
+          "name": "qd/dfmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/auto": {
+          "name": "qd/auto",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/ultimate": {
+          "name": "qd/ultimate",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/efficient": {
+          "name": "qd/efficient",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/qmodel_38max": {
+          "name": "qd/qmodel_38max",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/kmodel_latest": {
+          "name": "qd/kmodel_latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/kmodel": {
+          "name": "qd/kmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/gmodel": {
+          "name": "qd/gmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/gfmodel": {
+          "name": "qd/gfmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/dmodel": {
+          "name": "qd/dmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "qd/mmodel": {
+          "name": "qd/mmodel",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/DeepSeek-V4-Flash-0731": {
+          "name": "motapi/DeepSeek-V4-Flash-0731",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/claude-sonnet-4-6": {
+          "name": "motapi/claude-sonnet-4-6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/claude-sonnet-5": {
+          "name": "motapi/claude-sonnet-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/claude-sonnet-5-5": {
+          "name": "motapi/claude-sonnet-5-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/deepseek-v4-flash": {
+          "name": "motapi/deepseek-v4-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/deepseek-v4.1-flash-1017": {
+          "name": "motapi/deepseek-v4.1-flash-1017",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/glm-5.3-flash": {
+          "name": "motapi/glm-5.3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/gpt-5.6-sol": {
+          "name": "motapi/gpt-5.6-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/gpt-6-astra": {
+          "name": "motapi/gpt-6-astra",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/gpt-6-luna": {
+          "name": "motapi/gpt-6-luna",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/gpt-6-sol": {
+          "name": "motapi/gpt-6-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/grok-4.5": {
+          "name": "motapi/grok-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/grok-4.6": {
+          "name": "motapi/grok-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/hy3": {
+          "name": "motapi/hy3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/hy4-preview": {
+          "name": "motapi/hy4-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/kimi-k3.1-pro": {
+          "name": "motapi/kimi-k3.1-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/minimax-m2.7": {
+          "name": "motapi/minimax-m2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/minimax-m3": {
+          "name": "motapi/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "motapi/qwen3.8-max": {
+          "name": "motapi/qwen3.8-max",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/deepseek-v4-flash-0731": {
+          "name": "kimchi/deepseek-v4-flash-0731",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/kimi-k3": {
+          "name": "kimchi/kimi-k3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/glm-5.3": {
+          "name": "kimchi/glm-5.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/minimax-m3": {
+          "name": "kimchi/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/deepseek-v4.1-flash": {
+          "name": "kimchi/deepseek-v4.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/glm-5.3-flash": {
+          "name": "kimchi/glm-5.3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/nemotron-3-ultra-fp4": {
+          "name": "kimchi/nemotron-3-ultra-fp4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/auto": {
+          "name": "kimchi/auto",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/gemma-4-31b": {
+          "name": "kimchi/gemma-4-31b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "kimchi/kimi-k2.7": {
+          "name": "kimchi/kimi-k2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/bge-m3": {
+          "name": "modelrouter/bge-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-fable-5": {
+          "name": "modelrouter/claude-fable-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-fable-5.1": {
+          "name": "modelrouter/claude-fable-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-haiku-4.5": {
+          "name": "modelrouter/claude-haiku-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-haiku-5.5": {
+          "name": "modelrouter/claude-haiku-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-4.5": {
+          "name": "modelrouter/claude-opus-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-4.6": {
+          "name": "modelrouter/claude-opus-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-4.7": {
+          "name": "modelrouter/claude-opus-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-4.8": {
+          "name": "modelrouter/claude-opus-4.8",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-5": {
+          "name": "modelrouter/claude-opus-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-opus-5.5": {
+          "name": "modelrouter/claude-opus-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-sonnet-4.5": {
+          "name": "modelrouter/claude-sonnet-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-sonnet-4.6": {
+          "name": "modelrouter/claude-sonnet-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-sonnet-5": {
+          "name": "modelrouter/claude-sonnet-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/claude-sonnet-5.5": {
+          "name": "modelrouter/claude-sonnet-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/codestral-2508": {
+          "name": "modelrouter/codestral-2508",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/command-a": {
+          "name": "modelrouter/command-a",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/command-a-plus": {
+          "name": "modelrouter/command-a-plus",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/command-r-08-2024": {
+          "name": "modelrouter/command-r-08-2024",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/command-r-plus-08-2024": {
+          "name": "modelrouter/command-r-plus-08-2024",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/command-r7b-12-2024": {
+          "name": "modelrouter/command-r7b-12-2024",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/deepseek-v4-flash": {
+          "name": "modelrouter/deepseek-v4-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/deepseek-v4-pro": {
+          "name": "modelrouter/deepseek-v4-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/deepseek-v4.1-flash": {
+          "name": "modelrouter/deepseek-v4.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/deepseek-v4.1-flash-1017": {
+          "name": "modelrouter/deepseek-v4.1-flash-1017",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/devstral-2512": {
+          "name": "modelrouter/devstral-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/dolphin": {
+          "name": "modelrouter/dolphin",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-2.5-flash": {
+          "name": "modelrouter/gemini-2.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-2.5-flash-lite": {
+          "name": "modelrouter/gemini-2.5-flash-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-2.5-pro": {
+          "name": "modelrouter/gemini-2.5-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3-flash-preview": {
+          "name": "modelrouter/gemini-3-flash-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.1-flash-lite": {
+          "name": "modelrouter/gemini-3.1-flash-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.1-flash-lite-preview": {
+          "name": "modelrouter/gemini-3.1-flash-lite-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.1-pro-preview": {
+          "name": "modelrouter/gemini-3.1-pro-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.1-pro-preview-customtools": {
+          "name": "modelrouter/gemini-3.1-pro-preview-customtools",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.5-flash": {
+          "name": "modelrouter/gemini-3.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.5-flash-lite": {
+          "name": "modelrouter/gemini-3.5-flash-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.6-flash": {
+          "name": "modelrouter/gemini-3.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.7-flash": {
+          "name": "modelrouter/gemini-3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-3.8-flash": {
+          "name": "modelrouter/gemini-3.8-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemini-4-argon": {
+          "name": "modelrouter/gemini-4-argon",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemma-3-12b-it": {
+          "name": "modelrouter/gemma-3-12b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemma-3-27b-it": {
+          "name": "modelrouter/gemma-3-27b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemma-3-4b-it": {
+          "name": "modelrouter/gemma-3-4b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemma-4-26b-a4b-it": {
+          "name": "modelrouter/gemma-4-26b-a4b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gemma-4-31b-it": {
+          "name": "modelrouter/gemma-4-31b-it",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.5": {
+          "name": "modelrouter/glm-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.5-air": {
+          "name": "modelrouter/glm-4.5-air",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.5v": {
+          "name": "modelrouter/glm-4.5v",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.6": {
+          "name": "modelrouter/glm-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.6v": {
+          "name": "modelrouter/glm-4.6v",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-4.7": {
+          "name": "modelrouter/glm-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5": {
+          "name": "modelrouter/glm-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5-turbo": {
+          "name": "modelrouter/glm-5-turbo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.1": {
+          "name": "modelrouter/glm-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.2": {
+          "name": "modelrouter/glm-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.3": {
+          "name": "modelrouter/glm-5.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.3-flash": {
+          "name": "modelrouter/glm-5.3-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.3-flashx": {
+          "name": "modelrouter/glm-5.3-flashx",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5v-turbo": {
+          "name": "modelrouter/glm-5v-turbo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-3.5-turbo": {
+          "name": "modelrouter/gpt-3.5-turbo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-3.5-turbo-16k": {
+          "name": "modelrouter/gpt-3.5-turbo-16k",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-3.5-turbo-instruct": {
+          "name": "modelrouter/gpt-3.5-turbo-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4": {
+          "name": "modelrouter/gpt-4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4-turbo": {
+          "name": "modelrouter/gpt-4-turbo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4.1": {
+          "name": "modelrouter/gpt-4.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4.1-mini": {
+          "name": "modelrouter/gpt-4.1-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4.1-nano": {
+          "name": "modelrouter/gpt-4.1-nano",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o": {
+          "name": "modelrouter/gpt-4o",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o-2024-05-13": {
+          "name": "modelrouter/gpt-4o-2024-05-13",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o-2024-08-06": {
+          "name": "modelrouter/gpt-4o-2024-08-06",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o-2024-11-20": {
+          "name": "modelrouter/gpt-4o-2024-11-20",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o-mini": {
+          "name": "modelrouter/gpt-4o-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-4o-mini-2024-07-18": {
+          "name": "modelrouter/gpt-4o-mini-2024-07-18",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5": {
+          "name": "modelrouter/gpt-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5-mini": {
+          "name": "modelrouter/gpt-5-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5-nano": {
+          "name": "modelrouter/gpt-5-nano",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5-pro": {
+          "name": "modelrouter/gpt-5-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.1": {
+          "name": "modelrouter/gpt-5.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.2": {
+          "name": "modelrouter/gpt-5.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.2-pro": {
+          "name": "modelrouter/gpt-5.2-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.3-codex": {
+          "name": "modelrouter/gpt-5.3-codex",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.4": {
+          "name": "modelrouter/gpt-5.4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.4-mini": {
+          "name": "modelrouter/gpt-5.4-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.4-nano": {
+          "name": "modelrouter/gpt-5.4-nano",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.4-pro": {
+          "name": "modelrouter/gpt-5.4-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.5": {
+          "name": "modelrouter/gpt-5.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.5-pro": {
+          "name": "modelrouter/gpt-5.5-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-luna": {
+          "name": "modelrouter/gpt-5.6-luna",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-luna-pro": {
+          "name": "modelrouter/gpt-5.6-luna-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-sol": {
+          "name": "modelrouter/gpt-5.6-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-sol-pro": {
+          "name": "modelrouter/gpt-5.6-sol-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-terra": {
+          "name": "modelrouter/gpt-5.6-terra",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-5.6-terra-pro": {
+          "name": "modelrouter/gpt-5.6-terra-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-astra": {
+          "name": "modelrouter/gpt-6-astra",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-astra-pro": {
+          "name": "modelrouter/gpt-6-astra-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-luna": {
+          "name": "modelrouter/gpt-6-luna",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-luna-pro": {
+          "name": "modelrouter/gpt-6-luna-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-sol": {
+          "name": "modelrouter/gpt-6-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6-sol-pro": {
+          "name": "modelrouter/gpt-6-sol-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6.1-sol": {
+          "name": "modelrouter/gpt-6.1-sol",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-6.1-sol-pro": {
+          "name": "modelrouter/gpt-6.1-sol-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/gpt-chat-latest": {
+          "name": "modelrouter/gpt-chat-latest",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.20": {
+          "name": "modelrouter/grok-4.20",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.20-multi-agent": {
+          "name": "modelrouter/grok-4.20-multi-agent",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.3": {
+          "name": "modelrouter/grok-4.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.5": {
+          "name": "modelrouter/grok-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.6": {
+          "name": "modelrouter/grok-4.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-4.7": {
+          "name": "modelrouter/grok-4.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/grok-build-0.1": {
+          "name": "modelrouter/grok-build-0.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hermes-3-llama-3.1-405b": {
+          "name": "modelrouter/hermes-3-llama-3.1-405b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hermes-3-llama-3.1-70b": {
+          "name": "modelrouter/hermes-3-llama-3.1-70b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy-mt2-1.8b": {
+          "name": "modelrouter/hy-mt2-1.8b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy-mt2-30b-a3b": {
+          "name": "modelrouter/hy-mt2-30b-a3b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy-mt2-7b": {
+          "name": "modelrouter/hy-mt2-7b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy3": {
+          "name": "modelrouter/hy3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy4-preview": {
+          "name": "modelrouter/hy4-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/k3-edit": {
+          "name": "modelrouter/k3-edit",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/kimi-k2.6": {
+          "name": "modelrouter/kimi-k2.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/kimi-k2.7-code": {
+          "name": "modelrouter/kimi-k2.7-code",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/kimi-k3": {
+          "name": "modelrouter/kimi-k3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/kimi-k3.1-pro": {
+          "name": "modelrouter/kimi-k3.1-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/llama-3.1-70b-instruct": {
+          "name": "modelrouter/llama-3.1-70b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/llama-3.1-8b-instruct": {
+          "name": "modelrouter/llama-3.1-8b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/llama-3.3-70b-instruct": {
+          "name": "modelrouter/llama-3.3-70b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/llama-4-scout": {
+          "name": "modelrouter/llama-4-scout",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/llama-guard-4-12b": {
+          "name": "modelrouter/llama-guard-4-12b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mimo-v2.6-flash": {
+          "name": "modelrouter/mimo-v2.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mimo-v2.6-pro": {
+          "name": "modelrouter/mimo-v2.6-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mimo-v2.6-pro-ultraspeed": {
+          "name": "modelrouter/mimo-v2.6-pro-ultraspeed",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-01": {
+          "name": "modelrouter/minimax-01",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m1": {
+          "name": "modelrouter/minimax-m1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m2": {
+          "name": "modelrouter/minimax-m2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m2-her": {
+          "name": "modelrouter/minimax-m2-her",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m2.1": {
+          "name": "modelrouter/minimax-m2.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m2.5": {
+          "name": "modelrouter/minimax-m2.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m2.7": {
+          "name": "modelrouter/minimax-m2.7",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m3": {
+          "name": "modelrouter/minimax-m3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/minimax-m3.1-flash": {
+          "name": "modelrouter/minimax-m3.1-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/ministral-14b-2512": {
+          "name": "modelrouter/ministral-14b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/ministral-3b-2512": {
+          "name": "modelrouter/ministral-3b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/ministral-8b-2512": {
+          "name": "modelrouter/ministral-8b-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-large": {
+          "name": "modelrouter/mistral-large",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-large-2407": {
+          "name": "modelrouter/mistral-large-2407",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-large-2512": {
+          "name": "modelrouter/mistral-large-2512",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-large-4-0": {
+          "name": "modelrouter/mistral-large-4-0",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-medium-3": {
+          "name": "modelrouter/mistral-medium-3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-medium-3-5": {
+          "name": "modelrouter/mistral-medium-3-5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-medium-3.1": {
+          "name": "modelrouter/mistral-medium-3.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-nemo": {
+          "name": "modelrouter/mistral-nemo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-saba": {
+          "name": "modelrouter/mistral-saba",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-small-2603": {
+          "name": "modelrouter/mistral-small-2603",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mistral-small-3.2-24b-instruct": {
+          "name": "modelrouter/mistral-small-3.2-24b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mixtral-8x22b-instruct": {
+          "name": "modelrouter/mixtral-8x22b-instruct",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-spark-1.1": {
+          "name": "modelrouter/muse-spark-1.1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-spark-1.2": {
+          "name": "modelrouter/muse-spark-1.2",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-spark-1.2-contributor": {
+          "name": "modelrouter/muse-spark-1.2-contributor",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-spark-1.3": {
+          "name": "modelrouter/muse-spark-1.3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-spark-1.3-contributor": {
+          "name": "modelrouter/muse-spark-1.3-contributor",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/muse-wonder": {
+          "name": "modelrouter/muse-wonder",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nova-2-lite-v1": {
+          "name": "modelrouter/nova-2-lite-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nova-lite-v1": {
+          "name": "modelrouter/nova-lite-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nova-micro-v1": {
+          "name": "modelrouter/nova-micro-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nova-premier-v1": {
+          "name": "modelrouter/nova-premier-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nova-pro-v1": {
+          "name": "modelrouter/nova-pro-v1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o1": {
+          "name": "modelrouter/o1",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o3": {
+          "name": "modelrouter/o3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o3-mini": {
+          "name": "modelrouter/o3-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o3-mini-high": {
+          "name": "modelrouter/o3-mini-high",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o3-pro": {
+          "name": "modelrouter/o3-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o4-mini": {
+          "name": "modelrouter/o4-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/o4-mini-high": {
+          "name": "modelrouter/o4-mini-high",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen-plus": {
+          "name": "modelrouter/qwen-plus",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3-coder-flash": {
+          "name": "modelrouter/qwen3-coder-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.6-27b": {
+          "name": "modelrouter/qwen3.6-27b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.6-flash": {
+          "name": "modelrouter/qwen3.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.6-plus": {
+          "name": "modelrouter/qwen3.6-plus",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.7-flash": {
+          "name": "modelrouter/qwen3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.7-max": {
+          "name": "modelrouter/qwen3.7-max",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.7-plus": {
+          "name": "modelrouter/qwen3.7-plus",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.8-27b": {
+          "name": "modelrouter/qwen3.8-27b",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.8-flash": {
+          "name": "modelrouter/qwen3.8-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.8-max-0902": {
+          "name": "modelrouter/qwen3.8-max-0902",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/qwen3.8-omni-flash": {
+          "name": "modelrouter/qwen3.8-omni-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-1.6": {
+          "name": "modelrouter/seed-1.6",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-1.6-flash": {
+          "name": "modelrouter/seed-1.6-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-2-1-turbo": {
+          "name": "modelrouter/seed-2-1-turbo",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-2.0-code": {
+          "name": "modelrouter/seed-2.0-code",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-2.0-lite": {
+          "name": "modelrouter/seed-2.0-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seed-2.0-mini": {
+          "name": "modelrouter/seed-2.0-mini",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seedream-4.5": {
+          "name": "modelrouter/seedream-4.5",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/seedream-5-0-lite": {
+          "name": "modelrouter/seedream-5-0-lite",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/solar-mini4": {
+          "name": "modelrouter/solar-mini4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/solar-pro-3": {
+          "name": "modelrouter/solar-pro-3",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/solar-pro4": {
+          "name": "modelrouter/solar-pro4",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/sonar": {
+          "name": "modelrouter/sonar",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/sonar-deep-research": {
+          "name": "modelrouter/sonar-deep-research",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/sonar-pro": {
+          "name": "modelrouter/sonar-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/sonar-pro-search": {
+          "name": "modelrouter/sonar-pro-search",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/sonar-reasoning-pro": {
+          "name": "modelrouter/sonar-reasoning-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/step-3.7-flash": {
+          "name": "modelrouter/step-3.7-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/step-5-preview": {
+          "name": "modelrouter/step-5-preview",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/voxtral-small-24b-2507": {
+          "name": "modelrouter/voxtral-small-24b-2507",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/voyage-4-large": {
+          "name": "modelrouter/voyage-4-large",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/deepseek-v4.1-flash:mr": {
+          "name": "modelrouter/deepseek-v4.1-flash:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/glm-5.3-flash:mr": {
+          "name": "modelrouter/glm-5.3-flash:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/hy3:mr": {
+          "name": "modelrouter/hy3:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nemotron-3.5-super-vl:mr": {
+          "name": "modelrouter/nemotron-3.5-super-vl:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/beam:mr": {
+          "name": "modelrouter/beam:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/cat-jam:mr": {
+          "name": "modelrouter/cat-jam:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/longcat-2.5-preview:mr": {
+          "name": "modelrouter/longcat-2.5-preview:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/nemotron-3-ultra:mr": {
+          "name": "modelrouter/nemotron-3-ultra:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/space-bunny:mr": {
+          "name": "modelrouter/space-bunny:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mimo-v2.6-flash:mr": {
+          "name": "modelrouter/mimo-v2.6-flash:mr",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "modelrouter/mr-vip": {
+          "name": "modelrouter/mr-vip",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "agnes/agnes-2.5-flash": {
+          "name": "agnes/agnes-2.5-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "agnes/agnes-2.5-pro": {
+          "name": "agnes/agnes-2.5-pro",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "agnes/agnes-2.5-pro-beta": {
+          "name": "agnes/agnes-2.5-pro-beta",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "agnes/agnes-3.0-flash": {
+          "name": "agnes/agnes-3.0-flash",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "mmf/mimo-auto": {
+          "name": "mmf/mimo-auto",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/muse-spark-1.2-contributor-free": {
+          "name": "oc/muse-spark-1.2-contributor-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/muse-spark-1.3-contributor-free": {
+          "name": "oc/muse-spark-1.3-contributor-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/union-alpha": {
+          "name": "oc/union-alpha",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/jev-1.13-free": {
+          "name": "oc/jev-1.13-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/big-pickle": {
+          "name": "oc/big-pickle",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/beam-free": {
+          "name": "oc/beam-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/mimo-v2.6-flash-free": {
+          "name": "oc/mimo-v2.6-flash-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/nemotron-3.5-super-vl-free": {
+          "name": "oc/nemotron-3.5-super-vl-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/nemotron-3.5-lightning-free": {
+          "name": "oc/nemotron-3.5-lightning-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/longcat-2.5-preview-free": {
+          "name": "oc/longcat-2.5-preview-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/deepseek-v4.1-flash-free": {
+          "name": "oc/deepseek-v4.1-flash-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/glm-5.3-flash-free": {
+          "name": "oc/glm-5.3-flash-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/space-bunny-free": {
+          "name": "oc/space-bunny-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        },
+        "oc/flint-40b-free": {
+          "name": "oc/flint-40b-free",
+          "tool_call": true,
+          "limit": {
+            "context": 131072,
+            "output": 32768
+          }
+        }
+      }
+    }
+  }
+}

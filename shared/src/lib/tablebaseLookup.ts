@@ -155,9 +155,10 @@ export function getTablebaseMoveEvaluation(
  * Human readable result from white's viewpoint, e.g.
  * "WHITE WINS IN 16", "BLACK WINS", "DRAWS (50-MOVE LIMIT)".
  *
- * Pass forResultingPosition = true when `result` belongs to a move
- * (its category describes the position after the move, where the
- * opponent becomes the side-to-move).
+ * Decisive results always name the winning side; the losing side is
+ * never mentioned. Pass forResultingPosition = true when `result`
+ * belongs to a move (its category describes the position after the
+ * move, where the opponent becomes the side-to-move).
  */
 export function formatTablebaseResult(
     result: TablebaseResult | TablebaseMove,
@@ -169,7 +170,8 @@ export function formatTablebaseResult(
         : getWhiteToMove(fen);
 
     if (result.checkmate) {
-        return whiteToMove ? "WHITE IS MATED" : "BLACK IS MATED";
+        // Whoever is to move has been mated; report the winner instead
+        return whiteToMove ? "BLACK WINS" : "WHITE WINS";
     }
     if (result.stalemate) {
         return "STALEMATE";
