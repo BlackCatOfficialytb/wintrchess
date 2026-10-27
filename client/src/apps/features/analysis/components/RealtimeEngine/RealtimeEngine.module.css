@@ -11,10 +11,25 @@
 
 .depth {
     display: flex;
+    align-items: center;
     gap: 5px;
 
     color: gray;
-    font-size: 0.7rem;
+    font-size: 0.85rem;
+}
+
+.cloudBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+
+    border-radius: 5px;
+    background-color: #22c55e;
+
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .engineLineSeparator {

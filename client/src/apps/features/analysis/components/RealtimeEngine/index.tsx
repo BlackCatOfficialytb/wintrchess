@@ -197,8 +197,13 @@ function RealtimeEngine({
 
             <span>
                 {displayedLines.at(0)?.depth || 0}
-                {cloudAnalysed && " (CLOUD)"}
             </span>
+
+            {cloudAnalysed && (
+                <span className={styles.cloudBadge}>
+                    CLOUD
+                </span>
+            )}
         </span>
 
         {cloudAnalysed && (
