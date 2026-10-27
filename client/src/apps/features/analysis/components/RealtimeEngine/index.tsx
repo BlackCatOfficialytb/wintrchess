@@ -187,10 +187,7 @@ function RealtimeEngine({
         className={`${styles.wrapper} ${className}`}
         style={style}
     >
-        <span
-            className={styles.depth}
-            data-tooltip-id="realtime-engine-depth"
-        >
+        <span className={styles.depth}>
             <span>
                 {t("realtimeEngine.depth")}
             </span>
@@ -200,7 +197,10 @@ function RealtimeEngine({
             </span>
 
             {cloudAnalysed && (
-                <span className={styles.cloudBadge}>
+                <span
+                    className={styles.cloudBadge}
+                    data-tooltip-id="realtime-engine-depth"
+                >
                     CLOUD
                 </span>
             )}
