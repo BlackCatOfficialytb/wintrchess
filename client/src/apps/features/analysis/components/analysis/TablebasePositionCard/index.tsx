@@ -12,12 +12,15 @@ import TablebaseEvaluationWidget from "@analysis/components/report/TablebaseEval
 interface PVType {
     move: string;
     dtz: number;
+    dtm?: number;
     isBest: boolean;
 }
 
 interface TablebaseDisplayData {
     pvMoves: PVType[];
     resultText: string;
+    /** Exact distance to mate shown in the header, when winning */
+    dtm?: number;
 }
 
 const VARIATION_COUNT = 6;
@@ -26,16 +29,30 @@ function getTablebaseDisplayData(
     result: TablebaseResult,
     fen: string
 ): TablebaseDisplayData {
+    const decisive =
+        result.category == "win"
+        || result.category == "loss"
+        || result.category == "maybe-win"
+        || result.category == "maybe-loss"
+        || result.category == "cursed-win";
+
     return {
         pvMoves: result.moves
             .slice(0, VARIATION_COUNT)
             .map((rate, index) => ({
                 move: rate.san,
-                // Signed dtz values are negative for losing variations
+                // Signed dtz/dtm values are negative for losing variations
                 dtz: Math.abs(rate.dtz ?? rate.dtm ?? 0),
+                dtm: rate.dtm !== undefined
+                    ? Math.abs(rate.dtm)
+                    : undefined,
                 isBest: index == 0
             })),
-        resultText: formatTablebaseResult(result, fen)
+        resultText: formatTablebaseResult(result, fen),
+        // dtm is only provided by the tablebase for <= 5-piece positions
+        dtm: decisive && result.dtm !== undefined
+            ? Math.abs(result.dtm)
+            : undefined
     };
 }
 
@@ -107,6 +124,7 @@ function TablebasePositionCard() {
                 <TablebaseEvaluationWidget
                     pvMoves={tablebaseData.pvMoves}
                     resultText={tablebaseData.resultText}
+                    dtm={tablebaseData.dtm}
                     defaultExpanded={true}
                 />
             ) : (

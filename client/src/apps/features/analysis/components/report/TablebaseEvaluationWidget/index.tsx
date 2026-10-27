@@ -3,12 +3,16 @@ import React, { useState } from "react";
 interface MoveData {
     move: string;
     dtz: number;
+    /** Exact distance to mate, when the tablebase provides one */
+    dtm?: number;
     isBest?: boolean;
 }
 
 interface TablebaseEvaluationWidgetProps {
     pvMoves: MoveData[];
     resultText: string;
+    /** Top-level DTM shown in the header when either side is winning */
+    dtm?: number;
     defaultExpanded?: boolean;
     onToggle?: () => void;
 }
@@ -30,6 +34,7 @@ interface TablebaseEvaluationWidgetProps {
 const TablebaseEvaluationWidget: React.FC<TablebaseEvaluationWidgetProps> = ({
     pvMoves = [],
     resultText = "TABLEBASE EVALUATION",
+    dtm,
     defaultExpanded = false,
     onToggle
 }) => {
@@ -98,6 +103,21 @@ const TablebaseEvaluationWidget: React.FC<TablebaseEvaluationWidgetProps> = ({
                     }}>
                         {resultText}
                     </span>
+                    {dtm !== undefined && (
+                        <span style={{
+                            flexShrink: 0,
+                            padding: "3px 10px",
+                            borderRadius: "999px",
+                            backgroundColor: "white",
+                            color: "var(--ui-shade-1)",
+                            fontWeight: 700,
+                            fontSize: "11px",
+                            letterSpacing: "0.3px",
+                            whiteSpace: "nowrap"
+                        }}>
+                            DTM {dtm}
+                        </span>
+                    )}
                 </div>
                 <button
                     onClick={event => {
@@ -227,6 +247,23 @@ const TablebaseEvaluationWidget: React.FC<TablebaseEvaluationWidgetProps> = ({
                                     }}>
                                         DTZ {moveItem.dtz}
                                     </span>
+
+                                    {/* DTM badge, exact mate distance when provided */}
+                                    {moveItem.dtm !== undefined && (
+                                        <span style={{
+                                            flexShrink: 0,
+                                            padding: "3px 8px",
+                                            borderRadius: "999px",
+                                            backgroundColor: "var(--ui-shade-2)",
+                                            border: "1px solid var(--ui-shade-6)",
+                                            color: "white",
+                                            fontWeight: 700,
+                                            fontSize: "11px",
+                                            whiteSpace: "nowrap"
+                                        }}>
+                                            DTM {moveItem.dtm}
+                                        </span>
+                                    )}
                                 </div>
                             ))}
                         </div>

@@ -19,6 +19,29 @@
 
 .progress {
     width: 100%;
+    height: 12px;
+
+    appearance: none;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--ui-shade-2);
+    overflow: hidden;
+}
+
+.progress::-webkit-progress-bar {
+    background-color: var(--ui-shade-2);
+    border-radius: 999px;
+}
+
+.progress::-webkit-progress-value {
+    background-color: var(--ui-blue);
+    border-radius: 999px;
+    transition: width 0.2s ease;
+}
+
+.progress::-moz-progress-bar {
+    background-color: var(--ui-blue);
+    border-radius: 999px;
 }
 
 .tooltip {
