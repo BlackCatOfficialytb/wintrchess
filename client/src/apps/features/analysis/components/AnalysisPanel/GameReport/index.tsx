@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { lookupTablebase, isTablebasePosition, type TablebaseResult } from "shared/lib/tablebaseLookup";
+import {
+    lookupTablebase,
+    isTablebasePosition,
+    formatTablebaseResult,
+    type TablebaseResult
+} from "shared/lib/tablebaseLookup";
 import { getGameAccuracy } from "shared/lib/reporter/accuracy";
 import useAnalysisGameStore from "@analysis/stores/AnalysisGameStore";
 import useAnalysisBoardStore from "@analysis/stores/AnalysisBoardStore";
@@ -15,140 +20,97 @@ interface PVType {
     isBest: boolean;
 }
 
-export interface TablebaseData {
+interface TablebaseDisplayData {
     pvMoves: PVType[];
     resultText: string;
+}
+
+/** Legal move variations shown in the widget */
+const VARIATION_COUNT = 6;
+
+function getTablebaseDisplayData(
+    result: TablebaseResult,
+    fen: string
+): TablebaseDisplayData {
+    const pvMoves: PVType[] = result.moves
+        .slice(0, VARIATION_COUNT)
+        .map((rate, index) => ({
+            move: rate.san,
+            // Signed dtz values are negative for losing variations
+            dtz: Math.abs(rate.dtz ?? rate.dtm ?? 0),
+            isBest: index == 0
+        }));
+
+    return {
+        pvMoves,
+        resultText: formatTablebaseResult(result, fen)
+    };
 }
 
 function GameReport() {
     const analysisGame = useAnalysisGameStore(state => state.analysisGame);
 
-    useAnalysisBoardStore(state => state.currentStateTreeNodeUpdate);
+    const currentStateTreeNode = useAnalysisBoardStore(
+        state => state.currentStateTreeNode
+    );
 
-    const [tablebaseData, setTablebaseData] = useState<TablebaseData | undefined>(undefined);
+    const [tablebaseData, setTablebaseData] = useState<TablebaseDisplayData | undefined>(undefined);
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const fetchTablebase = async () => {
-            if (!analysisGame?.stateTree) return;
+        let cancelled = false;
 
-            // Find the current state with FEN
-            const findCurrentFen = (node: any): string | null => {
-                if (node.id === analysisGame.currentStateTreeNode?.id) {
-                    return node.state.fen;
-                }
-                if (node.children) {
-                    for (const child of node.children) {
-                        const result = findCurrentFen(child);
-                        if (result) return result;
-                    }
-                }
-                return null;
-            };
+        const fen = currentStateTreeNode?.state?.fen;
 
-            const currentFen = findCurrentFen(analysisGame.stateTree);
-            if (!currentFen) return;
+        if (!fen || !isTablebasePosition(fen)) {
+            setTablebaseData(undefined);
+            setLoading(false);
+            return;
+        }
 
-            // Check if this is a tablebase position (≤7 pieces)
-            if (!isTablebasePosition(currentFen)) {
-                setTablebaseData(undefined);
-                return;
-            }
+        setLoading(true);
 
-            // Fetch tablebase data
-            setLoading(true);
-            try {
-                const result = await lookupTablebase(currentFen, {
-                    multiPv: 6,
-                    timeout: 300
-                });
+        lookupTablebase(fen).then(result => {
+            if (cancelled) return;
 
-                if (!result) {
-                    setTablebaseData(undefined);
-                    return;
-                }
+            setTablebaseData(
+                result
+                    ? getTablebaseDisplayData(result, fen)
+                    : undefined
+            );
+        }).finally(() => {
+            if (!cancelled) setLoading(false);
+        });
 
-                // Parse result into format for widget
-                const pvMoves: PVType[] = [];
-
-                if (result.dtm && result.dtm > 0) {
-                    // Mate or winning/losing scenario
-                    if (result.win) {
-                        // White can force mate
-                        pvMoves.push({ move: "Rbd1", dtz: Math.min(result.dtm, 10), isBest: true });
-                        if (result.dtm > 1) pvMoves.push({ move: "Kxd8", dtz: result.dtm, isBest: false });
-                        pvMoves.push({ move: "Nb6", dtz: result.dtm + 1, isBest: false });
-                    } else if (result.loss) {
-                        // Black can force mate
-                        pvMoves.push({ move: "Kd8", dtz: result.dtm, isBest: true });
-                        pvMoves.push({ move: "Rbc1", dtz: result.dtm + 1, isBest: false });
-                    }
-                } else if (result.draw) {
-                    // Draw
-                    setTablebaseData({
-                        pvMoves,
-                        resultText: "TABLEBASE DRAWS"
-                    });
-                    return;
-                }
-
-                // Format result text
-                let resultText = "";
-                if (!pvMoves.length) {
-                    resultText = "NO CLEAR RESULT";
-                    setTablebaseData({ pvMoves, resultText });
-                    return;
-                }
-
-                if (result.win || result.draw) {
-                    resultText = "TABLEBASE " + (result.win ? "WHITE WINS" : "BLACK WINS");
-                } else if (result.loss) {
-                    resultText = "TABLEBASE BLACK WINS";
-                }
-
-                setTablebaseData({
-                    pvMoves,
-                    resultText
-                });
-
-            } catch (error) {
-                console.error("Tablebase lookup failed:", error);
-                setTablebaseData(undefined);
-            } finally {
-                setLoading(false);
-            }
+        return () => {
+            cancelled = true;
         };
+    }, [currentStateTreeNode?.id]);
 
-        fetchTablebase();
-    }, [analysisGame, analysisGame.currentStateTreeNode]);
-
-    const accuracies = analysisGame ? getGameAccuracy(analysisGame.stateTree) : null;
+    const accuracies = analysisGame
+        ? getGameAccuracy(analysisGame.stateTree)
+        : null;
 
     return (
         <div>
             <EvaluationGraphArea/>
 
-            {!loading && tablebaseData && (
+            {(loading || tablebaseData) && (
                 <div style={{ backgroundColor: 'var(--ui-shade-3)', padding: '12px', marginBottom: '16px', borderRadius: '8px', border: '1px solid var(--ui-shade-6)' }}>
                     <h4 style={{ color: 'white', fontWeight: 'bold', marginBottom: '12px', fontSize: '16px' }}>
                         Tablebase Analysis
                     </h4>
-                    <TablebaseEvaluationWidget
-                        pvMoves={tablebaseData.pvMoves}
-                        resultText={tablebaseData.resultText}
-                        defaultExpanded={true}
-                    />
-                </div>
-            )}
-
-            {loading && (
-                <div style={{ backgroundColor: 'var(--ui-shade-3)', padding: '12px', marginBottom: '16px', borderRadius: '8px', border: '1px solid var(--ui-shade-6)' }}>
-                    <h4 style={{ color: 'white', fontWeight: 'bold', marginBottom: '12px', fontSize: '16px' }}>
-                        Tablebase Analysis
-                    </h4>
-                    <div style={{ color: 'var(--ui-shade-5)', fontSize: '14px', padding: '16px' }}>
-                        Loading tablebase data...
-                    </div>
+                    {loading ? (
+                        <div style={{ color: 'var(--ui-shade-5)', fontSize: '14px', padding: '16px' }}>
+                            Loading tablebase data...
+                        </div>
+                    ) : tablebaseData && (
+                        <TablebaseEvaluationWidget
+                            pvMoves={tablebaseData.pvMoves}
+                            resultText={tablebaseData.resultText}
+                            defaultExpanded={true}
+                        />
+                    )}
                 </div>
             )}
 

@@ -35,6 +35,8 @@ function useEvaluateGame() {
             cloudEngineLines: settings.lines,
             maxEngineCount: 4,
             multiThreaded: settings.multiThreaded,
+            useTablebases: true,
+            tablebaseTries: 3,
             engineConfig: engine => engine.setLineCount(settings.lines),
             onProgress: progress => {
                 setEvaluationProgress(progress);

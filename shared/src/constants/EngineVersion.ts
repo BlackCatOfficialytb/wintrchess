@@ -1,5 +1,6 @@
 enum EngineVersion {
     LICHESS_CLOUD = "lichess-cloud",
+    EGTB_SYZYGY = "egtb-syzygy",
     STOCKFISH_11 = "stockfish-11.js",
     STOCKFISH_19_ASM = "stockfish-19-asm.js",
     STOCKFISH_19_LITE = "stockfish-19-lite-single.js",
