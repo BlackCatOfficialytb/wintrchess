@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Tooltip } from "react-tooltip";
 import { Chess } from "chess.js";
 import { range } from "lodash-es";
 
+import EngineVersion from "shared/constants/EngineVersion";
 import { EngineLine } from "shared/types/game/position/EngineLine";
 import { pickEngineLines } from "shared/types/game/position/EngineLine";
 import LogMessage from "@/components/common/LogMessage";
@@ -121,6 +123,9 @@ function RealtimeEngine({
 
     const displayedLines = displayedCacheLines || displayedLocalLines;
 
+    // Cloud-evaluated games get a "CLOUD" suffix on the depth indicator
+    const cloudAnalysed = displayedLines.at(0)?.source == EngineVersion.LICHESS_CLOUD;
+
     useEffect(() => (
         onEngineLines?.(displayedLines)
     ), [displayedLines]);
@@ -182,15 +187,27 @@ function RealtimeEngine({
         className={`${styles.wrapper} ${className}`}
         style={style}
     >
-        <span className={styles.depth}>
+        <span
+            className={styles.depth}
+            data-tooltip-id="realtime-engine-depth"
+        >
             <span>
                 {t("realtimeEngine.depth")}
             </span>
 
             <span>
                 {displayedLines.at(0)?.depth || 0}
+                {cloudAnalysed && " (CLOUD)"}
             </span>
         </span>
+
+        {cloudAnalysed && (
+            <Tooltip
+                id="realtime-engine-depth"
+                content={t("realtimeEngine.analysedByCloudEval")}
+                delayShow={400}
+            />
+        )}
 
         {displayedLines.map((line, index) => <>
             <EngineLineInfo line={line} key={line.index} />

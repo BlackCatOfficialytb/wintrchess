@@ -67,7 +67,8 @@
     "realtimeEngine": {
         "depth": "Глубина:",
         "checkmate": "Мат",
-        "error": "Не удалось определить позицию."
+        "error": "Не удалось определить позицию.",
+        "analysedByCloudEval": "Проанализировано через Lichess Cloud Eval"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

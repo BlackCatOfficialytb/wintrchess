@@ -34,6 +34,23 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
+.cloudTag {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 6px;
+    padding: 2px 6px;
+
+    border-radius: 5px;
+    background-color: var(--ui-blue);
+
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+
+    cursor: default;
+}
+
 .expandArrowContainer {
     height: 20px;
     position: absolute;

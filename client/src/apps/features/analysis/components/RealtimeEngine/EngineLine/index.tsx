@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useId } from "react";
 import { useTranslation } from "react-i18next";
+import { Tooltip } from "react-tooltip";
 
+import EngineVersion from "shared/constants/EngineVersion";
 import { addChildMove } from "shared/types/game/position/StateTreeNode";
 import useAnalysisBoardStore from "@analysis/stores/AnalysisBoardStore";
 import playBoardSound from "@/lib/boardSounds";
@@ -12,6 +14,9 @@ import iconInterfaceExpandarrow from "@assets/img/interface/expand_arrow.svg";
 
 function EngineLine({ line }: EngineLineProps) {
     const { t } = useTranslation("analysis");
+
+    // Unique tooltip anchor for this engine line's CLOUD tag
+    const cloudTooltipId = useId();
 
     const {
         currentStateTreeNode,
@@ -76,6 +81,25 @@ function EngineLine({ line }: EngineLineProps) {
                 </span>
             ))
         }
+
+        {
+            line.source == EngineVersion.LICHESS_CLOUD && (
+                <span
+                    className={styles.cloudTag}
+                    data-tooltip-id={cloudTooltipId}
+                >
+                    CLOUD
+                </span>
+            )
+        }
+
+        {line.source == EngineVersion.LICHESS_CLOUD && (
+            <Tooltip
+                id={cloudTooltipId}
+                content={t("realtimeEngine.analysedByCloudEval")}
+                delayShow={400}
+            />
+        )}
 
         <div className={styles.expandArrowContainer}>
             <img

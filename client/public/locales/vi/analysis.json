@@ -72,7 +72,8 @@
     "realtimeEngine": {
         "depth": "Số nước đi đã tính toán:",
         "checkmate": "Chiếu hết",
-        "error": "Không thể đánh giá nước đi."
+        "error": "Không thể đánh giá nước đi.",
+        "analysedByCloudEval": "Được phân tích bởi Lichess Cloud Eval"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

@@ -67,7 +67,8 @@
     "realtimeEngine": {
         "depth": "Profondeur:",
         "checkmate": "Échec et mat",
-        "error": "Impossible d'évaluer la position."
+        "error": "Impossible d'évaluer la position.",
+        "analysedByCloudEval": "Analysé par le moteur cloud Lichess"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

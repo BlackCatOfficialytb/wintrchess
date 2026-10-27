@@ -95,7 +95,8 @@
     "realtimeEngine": {
         "depth": "Depth:",
         "checkmate": "Checkmate",
-        "error": "Failed to evaluate position."
+        "error": "Failed to evaluate position.",
+        "analysedByCloudEval": "Analysed by Lichess Cloud Eval"
     },
     "stateTreeEditor": {
         "moveContextMenu": {
