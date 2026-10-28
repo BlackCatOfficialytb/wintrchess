@@ -12,14 +12,16 @@
                     "disabled": "Désactivé : Ne pas afficher les flèches du moteur",
                     "continuation": "Meilleure continuation : Afficher une flèche pour le meilleur coup pour cette position",
                     "alternative": "Meilleure alternative : Afficher une flèche pour le meilleur coup de la position précédente"
-                }
+                },
+                "dynamicDepth": "Définit automatiquement la limite de profondeur d'analyse selon les performances de l'appareil. Repli sur 20-25 si le matériel est indétectable."
             },
             "title": "Moteur",
             "version": "Version",
             "depth": "Profondeur",
             "lines": "Nombre de lignes",
             "linesWarning": "Au moins 2 lignes doivent être présentes pour les coups Critiques et Brillants.",
-            "timeLimit": "Limite de temps (en secondes)"
+            "timeLimit": "Limite de temps (en secondes)",
+            "dynamicDepth": "Mode dynamique"
         },
         "classifications": {
             "title": "Classement",
@@ -68,7 +70,8 @@
         "depth": "Profondeur:",
         "checkmate": "Échec et mat",
         "error": "Impossible d'évaluer la position.",
-        "analysedByCloudEval": "Analysé par le moteur cloud Lichess"
+        "analysedByCloudEval": "Analysé par le moteur cloud Lichess",
+        "goDeeper": "Aller plus profondément"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

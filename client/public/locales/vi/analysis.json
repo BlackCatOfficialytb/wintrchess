@@ -12,7 +12,8 @@
                     "disabled": "Tắt: Không hiển thị mũi tên của phần mềm cờ",
                     "continuation": "Nước đi tốt nhất để tiếp tục: Hiển thị một mũi tên cho nước đi tốt nhất trong thế cờ này",
                     "alternative": "Nước đi tốt nhất thay thế: Hiển thị một mũi tên cho nước đi tốt nhất trong thế cờ trước"
-                }
+                },
+                "dynamicDepth": "Tự động đặt giới hạn độ sâu phân tích dựa trên hiệu năng thiết bị. Quay lại 20-25 khi không phát hiện được phần cứng."
             },
             "title": "Phần mềm cờ",
             "version": "Phiên bản",
@@ -24,7 +25,8 @@
                 "title": "Mũi tên gợi ý",
                 "continuation": "Nước đi nối tiếp tốt nhất",
                 "alternative": "Nước đi thay thế tốt nhất"
-            }
+            },
+            "dynamicDepth": "Chế độ động"
         },
         "classifications": {
             "title": "Phân loại",
@@ -73,7 +75,8 @@
         "depth": "Số nước đi đã tính toán:",
         "checkmate": "Chiếu hết",
         "error": "Không thể đánh giá nước đi.",
-        "analysedByCloudEval": "Được phân tích bởi Lichess Cloud Eval"
+        "analysedByCloudEval": "Được phân tích bởi Lichess Cloud Eval",
+        "goDeeper": "Tìm sâu hơn"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

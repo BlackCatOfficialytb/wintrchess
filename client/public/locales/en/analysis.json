@@ -21,7 +21,8 @@
                     "disabled": "Disabled: Do not show engine arrows",
                     "continuation": "Top Continuation: Show an arrow for the top move in this position",
                     "alternative": "Top Alternative: Show an arrow for the top move in the previous position"
-                }
+                },
+                "dynamicDepth": "Automatically set the analysis depth limit based on your device's performance. Falls back to 20-25 when hardware cannot be detected."
             },
             "title": "Engine",
             "version": "Version",
@@ -47,7 +48,8 @@
                 "downloadSuccess": "{{engine}} downloaded successfully",
                 "downloadError": "Download failed: {{error}}",
                 "deleted": "{{engine}} removed"
-            }
+            },
+            "dynamicDepth": "Dynamic Mode"
         },
         "classifications": {
             "title": "Classifications",
@@ -96,7 +98,8 @@
         "depth": "Depth:",
         "checkmate": "Checkmate",
         "error": "Failed to evaluate position.",
-        "analysedByCloudEval": "Analysed by Lichess Cloud Eval"
+        "analysedByCloudEval": "Analysed by Lichess Cloud Eval",
+        "goDeeper": "Go Deeper"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

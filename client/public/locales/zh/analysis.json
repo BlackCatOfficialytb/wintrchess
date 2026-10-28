@@ -12,14 +12,16 @@
                     "disabled": "已禁用：不显示引擎箭头",
                     "continuation": "首选后续：箭头显示在当前局面下的首选着法",
                     "alternative": "首选替代：箭头显示在先前局面下的首选着法"
-                }
+                },
+                "dynamicDepth": "根据设备性能自动设置分析深度上限。无法检测硬件时回退为 20-25。"
             },
             "title": "引擎",
             "version": "版本",
             "depth": "深度",
             "lines": "线数",
             "linesWarning": "关键和某些精彩着法需要至少2条线。",
-            "timeLimit": "时限（秒）"
+            "timeLimit": "时限（秒）",
+            "dynamicDepth": "动态深度模式"
         },
         "classifications": {
             "title": "分级",
@@ -68,7 +70,8 @@
         "depth": "深度：",
         "checkmate": "将杀",
         "error": "未能评估局面。",
-        "analysedByCloudEval": "由 Lichess 云引擎分析"
+        "analysedByCloudEval": "由 Lichess 云引擎分析",
+        "goDeeper": "继续加深"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

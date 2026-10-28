@@ -9,6 +9,7 @@ import { EngineLine } from "shared/types/game/position/EngineLine";
 import { pickEngineLines } from "shared/types/game/position/EngineLine";
 import LogMessage from "@/components/common/LogMessage";
 import Engine from "@analysis/lib/engine";
+import { getDynamicDepthCap } from "@analysis/lib/dynamicDepth";
 
 import EngineLineInfo from "./EngineLine";
 import SkeletonLine from "./SkeletonLine";
@@ -40,6 +41,10 @@ function RealtimeEngine({
     ] = useState<EngineLine[]>([]);
 
     const [ evaluationError, setEvaluationError ] = useState<string>();
+
+    // "Go Deeper" removes the active depth cap (up to max depth 99)
+    const [ depthOverride, setDepthOverride ] = useState<number>();
+    const [ overrideRequested, setOverrideRequested ] = useState(false);
 
     const evaluationDelayRef = useRef<Timeout>();
 
@@ -123,6 +128,42 @@ function RealtimeEngine({
 
     const displayedLines = displayedCacheLines || displayedLocalLines;
 
+    // Effective depth cap: dynamic (hardware-based) or the user's setting;
+    // lifted entirely once "Go Deeper" is pressed for this position.
+    const targetDepth = overrideRequested
+        ? 99
+        : (hydratedConfig.dynamicDepth
+            ? getDynamicDepthCap(hydratedConfig.multiThreaded)
+            : hydratedConfig.depth);
+
+    const evaluatedDepth = displayedLocalLines.at(0)?.depth || 0;
+
+    const depthCapReached = !displayedCacheLines
+        && !overrideRequested
+        && evaluatedDepth > 0
+        && evaluatedDepth >= targetDepth;
+
+    // Reset the override when the position changes
+    useEffect(() => {
+        setOverrideRequested(false);
+        setDepthOverride(undefined);
+    }, [position]);
+
+    // Re-run evaluation when "Go Deeper" is pressed
+    useEffect(() => {
+        if (depthOverride === undefined) return;
+
+        async function resumeEvaluation() {
+            await engine?.stopEvaluation();
+
+            setRealtimeEngineLines([]);
+
+            evaluatePosition();
+        }
+
+        resumeEvaluation();
+    }, [depthOverride]);
+
     // Cloud-evaluated games get a "CLOUD" suffix on the depth indicator
     const cloudAnalysed = displayedLines.at(0)?.source == EngineVersion.LICHESS_CLOUD;
 
@@ -141,7 +182,7 @@ function RealtimeEngine({
             onEvaluationStart?.();
 
             const lines = await engine.evaluate({
-                depth: hydratedConfig.depth,
+                depth: targetDepth,
                 timeLimit: (
                     hydratedConfig.timeLimit
                     && (hydratedConfig.timeLimit * 1000)
@@ -180,6 +221,8 @@ function RealtimeEngine({
         position,
         engine,
         hydratedConfig.depth,
+        hydratedConfig.dynamicDepth,
+        hydratedConfig.multiThreaded,
         hydratedConfig.lines
     ]);
 
@@ -194,6 +237,7 @@ function RealtimeEngine({
 
             <span>
                 {displayedLines.at(0)?.depth || 0}
+                {!overrideRequested && hydratedConfig.dynamicDepth && ` / ${targetDepth}`}
             </span>
 
             {cloudAnalysed && (
@@ -221,6 +265,19 @@ function RealtimeEngine({
                 && <hr className={styles.engineLineSeparator} />
             }
         </>)}
+
+        {depthCapReached && (
+            <button
+                className={styles.goDeeperButton}
+                onClick={() => {
+                    setOverrideRequested(true);
+                    setDepthOverride(99);
+                }}
+            >
+                <span className={styles.goDeeperPlus}>+</span>
+                {t("realtimeEngine.goDeeper")}
+            </button>
+        )}
 
         {displayedLines.at(0)?.depth != 0
             && range(

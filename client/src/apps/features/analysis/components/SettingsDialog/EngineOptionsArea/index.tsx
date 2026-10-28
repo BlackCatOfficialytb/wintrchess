@@ -161,6 +161,29 @@ function EngineOptionsArea() {
         </div>
 
         <div className={styles.setting}>
+            <span data-tooltip-id="settings-engine-dynamic-depth">
+                {t("settings.engine.dynamicDepth")}
+            </span>
+
+            <Tooltip
+                id="settings-engine-dynamic-depth"
+                content={t("settings.engine.descriptions.dynamicDepth")}
+                delayShow={500}
+                className={styles.settingDescription}
+            />
+
+            <SwitchSetting
+                defaultChecked={settings.analysis.engine.dynamicDepth}
+                onChange={checked => (
+                    setSettings(draft => {
+                        draft.analysis.engine.dynamicDepth = checked;
+                        return draft;
+                    })
+                )}
+            />
+        </div>
+
+        <div className={styles.setting}>
             <span data-tooltip-id="settings-engine-lines">
                 {t("settings.engine.lines")}
             </span>
