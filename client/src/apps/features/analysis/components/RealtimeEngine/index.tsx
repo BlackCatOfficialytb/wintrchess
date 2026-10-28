@@ -45,6 +45,7 @@ function RealtimeEngine({
     // "Go Deeper" removes the active depth cap (up to max depth 99)
     const [ depthOverride, setDepthOverride ] = useState<number>();
     const [ overrideRequested, setOverrideRequested ] = useState(false);
+    const [ evaluationCompleted, setEvaluationCompleted ] = useState(false);
 
     const evaluationDelayRef = useRef<Timeout>();
 
@@ -148,12 +149,14 @@ function RealtimeEngine({
         && !displayedCacheLines
         && !overrideRequested
         && evaluatedDepth > 0
-        && evaluatedDepth >= (targetDepth ?? 0);
+        && evaluationCompleted
+        && evaluatedDepth < 99;
 
     // Reset the override when the position changes
     useEffect(() => {
         setOverrideRequested(false);
         setDepthOverride(undefined);
+        setEvaluationCompleted(false);
     }, [position]);
 
     // Re-run evaluation when "Go Deeper" is pressed
@@ -201,10 +204,12 @@ function RealtimeEngine({
             });
 
             onEvaluationComplete?.(lines);
+            setEvaluationCompleted(true);
         } catch {
             setEvaluationError(
                 t("realtimeEngine.error")
             );
+            setEvaluationCompleted(true);
         }
     }
 
