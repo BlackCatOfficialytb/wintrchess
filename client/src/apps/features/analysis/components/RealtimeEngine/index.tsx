@@ -128,20 +128,27 @@ function RealtimeEngine({
 
     const displayedLines = displayedCacheLines || displayedLocalLines;
 
+    // Cloud/tablebase analyses have pre-computed depths — no dynamic cap or override
+    const isExternalEval = displayedLines.at(0)?.source == EngineVersion.LICHESS_CLOUD
+        || displayedLines.at(0)?.source == EngineVersion.EGTB_SYZYGY;
+
     // Effective depth cap: dynamic (hardware-based) or the user's setting;
     // lifted entirely once "Go Deeper" is pressed for this position.
-    const targetDepth = overrideRequested
-        ? 99
-        : (hydratedConfig.dynamicDepth
-            ? getDynamicDepthCap(hydratedConfig.multiThreaded)
-            : hydratedConfig.depth);
+    const targetDepth = isExternalEval
+        ? undefined
+        : (overrideRequested
+            ? 99
+            : (hydratedConfig.dynamicDepth
+                ? getDynamicDepthCap(hydratedConfig.multiThreaded)
+                : hydratedConfig.depth));
 
     const evaluatedDepth = displayedLocalLines.at(0)?.depth || 0;
 
-    const depthCapReached = !displayedCacheLines
+    const depthCapReached = !isExternalEval
+        && !displayedCacheLines
         && !overrideRequested
         && evaluatedDepth > 0
-        && evaluatedDepth >= targetDepth;
+        && evaluatedDepth >= (targetDepth ?? 0);
 
     // Reset the override when the position changes
     useEffect(() => {
@@ -166,6 +173,7 @@ function RealtimeEngine({
 
     // Cloud-evaluated games get a "CLOUD" suffix on the depth indicator
     const cloudAnalysed = displayedLines.at(0)?.source == EngineVersion.LICHESS_CLOUD;
+    const tablebaseAnalysed = displayedLines.at(0)?.source == EngineVersion.EGTB_SYZYGY;
 
     useEffect(() => (
         onEngineLines?.(displayedLines)
@@ -237,7 +245,7 @@ function RealtimeEngine({
 
             <span>
                 {displayedLines.at(0)?.depth || 0}
-                {!overrideRequested && hydratedConfig.dynamicDepth && ` / ${targetDepth}`}
+                {!isExternalEval && !overrideRequested && hydratedConfig.dynamicDepth && targetDepth && ` / ${targetDepth}`}
             </span>
 
             {cloudAnalysed && (
@@ -248,12 +256,29 @@ function RealtimeEngine({
                     CLOUD
                 </span>
             )}
+
+            {tablebaseAnalysed && (
+                <span
+                    className={styles.tablebaseBadge}
+                    data-tooltip-id="realtime-engine-tablebase"
+                >
+                    TABLEBASE
+                </span>
+            )}
         </span>
 
         {cloudAnalysed && (
             <Tooltip
                 id="realtime-engine-depth"
                 content={t("realtimeEngine.analysedByCloudEval")}
+                delayShow={400}
+            />
+        )}
+
+        {tablebaseAnalysed && (
+            <Tooltip
+                id="realtime-engine-tablebase"
+                content={t("realtimeEngine.analysedByTablebase")}
                 delayShow={400}
             />
         )}

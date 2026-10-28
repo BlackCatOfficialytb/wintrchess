@@ -71,7 +71,8 @@
         "checkmate": "Échec et mat",
         "error": "Impossible d'évaluer la position.",
         "analysedByCloudEval": "Analysé par le moteur cloud Lichess",
-        "goDeeper": "Aller plus profondément"
+        "goDeeper": "Aller plus profondément",
+        "analysedByTablebase": "Analysé par la tablebase Syzygy"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

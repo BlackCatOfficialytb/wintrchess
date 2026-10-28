@@ -32,6 +32,20 @@
     letter-spacing: 0.5px;
 }
 
+.tablebaseBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 7px;
+
+    border-radius: 5px;
+    background-color: #8b5cf6;
+
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
 .engineLineSeparator {
     margin: 0;
     width: 100%;

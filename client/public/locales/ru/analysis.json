@@ -71,7 +71,8 @@
         "checkmate": "Мат",
         "error": "Не удалось определить позицию.",
         "analysedByCloudEval": "Проанализировано через Lichess Cloud Eval",
-        "goDeeper": "Глубже"
+        "goDeeper": "Глубже",
+        "analysedByTablebase": "Проанализировано через Syzygy Tablebase"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

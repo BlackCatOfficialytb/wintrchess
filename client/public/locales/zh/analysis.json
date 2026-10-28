@@ -71,7 +71,8 @@
         "checkmate": "将杀",
         "error": "未能评估局面。",
         "analysedByCloudEval": "由 Lichess 云引擎分析",
-        "goDeeper": "继续加深"
+        "goDeeper": "继续加深",
+        "analysedByTablebase": "由 Syzygy 表库分析"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

@@ -76,7 +76,8 @@
         "checkmate": "Chiếu hết",
         "error": "Không thể đánh giá nước đi.",
         "analysedByCloudEval": "Được phân tích bởi Lichess Cloud Eval",
-        "goDeeper": "Tìm sâu hơn"
+        "goDeeper": "Tìm sâu hơn",
+        "analysedByTablebase": "Được phân tích bởi Syzygy Tablebase"
     },
     "stateTreeEditor": {
         "moveContextMenu": {

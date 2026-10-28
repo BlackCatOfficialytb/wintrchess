@@ -99,7 +99,8 @@
         "checkmate": "Checkmate",
         "error": "Failed to evaluate position.",
         "analysedByCloudEval": "Analysed by Lichess Cloud Eval",
-        "goDeeper": "Go Deeper"
+        "goDeeper": "Go Deeper",
+        "analysedByTablebase": "Analysed by Syzygy Tablebase"
     },
     "stateTreeEditor": {
         "moveContextMenu": {
