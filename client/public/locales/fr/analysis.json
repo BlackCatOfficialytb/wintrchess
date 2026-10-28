@@ -21,7 +21,7 @@
             "lines": "Nombre de lignes",
             "linesWarning": "Au moins 2 lignes doivent être présentes pour les coups Critiques et Brillants.",
             "timeLimit": "Limite de temps (en secondes)",
-            "dynamicDepth": "Mode dynamique"
+            "dynamicDepth": "Dynamic Depth"
         },
         "classifications": {
             "title": "Classement",

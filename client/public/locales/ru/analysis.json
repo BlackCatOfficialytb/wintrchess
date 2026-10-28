@@ -21,7 +21,7 @@
             "lines": "Количество линий",
             "linesWarning": "Для критических и некоторых блестящих ходов требуется как минимум 2 линий.",
             "timeLimit": "Лимит времени (в секундах)",
-            "dynamicDepth": "Динамический режим"
+            "dynamicDepth": "Dynamic Depth"
         },
         "classifications": {
             "title": "Классификации",

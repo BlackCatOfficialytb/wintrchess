@@ -49,7 +49,7 @@
                 "downloadError": "Download failed: {{error}}",
                 "deleted": "{{engine}} removed"
             },
-            "dynamicDepth": "Dynamic Mode"
+            "dynamicDepth": "Dynamic Depth"
         },
         "classifications": {
             "title": "Classifications",

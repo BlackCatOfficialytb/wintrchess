@@ -21,7 +21,7 @@
             "lines": "线数",
             "linesWarning": "关键和某些精彩着法需要至少2条线。",
             "timeLimit": "时限（秒）",
-            "dynamicDepth": "动态深度模式"
+            "dynamicDepth": "Dynamic Depth"
         },
         "classifications": {
             "title": "分级",
