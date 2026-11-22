@@ -26,7 +26,7 @@ function Footer({ className, style }: FooterProps) {
             />
 
             <span className={styles.copyrightNotice}>
-                Copyright © {copyrightYear} wintrchess.blackcatofficial.qzz.io
+                Copyright © {copyrightYear} wintrchess.blackcatofficial.dpdns.org
             </span>
 
             <span className={styles.copyrightNotice}>
