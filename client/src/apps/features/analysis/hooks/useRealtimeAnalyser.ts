@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { StatusCodes } from "http-status-codes";
 
-import { useAltcha } from "@/apps/features/analysis/hooks/useAltcha";
+import { useCaptcha } from "@/apps/features/analysis/hooks/useCaptcha";
 import AnalysisStatus from "@analysis/constants/AnalysisStatus";
 import useSettingsStore from "@/stores/SettingsStore";
 import useAnalysisBoardStore from "@analysis/stores/AnalysisBoardStore";
@@ -10,7 +10,7 @@ import useAnalysisSessionStore from "@analysis/stores/AnalysisSessionStore";
 import { analyseNode } from "@analysis/lib/reporter";
 
 function useRealtimeAnalyser() {
-    const executeCaptcha = useAltcha();
+    const executeCaptcha = useCaptcha();
 
     const settings = useSettingsStore(state => state.settings.analysis);
 

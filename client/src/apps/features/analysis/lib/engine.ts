@@ -14,7 +14,8 @@ const uciEvaluationTypes: Record<string, string | undefined> = {
 // self-contained workers; only the lichess wrappers use ES module syntax.
 const moduleEngines = new Set<EngineVersion>([
     EngineVersion.LICHESS_19,
-    EngineVersion.LICHESS_19_SMALLNET
+    EngineVersion.LICHESS_19_SMALLNET,
+    EngineVersion.SF_DEV
 ]);
 
 function getEngineFile(version: EngineVersion, multiThreaded: boolean): string {
@@ -26,6 +27,7 @@ function getEngineFile(version: EngineVersion, multiThreaded: boolean): string {
                 return EngineVersion.STOCKFISH_19_LITE_MULTI;
             case EngineVersion.LICHESS_19:
             case EngineVersion.LICHESS_19_SMALLNET:
+            case EngineVersion.SF_DEV:
                 return version;
             default:
                 return version;

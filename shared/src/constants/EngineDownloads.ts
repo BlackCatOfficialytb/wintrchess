@@ -77,6 +77,15 @@ export const ENGINE_DOWNLOADS: EngineDownloadInfo[] = [
         wasmUrl: `${BASE_URL}/stockfish-19-lichess-smallnet.wasm`,
         size: "0.5 MB",
         description: "Lichess build with size-optimized NNUE"
+    },
+    {
+        version: EngineVersion.SF_DEV,
+        label: "Stockfish dev (dev-20261121-1c6f497a) (0.7 MB)",
+        jsUrl: `${BASE_URL}/stockfish-dev.js`,
+        wasmUrl: `${BASE_URL}/stockfish-dev-lichess.wasm`,
+        size: "0.7 MB",
+        description: "Latest Stockfish development build from Lichess, "
+            + "using NNUE nn-bddd9d57eb87"
     }
 ];
 

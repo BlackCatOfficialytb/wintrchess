@@ -92,8 +92,10 @@ function PrivacyPolicy() {
                 needing to solve a CAPTCHA to access Chess game analysis and move
                 classifications, but doesn't contain any personally identifying information.
                 It is highly recommended to keep cookies on; you may otherwise lose
-                functionality. The CAPTCHA is proof-of-work based; it in itself does not
-                collect any personal data.
+                functionality. Depending on the deployment, the CAPTCHA is either a
+                local proof-of-work check or a third-party service (Cloudflare
+                Turnstile or hCaptcha), which may process limited technical data such
+                as your IP address and browser information under its own privacy policy.
             </span>
 
             <span>

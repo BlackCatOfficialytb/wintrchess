@@ -56,6 +56,33 @@ ANALYSIS_SESSION_ACTIONS=80
 
 The number of actions that a user can take during an analysis session, before they have to solve a CAPTCHA again. Each request to the server using the analysis session to authorize oneself uses an action; this may be analysing a game or a single move added to the board. Defaults to `80`.
 
+### Analysis CAPTCHA
+
+```toml
+CAPTCHA_PROVIDER="turnstile"
+```
+
+Chooses the CAPTCHA guarding analysis sessions. One of `turnstile` (default), `hcaptcha`, or `altcha` (the original proof-of-work scheme). All three are wired into the same `/auth/captcha` + `/auth/analysis-session` flow; hosted providers are always verified server-side with their siteverify API.
+
+```toml
+TURNSTILE_SITE_KEY="0x4AAAAAAGPE86QlCZc9taVV"
+TURNSTILE_SECRET="..."
+TURNSTILE_APPEARANCE="interaction-only"
+TURNSTILE_HOSTNAMES="wintrchess.com"
+```
+
+Public site key and server-only secret for the Cloudflare Turnstile widget. `TURNSTILE_APPEARANCE` controls rendering: `interaction-only` (default) keeps the managed widget invisible until an interactive challenge is required, `always` shows it permanently, and `execute` waits for an explicit trigger. `TURNSTILE_HOSTNAMES` is a comma-separated allowlist of hostnames accepted from siteverify; production values must not include `localhost` or `127.0.0.1`.
+
+```toml
+HCAPTCHA_SITE_KEY="..."
+HCAPTCHA_SECRET="..."
+HCAPTCHA_HOSTNAMES="wintrchess.com"
+```
+
+Only used when `CAPTCHA_PROVIDER="hcaptcha"`. `HCAPTCHA_HOSTNAMES` falls back to `TURNSTILE_HOSTNAMES`. Note that hCaptcha does not support `localhost`/`127.0.0.1` as supplied hostnames; use a hosts-file alias for local development.
+
+When `CAPTCHA_PROVIDER="altcha"`, the existing `AUTH_SECRET`-based proof-of-work challenge is used and no external keys are needed.
+
 ```toml
 MAXIMUM_ARCHIVE_SIZE=50
 ```

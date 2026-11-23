@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 
 import { findNodeRecursively } from "shared/types/game/position/StateTreeNode";
 import AnalysisStatus from "@analysis/constants/AnalysisStatus";
-import { useAltcha } from "@/apps/features/analysis/hooks/useAltcha";
+import { useCaptcha } from "@/apps/features/analysis/hooks/useCaptcha";
 import useSettingsStore from "@/stores/SettingsStore";
 import useAnalysisGameStore from "@analysis/stores/AnalysisGameStore";
 import useAnalysisBoardStore from "@analysis/stores/AnalysisBoardStore";
@@ -30,7 +30,7 @@ function useAnalyseGame(
         state => state.setAnalysisStatus
     );
 
-    const executeCaptcha = useAltcha();
+    const executeCaptcha = useCaptcha();
 
     return async () => {
         const analyseResult = await analyseStateTree(analysisGame.stateTree, {

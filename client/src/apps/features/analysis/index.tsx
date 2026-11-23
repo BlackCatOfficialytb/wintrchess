@@ -2,7 +2,7 @@ import React, { lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import { useAltcha } from "@/apps/features/analysis/hooks/useAltcha";
+import { useCaptcha } from "@/apps/features/analysis/hooks/useCaptcha";
 import PageWrapper from "@/components/layout/PageWrapper";
 import { removeDefaultConsentLink } from "@/lib/consent";
 
@@ -18,7 +18,7 @@ const root = ReactDOM.createRoot(
 );
 
 function App() {
-    const executeCaptcha = useAltcha();
+    const executeCaptcha = useCaptcha();
 
     useEffect(() => {
         removeDefaultConsentLink();
