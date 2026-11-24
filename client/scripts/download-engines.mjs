@@ -107,7 +107,7 @@ const ENTRIES = {
     // scripts - no generated entry needed, the payload file is the entry
     "stockfish-19-lichess-build.js": moduleEntry("stockfish-19-lichess.js"),
     "stockfish-19-lichess-build-smallnet.js": moduleEntry("stockfish-19-lichess-smallnet.js"),
-    // Stockfish dev-20261121-1c6f497a, NNUE nn-bddd9d57eb87
+    // Stockfish 20 dev (dev-20261121-1c6f497a), NNUE nn-bddd9d57eb87
     "stockfish-dev.js": moduleEntry("stockfish-dev-lichess.js")
 };
 
