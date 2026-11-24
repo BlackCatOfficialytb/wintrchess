@@ -35,7 +35,7 @@ const engineVersionOptions = [
         value: EngineVersion.LICHESS_19_SMALLNET
     },
     {
-        label: "Stockfish 20 dev (dev-20261121-1c6f497a) (0.7 MB)",
+        label: "Stockfish 20 dev",
         value: EngineVersion.SF_DEV
     },
     {

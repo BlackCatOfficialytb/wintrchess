@@ -80,10 +80,10 @@ export const ENGINE_DOWNLOADS: EngineDownloadInfo[] = [
     },
     {
         version: EngineVersion.SF_DEV,
-        label: "Stockfish 20 dev (dev-20261121-1c6f497a) (0.7 MB)",
+        label: "Stockfish 20 dev",
         jsUrl: `${BASE_URL}/stockfish-dev.js`,
         wasmUrl: `${BASE_URL}/stockfish-dev-lichess.wasm`,
-        size: "0.7 MB",
+        size: "0.71 MB",
         description: "Latest Stockfish 20 development build from Lichess, "
             + "using NNUE nn-bddd9d57eb87"
     }
