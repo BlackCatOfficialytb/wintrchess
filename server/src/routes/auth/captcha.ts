@@ -18,18 +18,24 @@ router.get("/captcha", async (req, res) => {
     const provider = getCaptchaProvider();
 
     if (provider == CaptchaProvider.TURNSTILE) {
+        const siteKey = getTurnstileSiteKey();
+        if (!siteKey) return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+
         return res.json({
             provider,
-            siteKey: getTurnstileSiteKey(),
+            siteKey,
             action: CAPTCHA_ACTION,
             appearance: getTurnstileAppearance()
         });
     }
 
     if (provider == CaptchaProvider.HCAPTCHA) {
+        const siteKey = getHcaptchaSiteKey();
+        if (!siteKey) return res.sendStatus(StatusCodes.INTERNAL_SERVER_ERROR);
+
         return res.json({
             provider,
-            siteKey: getHcaptchaSiteKey(),
+            siteKey,
             action: CAPTCHA_ACTION
         });
     }

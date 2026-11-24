@@ -7,10 +7,6 @@ const TURNSTILE_VERIFY_URL =
     "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const HCAPTCHA_VERIFY_URL = "https://api.hcaptcha.com/siteverify";
 
-// Public site key of the existing managed Turnstile widget. Safe to ship to
-// browsers; the secret key is only ever read from the server environment.
-const DEFAULT_TURNSTILE_SITE_KEY = "0x4AAAAAAGPE86QlCZc9taVV";
-
 const APPEARANCES: TurnstileAppearance[] = [
     "always", "execute", "interaction-only"
 ];
@@ -25,7 +21,7 @@ export function getCaptchaProvider(): CaptchaProvider {
 }
 
 export function getTurnstileSiteKey(): string {
-    return process.env.TURNSTILE_SITE_KEY || DEFAULT_TURNSTILE_SITE_KEY;
+    return (process.env.TURNSTILE_SITE_KEY || "").trim();
 }
 
 export function getTurnstileAppearance(): TurnstileAppearance {
@@ -39,7 +35,7 @@ export function getTurnstileAppearance(): TurnstileAppearance {
 }
 
 export function getHcaptchaSiteKey(): string {
-    return process.env.HCAPTCHA_SITE_KEY || "";
+    return (process.env.HCAPTCHA_SITE_KEY || "").trim();
 }
 
 function getExpectedHostnames(provider: CaptchaProvider): Set<string> {

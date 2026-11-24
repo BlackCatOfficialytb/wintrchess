@@ -65,7 +65,7 @@ CAPTCHA_PROVIDER="turnstile"
 Chooses the CAPTCHA guarding analysis sessions. One of `turnstile` (default), `hcaptcha`, or `altcha` (the original proof-of-work scheme). All three are wired into the same `/auth/captcha` + `/auth/analysis-session` flow; hosted providers are always verified server-side with their siteverify API.
 
 ```toml
-TURNSTILE_SITE_KEY="0x4AAAAAAGPE86QlCZc9taVV"
+TURNSTILE_SITE_KEY="..."
 TURNSTILE_SECRET="..."
 TURNSTILE_APPEARANCE="interaction-only"
 TURNSTILE_HOSTNAMES="wintrchess.com"
