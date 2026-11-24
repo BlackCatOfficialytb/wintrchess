@@ -99,6 +99,42 @@ async function main() {
         }
     });
 
+    // Lichess WebAssembly engines load their NNUE net at runtime. The net API
+    // sends no CORS headers, so mirror it same-origin. Filenames are an
+    // allowlist to keep this a closed proxy instead of an open URL fetcher.
+    const nnueFiles = new Set([
+        "nn-bddd9d57eb87.nnue",
+        "nn-1a298aa575a0.nnue",
+        "nn-61e7af4bb97d.nnue"
+    ]);
+    const nnueBase = "https://tests.stockfishchess.org/api/nn/";
+
+    app.get("/nnue/:file", async (req, res) => {
+        if (!nnueFiles.has(req.params.file)) return res.sendStatus(404);
+
+        try {
+            const upstream = await fetch(nnueBase + req.params.file);
+            if (!upstream.ok || !upstream.body) return res.sendStatus(502);
+
+            res.status(200);
+            res.setHeader("Content-Type", "application/octet-stream");
+            // Content-addressed net names never change; cache indefinitely.
+            res.setHeader(
+                "Cache-Control", "public, max-age=31536000, immutable"
+            );
+            // The net API gzips its responses; fetch decompresses them, so the
+            // upstream Content-Length (compressed size) no longer matches the
+            // body we stream. Leave it unset and let Node use chunked encoding.
+            res.removeHeader("Content-Length");
+
+            Readable.fromWeb(
+                upstream.body as unknown as import("stream/web").ReadableStream
+            ).pipe(res);
+        } catch {
+            res.sendStatus(502);
+        }
+    });
+
     // Normal endpoints
     app.all("/auth/account/*", toNodeHandler(getAuth()));
     app.use("/", mainRouter);

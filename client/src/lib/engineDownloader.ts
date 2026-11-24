@@ -19,6 +19,7 @@ interface EngineMeta {
     size: number;
     jsArrayBuffer: ArrayBuffer;
     wasmArrayBuffer?: ArrayBuffer;
+    nnueArrayBuffer?: ArrayBuffer;
 }
 
 // opens (and on first use creates) the cache database; every public helper
@@ -74,62 +75,25 @@ async function cacheEngine(meta: EngineMeta): Promise<void> {
     });
 }
 
-// downloads js + wasm in parallel, caches both in IndexedDB, and returns
-// them as Blobs. progress spans 0-50 while the js payload streams and
-// 50-100 for wasm (or the whole range on js alone when the engine has no
-// wasm), so callers see one continuous bar across the two fetches
+// downloads js, wasm and NNUE (whichever the engine needs) in parallel,
+// caches them in IndexedDB and returns them as Blobs. Progress is split
+// 0-25 / 25-50 / 50-100; the NNUE net is by far the largest payload.
 export async function downloadEngine(
     version: EngineVersion,
     onProgress?: (progress: number) => void
-): Promise<{ jsBlob: Blob; wasmBlob?: Blob }> {
+): Promise<{ jsBlob: Blob; wasmBlob?: Blob; nnueBlob?: Blob }> {
     const info = getEngineDownloadInfo(version);
     if (!info) throw new Error(`Unknown engine version: ${version}`);
 
-    // streams the js entry point chunk by chunk (response.body reader)
-    // so partial progress is reportable; falls back to arrayBuffer() for
-    // environments without streaming, which means no progress updates
-    const downloadJs = async (): Promise<ArrayBuffer> => {
-        const response = await fetch(info.jsUrl);
-        if (!response.ok) throw new Error(`Failed to download JS: ${response.statusText}`);
-
-        const contentLength = response.headers.get("content-length");
-        const total = contentLength ? parseInt(contentLength, 10) : 0;
-        let loaded = 0;
-
-        const reader = response.body?.getReader();
-        const chunks: Uint8Array[] = [];
-
-        if (reader) {
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-                chunks.push(value);
-                loaded += value.length;
-                if (total > 0 && onProgress) {
-                    onProgress(Math.round((loaded / total) * 50));
-                }
-            }
-        } else {
-            return response.arrayBuffer();
-        }
-
-        const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
-        const result = new Uint8Array(totalLength);
-        let offset = 0;
-        for (const chunk of chunks) {
-            result.set(chunk, offset);
-            offset += chunk.length;
-        }
-        return result.buffer;
-    };
-
-    // wasm is optional (pure-JS builds); same streaming approach as the js
-    // payload, reporting the 50-100 half of the total progress range
-    const downloadWasm = async (): Promise<ArrayBuffer | undefined> => {
-        if (!info.wasmUrl) return undefined;
-
-        let response = await fetch(info.wasmUrl);
-        if (!response.ok) {
+    // streams chunk by chunk so partial progress is reportable; falls back to
+    // arrayBuffer() where streaming is unavailable (no progress updates)
+    const stream = async (
+        url: string,
+        rangeStart: number,
+        rangeEnd: number
+    ): Promise<ArrayBuffer> => {
+        let response = await fetch(url);
+        if (!response.ok && url == info.wasmUrl) {
             // client-side fallback: the local payload wasm is missing, so
             // retry the release-asset name derived from the engine entry
             // (the "sf wasm link.txt" convention <entry>.wasm). GitHub
@@ -139,7 +103,9 @@ export async function downloadEngine(
             const releaseWasm = info.jsUrl.replace(/\.js$/, ".wasm");
             if (releaseWasm != info.wasmUrl) response = await fetch(releaseWasm);
         }
-        if (!response.ok) throw new Error(`Failed to download WASM: ${response.statusText}`);
+        if (!response.ok) {
+            throw new Error(`Failed to download ${url}: ${response.statusText}`);
+        }
 
         const contentLength = response.headers.get("content-length");
         const total = contentLength ? parseInt(contentLength, 10) : 0;
@@ -155,7 +121,9 @@ export async function downloadEngine(
                 chunks.push(value);
                 loaded += value.length;
                 if (total > 0 && onProgress) {
-                    onProgress(50 + Math.round((loaded / total) * 50));
+                    onProgress(Math.round(
+                        rangeStart + (loaded / total) * (rangeEnd - rangeStart)
+                    ));
                 }
             }
         } else {
@@ -172,32 +140,47 @@ export async function downloadEngine(
         return result.buffer;
     };
 
-    const [jsArrayBuffer, wasmArrayBuffer] = await Promise.all([downloadJs(), downloadWasm()]);
+    const [jsArrayBuffer, wasmArrayBuffer, nnueArrayBuffer] = await Promise.all([
+        stream(info.jsUrl, 0, 25),
+        info.wasmUrl ? stream(info.wasmUrl, 25, 50) : Promise.resolve(undefined),
+        info.nnueUrl ? stream(info.nnueUrl, 50, 100) : Promise.resolve(undefined)
+    ]);
 
     const meta: EngineMeta = {
         version,
         downloadedAt: Date.now(),
-        size: jsArrayBuffer.byteLength + (wasmArrayBuffer?.byteLength || 0),
+        size: jsArrayBuffer.byteLength
+            + (wasmArrayBuffer?.byteLength || 0)
+            + (nnueArrayBuffer?.byteLength || 0),
         jsArrayBuffer,
-        wasmArrayBuffer
+        wasmArrayBuffer,
+        nnueArrayBuffer
     };
 
     await cacheEngine(meta);
 
     return {
         jsBlob: new Blob([jsArrayBuffer]),
-        wasmBlob: wasmArrayBuffer ? new Blob([wasmArrayBuffer]) : undefined
+        wasmBlob: wasmArrayBuffer ? new Blob([wasmArrayBuffer]) : undefined,
+        nnueBlob: nnueArrayBuffer ? new Blob([nnueArrayBuffer]) : undefined
     };
 }
 
-// returns the js/wasm as Blobs, cache-first; null means "never downloaded
-// or cache unreadable", which callers treat as "must download first"
-export async function getEngineBlob(version: EngineVersion): Promise<{ jsBlob: Blob; wasmBlob?: Blob } | null> {
+// returns the cached payloads as Blobs, cache-first; null means "never
+// downloaded or cache unreadable", which callers treat as "must download"
+export async function getEngineBlob(version: EngineVersion): Promise<{
+    jsBlob: Blob;
+    wasmBlob?: Blob;
+    nnueBlob?: Blob;
+} | null> {
     const cached = await getCachedEngine(version);
     if (cached) {
         return {
             jsBlob: new Blob([cached.jsArrayBuffer]),
-            wasmBlob: cached.wasmArrayBuffer ? new Blob([cached.wasmArrayBuffer]) : undefined
+            wasmBlob: cached.wasmArrayBuffer
+                ? new Blob([cached.wasmArrayBuffer]) : undefined,
+            nnueBlob: cached.nnueArrayBuffer
+                ? new Blob([cached.nnueArrayBuffer]) : undefined
         };
     }
     return null;

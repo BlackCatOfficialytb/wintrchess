@@ -27,11 +27,11 @@ const engineVersionOptions = [
         value: EngineVersion.STOCKFISH_19_ASM
     },
     {
-        label: "Stockfish 19 (Lichess Build) (0.6 MB)",
+        label: "Stockfish 19 (Lichess Build) (94.5 MB)",
         value: EngineVersion.LICHESS_19
     },
     {
-        label: "Stockfish 19 (Lichess Smallnet) (0.5 MB)",
+        label: "Stockfish 19 (Lichess Smallnet) (1.6 MB)",
         value: EngineVersion.LICHESS_19_SMALLNET
     },
     {
